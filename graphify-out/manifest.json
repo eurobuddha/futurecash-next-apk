@@ -1,0 +1,147 @@
+{
+  "app/build.gradle": {
+    "mtime": 1786484870.8374324,
+    "ast_hash": "d5ad809aa4541a699b04c08208033564",
+    "semantic_hash": "d5ad809aa4541a699b04c08208033564"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Audit.java": {
+    "mtime": 1786484468.464887,
+    "ast_hash": "a7fad619fa39b025f6939171bd140f20",
+    "semantic_hash": "a7fad619fa39b025f6939171bd140f20"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/AuditApi.java": {
+    "mtime": 1786484964.1259904,
+    "ast_hash": "9700639c37b22068ecf60793fd9e36fc",
+    "semantic_hash": "9700639c37b22068ecf60793fd9e36fc"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/AuditRunner.java": {
+    "mtime": 1786485338.1135612,
+    "ast_hash": "b86bbbb82e39b383c93fcd6558307505",
+    "semantic_hash": "b86bbbb82e39b383c93fcd6558307505"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/BootReceiver.java": {
+    "mtime": 1786484821.8648262,
+    "ast_hash": "9a2366e7ce08ef9999696a9211a8ce98",
+    "semantic_hash": "9a2366e7ce08ef9999696a9211a8ce98"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Cfg.java": {
+    "mtime": 1786484298.622979,
+    "ast_hash": "a23dea4e2d6e202ac7a9e640ea662db4",
+    "semantic_hash": "a23dea4e2d6e202ac7a9e640ea662db4"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Copy.java": {
+    "mtime": 1786484225.56171,
+    "ast_hash": "9cc6ae66ac2dc86de0ef12c0afb3de8a",
+    "semantic_hash": "9cc6ae66ac2dc86de0ef12c0afb3de8a"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/FutureCashContract.java": {
+    "mtime": 1786484225.564973,
+    "ast_hash": "a39e86818c669ab8d87ba094ff315a5d",
+    "semantic_hash": "a39e86818c669ab8d87ba094ff315a5d"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Guardian.java": {
+    "mtime": 1786484721.6294215,
+    "ast_hash": "ec5cb72293a0eeb3fd793cd0898b6de8",
+    "semantic_hash": "ec5cb72293a0eeb3fd793cd0898b6de8"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/GuardianService.java": {
+    "mtime": 1786484798.5801804,
+    "ast_hash": "a7dda215bd753fc9a352c67700653137",
+    "semantic_hash": "a7dda215bd753fc9a352c67700653137"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/GuardianWorker.java": {
+    "mtime": 1786484810.931542,
+    "ast_hash": "a46765a15da5bda536d659ab13c1515d",
+    "semantic_hash": "a46765a15da5bda536d659ab13c1515d"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/KeyAudit.java": {
+    "mtime": 1786484977.5714984,
+    "ast_hash": "02edd490e71d810c0bf856aaca606cb2",
+    "semantic_hash": "02edd490e71d810c0bf856aaca606cb2"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/MainActivity.java": {
+    "mtime": 1786485325.6666377,
+    "ast_hash": "0f75e806474875f02a38086d9d92c32a",
+    "semantic_hash": "0f75e806474875f02a38086d9d92c32a"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/MinimaAddress.java": {
+    "mtime": 1786484225.542479,
+    "ast_hash": "b97fe721d06017ffee3e0312725f18ca",
+    "semantic_hash": "b97fe721d06017ffee3e0312725f18ca"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Node.java": {
+    "mtime": 1786484398.5638978,
+    "ast_hash": "0c835ced5b98fc428bcf34ea835e8e9e",
+    "semantic_hash": "0c835ced5b98fc428bcf34ea835e8e9e"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/NodeApi.java": {
+    "mtime": 1786484225.5382464,
+    "ast_hash": "9315c873eded5babee71a56ef39514ec",
+    "semantic_hash": "9315c873eded5babee71a56ef39514ec"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Notifier.java": {
+    "mtime": 1786484763.4971654,
+    "ast_hash": "763162fe29bbfb8823148b186ea895a7",
+    "semantic_hash": "763162fe29bbfb8823148b186ea895a7"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Sha3.java": {
+    "mtime": 1786484225.5465708,
+    "ast_hash": "3ecd1f738ea75a158d4f1f73a578cdb0",
+    "semantic_hash": "3ecd1f738ea75a158d4f1f73a578cdb0"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Store.java": {
+    "mtime": 1786484358.3068104,
+    "ast_hash": "e25f679a96de49027260dd0bba2ea6ce",
+    "semantic_hash": "e25f679a96de49027260dd0bba2ea6ce"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Tx.java": {
+    "mtime": 1786484431.6763294,
+    "ast_hash": "224fbd1d4696cd440cf2109f6dd85e3b",
+    "semantic_hash": "224fbd1d4696cd440cf2109f6dd85e3b"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Ui.java": {
+    "mtime": 1786484913.4904132,
+    "ast_hash": "9689b619f89bf25cb771533f4c80e944",
+    "semantic_hash": "9689b619f89bf25cb771533f4c80e944"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Util.java": {
+    "mtime": 1786484225.5685313,
+    "ast_hash": "cf5f76da0f78bd876a77e6ae99c6e4aa",
+    "semantic_hash": "cf5f76da0f78bd876a77e6ae99c6e4aa"
+  },
+  "app/src/main/java/com/eurobuddha/futurecashnext/Wallet.java": {
+    "mtime": 1786484606.8752756,
+    "ast_hash": "b5a315b9d19bc2fa7bd3afdc2d7aa19d",
+    "semantic_hash": "b5a315b9d19bc2fa7bd3afdc2d7aa19d"
+  },
+  "app/src/test/java/com/eurobuddha/futurecashnext/KeyAuditTest.java": {
+    "mtime": 1786484225.5920663,
+    "ast_hash": "08d11fe215a01fd483bb350e0a8a9420",
+    "semantic_hash": "08d11fe215a01fd483bb350e0a8a9420"
+  },
+  "app/src/test/java/com/eurobuddha/futurecashnext/MinimaAddressTest.java": {
+    "mtime": 1786484225.5828931,
+    "ast_hash": "bbf60929a78c9da4bc5ca194446f91ba",
+    "semantic_hash": "bbf60929a78c9da4bc5ca194446f91ba"
+  },
+  "app/src/test/java/com/eurobuddha/futurecashnext/Sha3Test.java": {
+    "mtime": 1786484225.5887659,
+    "ast_hash": "e7b705b408040fcf99bd0f9b2b3b3749",
+    "semantic_hash": "e7b705b408040fcf99bd0f9b2b3b3749"
+  },
+  "build.gradle": {
+    "mtime": 1786484171.0991518,
+    "ast_hash": "4d251466b34f1ae1f5bacd62e2d49824",
+    "semantic_hash": "4d251466b34f1ae1f5bacd62e2d49824"
+  },
+  "gradlew": {
+    "mtime": 1786484160.7470782,
+    "ast_hash": "02c16663c6f0aa37f98d94d698c22b8c",
+    "semantic_hash": "02c16663c6f0aa37f98d94d698c22b8c"
+  },
+  "settings.gradle": {
+    "mtime": 1786484168.7313461,
+    "ast_hash": "0722166ca41bbcc4cfda30fc64b79542",
+    "semantic_hash": "0722166ca41bbcc4cfda30fc64b79542"
+  }
+}

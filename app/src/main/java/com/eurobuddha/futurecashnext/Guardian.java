@@ -263,6 +263,15 @@ public final class Guardian {
     private void sweepPending(long tip, String safe) {
         for (Store.SweepRow row : store.sweepsWithStatus(Store.PENDING)) {
             final String signKey = wallet.signKeyFor(row.address);
+            if (signKey == null) {
+                // No signable key for this address. Leave the row PENDING rather than burning an
+                // attempt on a transaction that cannot be signed — and say so once per pass, because
+                // this needs a human (usually: the address was retired on a node since reseeded, so
+                // the key is genuinely gone).
+                cfg.log(Cfg.LVL_ERROR, "Can't sweep — no signing key for this address on this node "
+                        + "| coin:" + row.coinid + " | on:" + row.address);
+                continue;
+            }
             if (!store.claimSweepForPost(row.coinid, tip)) continue;   // another pass owns it
 
             final Tx.Result res = Tx.sweep(node, row.coinid, safe, row.amount, row.tokenid, signKey);
@@ -507,6 +516,10 @@ public final class Guardian {
             st.atRisk = atRisk.contains(Wallet.canonAddr(payout));
             out.add(st);
         }
+        // Lowest maturity block first, so anything ready to collect is at the top and the rest read
+        // as a countdown. `coins relevant:true` returns them in the node's own storage order, which
+        // is effectively arbitrary — a list you have to scan to find what needs attention.
+        java.util.Collections.sort(out, (a, b) -> Long.compare(a.matureBlock, b.matureBlock));
         return out;
     }
 

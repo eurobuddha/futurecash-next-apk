@@ -305,12 +305,24 @@ public final class Wallet {
     private static final Pattern PURE_SIGNEDBY = Pattern.compile("^RETURN\\s+SIGNEDBY\\((0x[0-9a-fA-F]+)\\)$",
             Pattern.CASE_INSENSITIVE);
 
-    /** The signing key for an address, from its SIGNEDBY script; "auto" if we can't tell. */
+    /**
+     * The signing key for an address, taken from its SIGNEDBY script.
+     *
+     * <p>Falls back to {@code auto} ONLY when the row still carries a real public key. For a RETIRED
+     * address the row's key is nulled to 0x00, and {@code publickey:auto} then attaches nothing — so
+     * "auto" there is not a fallback, it is a transaction guaranteed to post unsigned, burn a retry
+     * and eventually trip the give-up alarm. Retired addresses are precisely what the stranded-coin
+     * sweep exists to drain, so this is the common case, not the exotic one.
+     *
+     * @return the key to sign with, or null when this address cannot be signed for
+     */
     public String signKeyFor(String addr) {
         final JSONObject row = scriptRowFor(addr);
-        if (row == null) return "auto";
+        if (row == null) return null;
         final Matcher m = SIGNEDBY.matcher(row.optString("script", ""));
-        return m.find() ? m.group(1) : "auto";
+        if (m.find()) return m.group(1);
+        final String pk = row.optString("publickey", "");
+        return (!pk.isEmpty() && !"0x00".equals(pk)) ? "auto" : null;
     }
 
     /**
@@ -542,8 +554,11 @@ public final class Wallet {
         if (!mine) { rep.error = "That isn't one of your signable addresses."; return rep; }
 
         final String fromHex = s.optString("address", "");
-        final Matcher m = SIGNEDBY.matcher(s.optString("script", ""));
-        final String signKey = m.find() ? m.group(1) : "auto";
+        final String signKey = signKeyFor(fromHex);
+        if (signKey == null) {
+            rep.error = "This node has no signing key for that address — it can't be swept from here.";
+            return rep;
+        }
 
         final Res dest = sweepDestination();
         if (!dest.ok) { rep.error = dest.error; return rep; }
