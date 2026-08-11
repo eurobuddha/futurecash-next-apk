@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Always-dark, matching the family's palette. Fixed rather than following the system setting
+         so the risk colours (green safe / orange at-risk / red taken) keep the contrast they were
+         chosen for — those colours carry meaning here, they are not decoration. -->
+    <style name="Base.Theme.FutureCash" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">#F7931A</item>
+        <item name="colorAccent">#F7931A</item>
+        <item name="android:colorBackground">#0A0A0F</item>
+    </style>
+
+    <style name="Theme.FutureCash" parent="Base.Theme.FutureCash" />
+</resources>

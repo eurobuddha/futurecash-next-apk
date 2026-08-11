@@ -1,0 +1,67 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.eurobuddha.futurecashnext'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.eurobuddha.futurecashnext"
+        minSdk 28
+        targetSdk 35
+        versionCode 100
+        versionName "0.1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        // Minima family release key. Credentials come from ~/.gradle/gradle.properties
+        // (outside every repo), so nothing secret is ever committed. On a machine without
+        // those props this config stays empty and release falls back to debug signing.
+        release {
+            def ksFile = project.findProperty('MINIMA_FAMILY_RELEASE_STORE_FILE')
+            if (ksFile != null) {
+                storeFile file(ksFile)
+                storePassword project.findProperty('MINIMA_FAMILY_RELEASE_STORE_PASSWORD')
+                keyAlias project.findProperty('MINIMA_FAMILY_RELEASE_KEY_ALIAS')
+                keyPassword project.findProperty('MINIMA_FAMILY_RELEASE_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+
+    testImplementation libs.junit
+
+    // Periodic fallback that revives the guardian if the OS kills it
+    implementation 'androidx.work:work-runtime:2.9.1'
+
+    // minimaapi.aar — taken from apks/keyreuses (Aug), NOT the older copy in apks/futurecash (Jun).
+    // Only this build carries readResponseUri()/deliverResult()/mFileExecutor, i.e. the content://
+    // file hand-off for large replies. The guardian reads `coins relevant:true`, which measured
+    // 248KB on a node with many stakes — an inline reply that size overflows the broadcast parcel
+    // and kills the receiving app uncatchably. The hand-off is not optional for this app.
+    implementation files('libs/minimaapi.aar')
+}

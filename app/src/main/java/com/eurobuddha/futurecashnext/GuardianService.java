@@ -1,0 +1,190 @@
+package com.eurobuddha.futurecashnext;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
+import android.os.IBinder;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
+import org.json.JSONObject;
+import org.minimarex.minimaapi.MinimaAPI;
+import org.minimarex.minimaapi.MinimaAPIMessages;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * The guardian daemon: keeps collecting and rescuing while the app is closed.
+ *
+ * <p>This is what makes it "-next" rather than the plain lock-and-collect app. A matured stake
+ * paying out to a reused key needs collecting and sweeping <b>promptly and unattended</b> — if it
+ * only happened when the user opened the app, the exposure window would be however long they take
+ * to notice.
+ *
+ * <p>Threading: {@link Guardian} blocks on node replies, and those replies are delivered on the main
+ * thread, so every pass runs on a single-thread executor. One thread also means passes are naturally
+ * serialised — no two reconciles can interleave.
+ */
+public class GuardianService extends Service {
+
+    private static final int FG_ID = 3101;
+
+    /** Set by MainActivity while it is visible; the service stands down so both don't post. */
+    public static volatile boolean UI_FOREGROUND = false;
+
+    private NodeApi nodeApi;
+    private Node node;
+    private Cfg cfg;
+    private Store store;
+    private Guardian guardian;
+    private BroadcastReceiver receiver;
+    private ExecutorService worker;
+    private volatile boolean started = false;
+
+    @Override public IBinder onBind(Intent intent) { return null; }
+
+    @Override public void onCreate() {
+        super.onCreate();
+        Notifier.ensureChannels(this);
+        // If the OS refuses the foreground service, bail gracefully rather than crashing — the
+        // guardian resumes when the app is next opened or the budget resets.
+        if (!startForegroundCompat()) { stopSelf(); return; }
+
+        cfg = new Cfg(this);
+        store = new Store(this);
+        worker = Executors.newSingleThreadExecutor();
+        nodeApi = new NodeApi(this, enabled -> {});
+        node = new Node(nodeApi);
+        guardian = new Guardian(node, cfg, store,
+                (title, body) -> { if (cfg.is(Cfg.NOTIFY, true)) Notifier.alert(this, title, body); });
+
+        receiver = new BroadcastReceiver() {
+            @Override public void onReceive(Context c, Intent intent) {
+                if (!MinimaAPI.checkMinimaID(GuardianService.this, intent)) return;
+                final String data = intent.getStringExtra(MinimaAPIMessages.MINIMA_API_NOTIFY_DATA);
+                if (data == null) return;
+                try {
+                    final String event = new JSONObject(data).optString("event", "");
+                    if ("NEWBLOCK".equals(event) || "NEWBALANCE".equals(event)) tick();
+                } catch (Exception ignored) {}
+            }
+        };
+        ContextCompat.registerReceiver(this, receiver,
+                new IntentFilter(MinimaAPIMessages.MINIMA_API_NOTIFY), ContextCompat.RECEIVER_EXPORTED);
+
+        // Assert the covenant is registered at every start, then run one pass immediately so
+        // in-flight work resumes without waiting for the next block (~50s).
+        submit(() -> {
+            guardian.wallet().registerContract();
+            started = true;
+            cfg.log(Cfg.LVL_INFO, "Guardian started");
+            runPass();
+        });
+    }
+
+    @Override public int onStartCommand(Intent intent, int flags, int startId) { return START_STICKY; }
+
+    private void tick() {
+        if (!started) return;
+        if (UI_FOREGROUND) return;   // the Activity owns processing while it is visible
+        submit(this::runPass);
+    }
+
+    private void runPass() {
+        try {
+            final long tip = guardian.tip();
+            if (tip > 0) guardian.reconcile(tip);
+        } catch (Throwable t) {
+            // A pass that throws must never take the daemon down — the next block brings another.
+            cfg.log(Cfg.LVL_ERROR, "Guardian pass failed — will retry next block: " + t);
+        }
+    }
+
+    private void submit(Runnable r) {
+        final ExecutorService w = worker;
+        if (w == null || w.isShutdown()) return;
+        try { w.execute(r); } catch (Exception ignored) {}
+    }
+
+    /** Swiped off recents. Keep guarding: reschedule the worker and ask to be brought back. */
+    @Override public void onTaskRemoved(Intent rootIntent) {
+        try { GuardianWorker.schedule(getApplicationContext()); } catch (Exception ignored) {}
+        try {
+            final android.app.AlarmManager am =
+                    (android.app.AlarmManager) getSystemService(ALARM_SERVICE);
+            final android.app.PendingIntent pi = android.app.PendingIntent.getForegroundService(
+                    getApplicationContext(), 9, new Intent(getApplicationContext(), GuardianService.class),
+                    android.app.PendingIntent.FLAG_ONE_SHOT | android.app.PendingIntent.FLAG_IMMUTABLE);
+            if (am != null) am.set(android.app.AlarmManager.RTC, System.currentTimeMillis() + 2000, pi);
+        } catch (Exception ignored) {}
+        super.onTaskRemoved(rootIntent);
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        if (receiver != null) { try { unregisterReceiver(receiver); } catch (Exception ignored) {} }
+        if (worker != null) worker.shutdownNow();
+        if (nodeApi != null) nodeApi.onDestroy();
+        if (store != null) store.close();
+    }
+
+    /**
+     * Start in the foreground, NEVER crashing. Uses specialUse on Android 14+ — a persistent
+     * chain-watcher does not fit dataSync, which is capped at ~6h/day and then crashes the service.
+     */
+    private boolean startForegroundCompat() {
+        final Notification n = new NotificationCompat.Builder(this, Notifier.CH_FG)
+                .setContentTitle("Future Cash guardian")
+                .setContentText("Watching your stakes — collecting safely, rescuing at-risk ones")
+                .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
+                .setOngoing(true)
+                .build();
+        try {
+            if (Build.VERSION.SDK_INT >= 34) {
+                startForeground(FG_ID, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            } else if (Build.VERSION.SDK_INT >= 29) {
+                startForeground(FG_ID, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            } else {
+                startForeground(FG_ID, n);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;   // ForegroundServiceStartNotAllowedException etc. — don't crash
+        }
+    }
+
+    /** Android 14+ can ask a time-limited FGS to stop. Stop gracefully rather than crashing. */
+    @Override public void onTimeout(int startId) { stopGracefully(); }
+    @Override public void onTimeout(int startId, int fgsType) { stopGracefully(); }
+
+    private void stopGracefully() {
+        try { stopForeground(STOP_FOREGROUND_REMOVE); } catch (Exception ignored) {}
+        stopSelf();
+    }
+
+    /* ---------- control ---------- */
+
+    public static void start(Context ctx) {
+        try {
+            ContextCompat.startForegroundService(ctx, new Intent(ctx, GuardianService.class));
+            GuardianWorker.schedule(ctx.getApplicationContext());
+        } catch (Exception ignored) {}
+    }
+
+    public static void stop(Context ctx) {
+        try {
+            ctx.stopService(new Intent(ctx, GuardianService.class));
+            GuardianWorker.cancel(ctx.getApplicationContext());
+            final NotificationManager nm = ctx.getSystemService(NotificationManager.class);
+            if (nm != null) nm.cancel(FG_ID);
+        } catch (Exception ignored) {}
+    }
+}

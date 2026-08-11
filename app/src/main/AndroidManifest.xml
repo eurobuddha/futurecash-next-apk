@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- The key audit talks to the reuse/keyaudit service over https. Only PUBLIC keys and
+         addresses ever leave the device. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Android 13+ runtime permission for collect / rescue alerts -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- The guardian daemon -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- Android 14+: a persistent chain-watcher uses specialUse; dataSync is capped at ~6h/day and
+         crashes the service when exceeded -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- A stake matures on a date the user chose weeks earlier; a doze-killed guardian would leave an
+         at-risk payout sitting on an exposed key -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Android 11+ package visibility: needed to deliver our targeted IPC broadcasts to the node -->
+    <queries>
+        <package android:name="org.minimarex.minimacore" />
+    </queries>
+
+    <!-- allowBackup=false is a FUND-SAFETY setting here, not a preference.
+         This app's data directory holds (a) the rescue destination and the audit verdict that
+         licenses a bare collect, and (b) fc_collect/fc_sweep — a RESUMABLE SPEND state machine.
+         With Auto Backup on, Android would upload that and RESTORE it on reinstall, so a fresh
+         install could resume "sweep this coin to that address" against a node that no longer holds
+         those coins, and a stale audit verdict could license collecting onto an address whose key
+         has since been reused. A reinstall must be a true reset. -->
+    <application
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FutureCash"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode|navigation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".GuardianService"
+            android:exported="false"
+            android:stopWithTask="false"
+            android:foregroundServiceType="specialUse|dataSync">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Watches the chain for the user's matured time-locked payments, collects them, and immediately moves any landing on a reused one-time key to a safe address" />
+        </service>
+
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
