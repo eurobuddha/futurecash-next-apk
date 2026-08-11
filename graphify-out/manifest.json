@@ -1,8 +1,8 @@
 {
   "app/build.gradle": {
-    "mtime": 1786484870.8374324,
-    "ast_hash": "d5ad809aa4541a699b04c08208033564",
-    "semantic_hash": "d5ad809aa4541a699b04c08208033564"
+    "mtime": 1786486195.6410437,
+    "ast_hash": "0f815680c107686e40d9d1d46a051e00",
+    "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Audit.java": {
     "mtime": 1786484468.464887,
@@ -40,9 +40,9 @@
     "semantic_hash": "a39e86818c669ab8d87ba094ff315a5d"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Guardian.java": {
-    "mtime": 1786484721.6294215,
-    "ast_hash": "ec5cb72293a0eeb3fd793cd0898b6de8",
-    "semantic_hash": "ec5cb72293a0eeb3fd793cd0898b6de8"
+    "mtime": 1786486158.2465665,
+    "ast_hash": "257c0578f7adbde00a65c26ff44e12f2",
+    "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/GuardianService.java": {
     "mtime": 1786484798.5801804,
@@ -95,9 +95,9 @@
     "semantic_hash": "e25f679a96de49027260dd0bba2ea6ce"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Tx.java": {
-    "mtime": 1786484431.6763294,
-    "ast_hash": "224fbd1d4696cd440cf2109f6dd85e3b",
-    "semantic_hash": "224fbd1d4696cd440cf2109f6dd85e3b"
+    "mtime": 1786486129.9683456,
+    "ast_hash": "c36ea01091ba3a05c16f5b0983cccf07",
+    "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Ui.java": {
     "mtime": 1786484913.4904132,
@@ -110,9 +110,9 @@
     "semantic_hash": "cf5f76da0f78bd876a77e6ae99c6e4aa"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Wallet.java": {
-    "mtime": 1786484606.8752756,
-    "ast_hash": "b5a315b9d19bc2fa7bd3afdc2d7aa19d",
-    "semantic_hash": "b5a315b9d19bc2fa7bd3afdc2d7aa19d"
+    "mtime": 1786486161.6068063,
+    "ast_hash": "390f9134ac584532541929946768e2e6",
+    "semantic_hash": ""
   },
   "app/src/test/java/com/eurobuddha/futurecashnext/KeyAuditTest.java": {
     "mtime": 1786484225.5920663,
@@ -143,5 +143,40 @@
     "mtime": 1786484168.7313461,
     "ast_hash": "0722166ca41bbcc4cfda30fc64b79542",
     "semantic_hash": "0722166ca41bbcc4cfda30fc64b79542"
+  },
+  "CLAUDE.md": {
+    "mtime": 1786485388.3133855,
+    "ast_hash": "4439d09bc81851d89f9ffcecc4136dcf",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1786485379.7263591,
+    "ast_hash": "95f6fd83a46e26647729698fe9094107",
+    "semantic_hash": ""
+  },
+  "app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png": {
+    "mtime": 1786484160.753789,
+    "ast_hash": "21b98b40443c76a12d0c69a0c218b532",
+    "semantic_hash": ""
+  },
+  "app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png": {
+    "mtime": 1786484160.7528946,
+    "ast_hash": "917306a51c9d77442fc1bc1a921d6793",
+    "semantic_hash": ""
+  },
+  "app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png": {
+    "mtime": 1786484160.7599754,
+    "ast_hash": "c3d01f1a2198ca707c44fda1d3b1bcee",
+    "semantic_hash": ""
+  },
+  "app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png": {
+    "mtime": 1786484160.757285,
+    "ast_hash": "1c884a674aa6c321cb61441690ccc260",
+    "semantic_hash": ""
+  },
+  "app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png": {
+    "mtime": 1786484160.7551248,
+    "ast_hash": "b23f24603a3ad3f9ead99823cbdab751",
+    "semantic_hash": ""
   }
 }

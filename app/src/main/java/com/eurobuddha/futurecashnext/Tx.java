@@ -9,27 +9,30 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Building and posting a transaction.
  *
- * <p>The sequence here is copied from the proven native collect in
- * {@code apks/futurecash CollectActivity.buildAndCollect}, NOT from the MiniDapp's — the two differ
- * in ways that matter, and only one of them works over this transport:
+ * <p>The sequence is the MiniDapp engine's, verbatim: create, input, output, basics, post. Two
+ * things about running it over broadcast-Intent IPC rather than MDS:
  *
  * <ul>
- *   <li><b>{@code scriptmmr:true} on the input.</b> This is what attaches the coin's script and MMR
- *       proof. The MiniDapp gets that from {@code txnbasics} instead (which is why a node with the
- *       covenant missing from its script table produced a transaction the chain silently rejected —
- *       see Wallet.registerContract).</li>
- *   <li><b>No {@code txnbasics} on the base path.</b> A whole-coin single-shot spend is
- *       self-balancing: one input, one output, same amount, no fee. {@code txnbasics} is there to
- *       scaffold an extra MINIMA input to fund a burn, and this app never burns. Observed: with it
- *       in the chain, a real collect on a real node failed AT that step; the two proven native
- *       sequences in this family (apks/futurecash collect, apks/openly settle) both omit it and both
- *       work. The precise reason core rejects it here has NOT been established — what is established
- *       is that the working sequences don't include it and this one did.</li>
+ *   <li><b>NEVER CHAIN COMMANDS WITH ';' HERE.</b> This is not style, it is a transport limit.
+ *       {@code MinimaAPIListener.response} takes a {@code JSONObject}, and the aar builds it with
+ *       {@code new JSONObject(reply)}. A chained command replies with a JSON ARRAY — one result per
+ *       command — so that constructor throws, the aar logs "Received Invalid JSONObject from
+ *       broadcast!" and delivers an EMPTY object instead. The commands all RAN; their result is
+ *       simply unreadable. That is what made a successful collect report "failed at txnbasics": the
+ *       step was {@code "txnbasics id:X;txnpost id:X"}, and the failing-stage label is its first
+ *       word. MDS can chain because {@code MDS.cmd} handles an array reply ({@code isArr(res)});
+ *       this transport cannot. One command per call, always.</li>
  *   <li><b>{@code txnpost} is async-mined.</b> Build steps must report {@code status:true}, but a
  *       post legitimately comes back without it ({@code istransaction:false} is mining in progress,
- *       not failure). Treating that as an error meant a perfectly good post was logged as failed and
- *       retried — posting the same coin twice.</li>
+ *       not failure). Treating that as an error logs a good post as failed and retries it — posting
+ *       the same coin twice.</li>
  * </ul>
+ *
+ * <p>The sibling native apps use the other valid shape — {@code txninput … scriptmmr:true} with NO
+ * {@code txnbasics} (see {@code apks/futurecash CollectActivity}, {@code apks/openly OpenlyTxn:454}),
+ * which attaches the script and MMR proof directly instead of letting the node do it. Either works;
+ * mixing them does not. This app follows the MiniDapp because that is the sequence proven against
+ * the covenant on a live node with live stakes.
  *
  * <p>Every path out of here runs {@code txndelete}, success or failure. Classic 2.7.1 chains the
  * whole thing as one command, so a failure at any step aborts before the delete and leaks the
@@ -74,6 +77,12 @@ public final class Tx {
                 final JSONObject r = node.cmd(cmd);
 
                 if (r == null) return Result.err("Minima Core didn't respond (at " + stage(cmd) + ")");
+                if (Node.unreadable(r)) {
+                    // The command almost certainly RAN — we just can't read the reply. Say exactly
+                    // that, rather than reporting a failure that probably didn't happen.
+                    return Result.err("Couldn't read Minima Core's reply to " + stage(cmd)
+                            + " — it may have succeeded. Check the Activity log before retrying.");
+                }
                 if (Node.pending(r)) {
                     return Result.unpaired("Minima Core is holding this for approval — the guardian has "
                             + "to act unattended, so enable Future Cash Next in Minima Core → Apps.");
@@ -135,9 +144,10 @@ public final class Tx {
         if (bad != null) return bad;
         final List<String> steps = new ArrayList<>();
         steps.add("txncreate id:%ID%");
-        steps.add("txninput id:%ID% coinid:" + coinid + " scriptmmr:true");
+        steps.add("txninput id:%ID% coinid:" + coinid);
         steps.add("txnoutput id:%ID% address:" + payout + " amount:" + amount
                 + " tokenid:" + tokenid + " storestate:false");
+        steps.add("txnbasics id:%ID%");   // attaches the script + MMR proof; NOT chained with the post
         steps.add("txnpost id:%ID%");
         return run(node, "COL", steps);
     }
@@ -162,10 +172,11 @@ public final class Tx {
         }
         final List<String> steps = new ArrayList<>();
         steps.add("txncreate id:%ID%");
-        steps.add("txninput id:%ID% coinid:" + coinid + " scriptmmr:true");
+        steps.add("txninput id:%ID% coinid:" + coinid);
         steps.add("txnoutput id:%ID% address:" + dest + " amount:" + amount
                 + " tokenid:" + tokenid + " storestate:false");
         steps.add("txnsign id:%ID% publickey:" + signKey);
+        steps.add("txnbasics id:%ID%");   // sign first, then basics — the order apks/openly uses
         steps.add("txnpost id:%ID%");
         return run(node, "SWP", steps);
     }

@@ -50,6 +50,20 @@ public final class Node {
 
     /* ---------- the blocking call ---------- */
 
+    /**
+     * True when a reply is the aar's parse-failure sentinel rather than a real answer.
+     *
+     * <p>{@code MinimaAPIListener.response} can only carry a {@code JSONObject}, and the aar builds
+     * it with {@code new JSONObject(reply)}. Anything that isn't a JSON object — most importantly the
+     * ARRAY returned by a ';'-chained command — makes that constructor throw, and the aar delivers an
+     * empty object instead. The commands ran; we simply cannot read the result. Calling that
+     * "failed" is how a successful collect reported failure, so name the condition and report it
+     * honestly. (Do not chain commands here — see Tx.)
+     */
+    public static boolean unreadable(JSONObject r) {
+        return r != null && r.length() == 0;
+    }
+
     /** @return the reply, or null if the node errored / never answered. Never throws. */
     public JSONObject cmd(String command) {
         final CountDownLatch done = new CountDownLatch(1);
