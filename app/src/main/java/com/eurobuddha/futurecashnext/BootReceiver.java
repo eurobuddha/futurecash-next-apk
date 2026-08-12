@@ -21,7 +21,9 @@ public class BootReceiver extends BroadcastReceiver {
                 && !Intent.ACTION_MY_PACKAGE_REPLACED.equals(action)) {
             return;
         }
-        if (!new Cfg(ctx).is(Cfg.GUARDIAN_ON, false)) return;
+        // rescueReady, not just GUARDIAN_ON: never resurrect a guardian that cannot rescue.
+        final Cfg cfg = new Cfg(ctx);
+        if (!cfg.is(Cfg.GUARDIAN_ON, false) || !cfg.rescueReady()) return;
         GuardianService.start(ctx.getApplicationContext());
     }
 }

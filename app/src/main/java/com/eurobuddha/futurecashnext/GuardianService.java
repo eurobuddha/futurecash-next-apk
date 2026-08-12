@@ -54,11 +54,31 @@ public class GuardianService extends Service {
     @Override public void onCreate() {
         super.onCreate();
         Notifier.ensureChannels(this);
+        cfg = new Cfg(this);
+
+        // REFUSE TO RUN WITHOUT A RESCUE DESTINATION. The UI gates this too, but the check has to
+        // live here as well: this service is also started by BootReceiver and GuardianWorker, and a
+        // build that shipped before the gate can already have GUARDIAN_ON set with nothing to sweep
+        // to. Running then would show an ongoing "watching your stakes" notification for a guardian
+        // that cannot rescue — the exact false assurance this whole change exists to remove.
+        //
+        // Checked BEFORE startForegroundCompat so that notification is never posted at all.
+        if (!cfg.rescueReady()) {
+            cfg.setBool(Cfg.GUARDIAN_ON, false);
+            GuardianWorker.cancel(getApplicationContext());
+            cfg.log(Cfg.LVL_ERROR, "Guardian stopped — no rescue destination is set, so it could not "
+                    + "move an at-risk stake to safety. Set one on the Guardian tab and start it again.");
+            Notifier.alert(this, "Future Cash guardian stopped",
+                    "It had no safe destination, so it could not rescue an at-risk stake. Open the app "
+                            + "and pick where rescued funds should go.");
+            stopSelf();
+            return;
+        }
+
         // If the OS refuses the foreground service, bail gracefully rather than crashing — the
         // guardian resumes when the app is next opened or the budget resets.
         if (!startForegroundCompat()) { stopSelf(); return; }
 
-        cfg = new Cfg(this);
         store = new Store(this);
         worker = Executors.newSingleThreadExecutor();
         nodeApi = new NodeApi(this, enabled -> {});

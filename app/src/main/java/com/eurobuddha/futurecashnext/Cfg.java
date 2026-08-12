@@ -55,6 +55,23 @@ public final class Cfg {
         this.sp = ctx.getApplicationContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
+    /**
+     * Can the guardian actually rescue? This is the precondition for running it AT ALL.
+     *
+     * <p>The whole point of the daemon is winning a race: collecting no longer needs a signature
+     * once a stake matures, so an attacker holding a leaked key can collect it themselves, land the
+     * money on the address they can forge for, and take it. A guardian with nowhere to sweep to
+     * cannot compete in that race — it just watches. Worse, it says it is protecting you.
+     *
+     * <p>Required even on a node with no reuse today, because "today" is not the guarantee that
+     * matters: the reuse database refreshes every 30 minutes and a key can sign again, so a clean
+     * node can be flagged at 3am — precisely when nobody is looking. Satisfying this costs one tap
+     * (a fresh same-node address), and on a clean node it simply never gets used.
+     */
+    public boolean rescueReady() {
+        return Node.validMx(get(SAFE_ADDRESS, null)) && is(ENABLED, false);
+    }
+
     public String get(String key, String dflt) {
         final String v = sp.getString(key, null);
         return (v == null || v.isEmpty()) ? dflt : v;

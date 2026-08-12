@@ -56,6 +56,7 @@ public final class Guardian {
 
     private boolean vaultLocked = false;
     private boolean lockNotified = false;
+    private boolean cannotRescueNotified = false;
 
     public interface Notifier {
         void notify(String title, String body);
@@ -446,6 +447,30 @@ public final class Guardian {
         // exposed address still goes ahead (leaving it there is worse), but we stop pulling FRESH
         // at-risk stakes out of the covenant for it.
         final boolean badSafe = audit.safeIsReused(safe);
+
+        // A RUNNING guardian that has lost the ability to rescue must say so, once. Everything below
+        // still fails safe — an at-risk stake simply won't be collected — but silence here is the
+        // same false assurance as running with no destination at all: the daemon appears healthy
+        // while the protection it advertises is off. The vault-locked case above already works this
+        // way; this covers the destination being cleared or flagged reused underneath us.
+        // Condition mirrors what collectMatured is actually given below (canSweep && !badSafe), so the
+        // warning can't disagree with the engine. vaultLocked is excluded — it has its own message.
+        if (!(canSweep && !badSafe) && !vaultLocked) {
+            if (!cannotRescueNotified) {
+                cannotRescueNotified = true;
+                final String why = badSafe
+                        ? "your safe destination is flagged as a REUSED address"
+                        : (safe == null || safe.isEmpty()
+                                ? "no safe destination is set"
+                                : "your safe destination is no longer usable");
+                cfg.log(Cfg.LVL_ERROR, "Rescue is OFF — " + why + ". At-risk stakes will be left "
+                        + "locked in the contract (safe, but not collected) until you fix it.");
+                notifier.notify("Future Cash: rescue is off",
+                        "The guardian can't move an at-risk stake to safety — " + why + ".");
+            }
+        } else {
+            cannotRescueNotified = false;
+        }
 
         collectMatured(tip, autoCollectSafe, rescueEnabled, verdict.ok, canSweep && !badSafe, sets.ownDefault);
         reconcileCollects(tip);

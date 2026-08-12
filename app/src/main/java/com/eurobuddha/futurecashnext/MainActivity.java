@@ -58,6 +58,20 @@ public class MainActivity extends AppCompatActivity {
     private long tip = 0;
     private List<Guardian.Stake> stakes = new ArrayList<>();
     private boolean auditRunning = false;
+    /** Set when the rescue chooser was opened BY "Start guardian", so we finish that job afterwards. */
+    private boolean startGuardianAfterSetup = false;
+
+    // Snapshots computed on the worker and rendered from cache. NOTHING in render() may touch the
+    // node or the database.
+    //
+    // Audit.usable() blocks on `keys action:list` whenever the stored verdict is past its freshness
+    // window but still re-confirmable (30 min .. 24 h). NodeApi delivers that reply ON THE MAIN
+    // THREAD — so calling it from render() blocked the main thread waiting for something only the
+    // main thread could deliver. The app hung on the splash screen for the full 200s IPC timeout and
+    // then rendered a wrongly-STALE verdict. It looked fine in testing only because a node with no
+    // stored audit short-circuits before the node call.
+    private Audit.Verdict lastVerdict;
+    private Guardian.Status lastStatus;
 
     @Override protected void onCreate(Bundle saved) {
         super.onCreate(saved);
@@ -169,12 +183,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void toast(String s) { runOnUiThread(() -> Toast.makeText(this, s, Toast.LENGTH_LONG).show()); }
 
-    /** Pull fresh state on the worker, then redraw. */
+    /**
+     * Finish the job the user actually asked for. They pressed "Start guardian" and were diverted
+     * into choosing a destination; now that one exists, start it — rather than leaving them on a
+     * screen that still says Off after they did what it asked.
+     */
+    private void finishPendingGuardianStart() {
+        if (!startGuardianAfterSetup) return;
+        startGuardianAfterSetup = false;
+        if (!cfg.rescueReady()) return;   // setup didn't actually complete
+        cfg.setBool(Cfg.GUARDIAN_ON, true);
+        runOnUiThread(() -> {
+            GuardianService.start(this);
+            toast("Guardian started — watching your stakes.");
+            render();
+        });
+    }
+
+    /** Pull fresh state on the worker, then redraw. Every blocking call belongs in here. */
     private void refresh() {
         submit(() -> {
             final long t = guardian.tip();
             final List<Guardian.Stake> s = guardian.listStakes();
-            runOnUiThread(() -> { tip = t; stakes = s; render(); });
+            final Audit.Verdict v = new Audit(cfg, node).usable();   // may block on the node — worker only
+            final Guardian.Status st = guardian.status(t);           // SQLite — worker only
+            runOnUiThread(() -> {
+                tip = t; stakes = s; lastVerdict = v; lastStatus = st;
+                render();
+            });
         });
     }
 
@@ -205,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayout c = Ui.card(this, 0);
         final long at = cfg.getLong(Cfg.AUDIT_AT);
         final String err = cfg.get(Cfg.AUDIT_LAST_ERR, "");
-        final Audit.Verdict v = new Audit(cfg, node).usable();
-        final String[] bad = new Audit(cfg, node).safeReused();
+        final Audit.Verdict v = lastVerdict;                        // cached — see the field comment
+        final String[] bad = new Audit(cfg, node).safeReused();     // prefs only, never touches the node
 
         String msg;
         int colour;
@@ -228,10 +264,10 @@ public class MainActivity extends AppCompatActivity {
             // service" told the user to check their network when the real problem was a local one
             // (not enabled in Minima Core), which is the opposite of the fix they needed.
             msg = err + " "
-                    + (v.ok ? "Using your last good audit (" + Ui.timeAgo(v.at) + ") — collecting continues."
+                    + (v != null && v.ok ? "Using your last good audit (" + Ui.timeAgo(v.at) + ") — collecting continues."
                             : "Auto-collect of safe stakes is paused until an audit succeeds; your funds "
                               + "are untouched and stay locked in the contract.");
-            colour = v.ok ? Ui.WARN : Ui.DANGER;
+            colour = (v != null && v.ok) ? Ui.WARN : Ui.DANGER;
         } else if (at == 0) {
             msg = "No audit yet. Tap Re-audit to check your keys."; colour = Ui.DIM;
         } else {
@@ -242,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         c.addView(Ui.text(this, "Key audit", Ui.TEXT, 16, true));
         c.addView(Ui.text(this, msg, colour, 13, false));
         if (at > 0) {
-            c.addView(Ui.text(this, "audited " + Ui.timeAgo(at) + " · " + v.mode.name().toLowerCase()
+            c.addView(Ui.text(this, "audited " + Ui.timeAgo(at) + (v == null ? "" : " · " + v.mode.name().toLowerCase())
                     + (tip > 0 ? " · block " + tip : ""), Ui.DIM, 11, false));
         }
         final LinearLayout row = Ui.row(this);
@@ -253,13 +289,34 @@ public class MainActivity extends AppCompatActivity {
 
     private View daemonCard() {
         final boolean on = cfg.is(Cfg.GUARDIAN_ON, false);
+        final boolean ready = cfg.rescueReady();
+        final String safe = cfg.get(Cfg.SAFE_ADDRESS, null);
         final LinearLayout c = Ui.card(this, on ? Ui.OK : Ui.WARN);
         c.addView(Ui.text(this, "Guardian daemon", Ui.TEXT, 16, true));
-        c.addView(Ui.text(this, on
-                ? "Running. Your stakes are watched even with the app closed — matured ones are "
-                  + "collected, and any landing on a reused key are swept to safety."
-                : "Off. Stakes are only checked while this app is open, so an at-risk payout could sit "
-                  + "on an exposed key until you next look.", on ? Ui.OK : Ui.WARN, 13, false));
+
+        // The old copy said only that stakes "are checked while this app is open", which never
+        // explained WHY an unwatched stake is exposed — and the exposure is the whole point. The
+        // mechanism has to be in the text: collecting needs no signature, so the clock is not yours
+        // to start.
+        final String body;
+        if (on) {
+            body = "Running. Your stakes are watched even with the app closed. A matured stake is "
+                 + "collected, and if its payout address has a reused key the money is swept onward "
+                 + "to safety within about a minute of landing — to "
+                 + Ui.shortAddr(safe) + (guardian.wallet().sameNodeMode() ? " on this node." : " (external).");
+        } else if (!ready) {
+            body = "Off, and it needs somewhere to move rescued funds before it can run. Press "
+                 + "Start guardian and pick a destination — a fresh address on this node takes one "
+                 + "tap. On a node with no key reuse it will never be used; it is there so the "
+                 + "guardian is never watching money it cannot rescue.";
+        } else {
+            body = "Off. After a stake matures, anyone can collect it — that needs no signature — "
+                 + "which lands the money on its payout address. If that address's key was reused, "
+                 + "it sits there exposed until you next open this app. With the guardian on, it is "
+                 + "moved to safety within about a minute of landing.";
+        }
+        c.addView(Ui.text(this, body, on ? Ui.OK : Ui.WARN, 13, false));
+
         final LinearLayout row = Ui.row(this);
         if (on) {
             row.addView(Ui.ghost(this, "Stop guardian", v -> {
@@ -269,6 +326,15 @@ public class MainActivity extends AppCompatActivity {
             }));
         } else {
             row.addView(Ui.button(this, "Start guardian", Ui.OK, v -> {
+                // HARD GATE. Never let the daemon run when it cannot rescue — that is the state that
+                // tells the user they are protected while nothing would happen. Not an error dialog:
+                // send them straight to the chooser so the fix is one tap away.
+                if (!cfg.rescueReady()) {
+                    toast("Pick where rescued funds should go — the guardian needs a destination.");
+                    startGuardianAfterSetup = true;
+                    rescueDialog();
+                    return;
+                }
                 cfg.setBool(Cfg.GUARDIAN_ON, true);
                 GuardianService.start(this);
                 render();
@@ -279,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private View safeCard() {
-        final Guardian.Status st = guardian.status(tip);
+        final Guardian.Status st = lastStatus != null ? lastStatus : new Guardian.Status();
         final LinearLayout c = Ui.card(this, 0);
         c.addView(Ui.text(this, "Ready to collect — SAFE", Ui.TEXT, 16, true));
 
@@ -308,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private View riskCard() {
-        final Guardian.Status st = guardian.status(tip);
+        final Guardian.Status st = lastStatus != null ? lastStatus : new Guardian.Status();
         final boolean anyRisk = st.atRiskKnown > 0 || st.readyRiskN > 0 || st.pendRiskN > 0;
         final LinearLayout c = Ui.card(this, st.readyRiskN > 0 ? Ui.WARN : 0);
         c.addView(Ui.text(this, "At-risk stakes", Ui.TEXT, 16, true));
@@ -364,7 +430,10 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog dlg = new AlertDialog.Builder(this)
                 .setTitle("Rescue at-risk stakes")
                 .setView(box)
-                .setNegativeButton("Cancel", null)
+                // Backing out means they did NOT agree to set a destination, so drop the pending
+                // "start the guardian afterwards" intent — never start it behind a cancel.
+                .setNegativeButton("Cancel", (d, w) -> startGuardianAfterSetup = false)
+                .setOnCancelListener(d -> startGuardianAfterSetup = false)
                 .create();
 
         final LinearLayout actions = Ui.row(this);
@@ -372,7 +441,7 @@ public class MainActivity extends AppCompatActivity {
             dlg.dismiss();
             submit(() -> {
                 final Wallet.Res r = guardian.wallet().setSafeSameNode();
-                if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); }
+                if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); finishPendingGuardianStart(); }
                 toast(r.ok ? "Rescue ON → " + Ui.shortAddr(r.value) : r.error);
                 runOnUiThread(this::render);
             });
@@ -384,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
             submit(() -> auditRunner.checkOne(addr, count -> submit(() -> {
                 // count: >0 reused (refuse), 0 clean, -1 unverifiable (accept, re-checked on every audit)
                 final Wallet.Res r = guardian.wallet().setSafeExternal(addr, count);
-                if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); }
+                if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); finishPendingGuardianStart(); }
                 toast(r.ok
                         ? "Rescue ON → external " + Ui.shortAddr(addr)
                           + (count == 0 ? " (verified clean)" : " (reuse check unverified — will re-check)")
@@ -670,14 +739,21 @@ public class MainActivity extends AppCompatActivity {
               + "2. Start the guardian on the Guardian tab.\n"
               + "3. Stakes tab: enter an amount, pick when it unlocks, press Lock it.\n\n"
               + "When the date arrives the guardian collects it for you, safely."));
-        content.addView(helpCard("Why there's a guardian",
-                "Minima signs with one-time keys — like a stamp that fades each time you press it. "
-              + "Using the same key twice weakens it.\n\n"
+        content.addView(helpCard("Why there's a guardian — it's a race",
+                "Minima signs with one-time keys. Signing twice with the same one leaks it, and that "
+              + "address is then exposed forever.\n\n"
               + "Your money can never be stolen AT collection: the chain only lets a collected coin go "
               + "to the payout address you chose when locking. The risk is what happens after it "
-              + "lands. So the guardian checks every key first:\n\n"
-              + "• Clean payout → collected normally.\n"
-              + "• Reused payout → collected AND immediately swept to your safe address, then verified."));
+              + "lands.\n\n"
+              + "And you don't control when it lands. Collecting a matured stake needs NO signature, "
+              + "so anyone can do it — including someone holding a leaked key, who has every reason "
+              + "to collect your stake onto the address they can forge for, then take it.\n\n"
+              + "So the guardian's job is to be the one who collects, with the sweep already moving:\n\n"
+              + "• Clean payout → collected normally, straight to your node.\n"
+              + "• Reused payout → collected AND swept onward in the same pass, no waiting for a "
+              + "confirmation, then checked that it arrived.\n\n"
+              + "That is why it needs a destination before it will run at all: a guardian with nowhere "
+              + "to sweep to can't win the race, it can only watch."));
         content.addView(helpCard("If the audit service is down",
                 "Collecting carries on. Your last good result stays in force, and the app re-checks it "
               + "against your node's own key counters — no internet needed. It only pauses if a key "

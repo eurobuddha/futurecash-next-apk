@@ -27,8 +27,11 @@ public class GuardianWorker extends Worker {
     @Override
     public Result doWork() {
         // Only revive the daemon if the user actually has it switched on — otherwise a cancelled
-        // schedule that outlives the toggle would keep resurrecting a service they turned off.
-        if (!new Cfg(getApplicationContext()).is(Cfg.GUARDIAN_ON, false)) return Result.success();
+        // schedule that outlives the toggle would keep resurrecting a service they turned off — and
+        // only if it can still rescue, so a destination removed since scheduling doesn't come back as
+        // a guardian that merely watches.
+        final Cfg cfg = new Cfg(getApplicationContext());
+        if (!cfg.is(Cfg.GUARDIAN_ON, false) || !cfg.rescueReady()) return Result.success();
         try {
             ContextCompat.startForegroundService(getApplicationContext(),
                     new Intent(getApplicationContext(), GuardianService.class));
