@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override protected void onCreate(Bundle saved) {
         super.onCreate(saved);
+        Design.load(this);   // fonts + persisted light/dark, before any view exists
         setContentView(R.layout.activity_main);
         content = findViewById(R.id.content);
         tabsBar = findViewById(R.id.tabs);
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         Notifier.ensureChannels(this);
         askNotificationPermission();
+        styleChrome();
         buildTabs();
         render();
 
@@ -155,21 +157,59 @@ public class MainActivity extends AppCompatActivity {
 
     /* ================= chrome ================= */
 
+    /** Apply the live palette to the chrome that lives in XML. Called on every theme change. */
+    private void styleChrome() {
+        final View root = findViewById(R.id.rootView);
+        root.setBackgroundColor(Design.BG());
+
+        final TextView title = findViewById(R.id.title);
+        title.setTypeface(Design.sansBold());
+        title.setTextColor(Design.TEXT());
+
+        final TextView sub = findViewById(R.id.subtitle);
+        sub.setTypeface(Design.sans());
+        sub.setTextColor(Design.DIM2());
+
+        // A quiet affordance, not a control that competes with the guardian's own state.
+        final TextView toggle = findViewById(R.id.themeToggle);
+        toggle.setText(Design.isDark() ? "☀" : "☾");
+        toggle.setTextColor(Design.DIM());
+        toggle.setBackground(Design.stroked(this, Design.SURFACE2(), 12));
+        toggle.setOnClickListener(v -> {
+            Design.toggle(this);
+            styleChrome();
+            buildTabs();
+            render();
+        });
+
+        pairBanner.setTypeface(Design.sans());
+        pairBanner.setTextColor(Design.WARN());
+        pairBanner.setBackground(Design.stroked(this, Design.SURFACE2(), 14));
+    }
+
+    /** A segmented control: the active tab is a filled pill, the rest are quiet text. */
     private void buildTabs() {
         tabsBar.removeAllViews();
         final String[][] defs = {{"guardian", "Guardian"}, {"lock", "Stakes"},
                 {"activity", "Activity"}, {"help", "Help"}};
         for (String[] d : defs) {
-            final Button b = Ui.ghost(this, d[1], v -> { tab = d[0]; buildTabs(); render(); });
-            if (tab.equals(d[0])) {
-                b.setTextColor(Color.BLACK);
-                final android.graphics.drawable.GradientDrawable bg =
-                        new android.graphics.drawable.GradientDrawable();
-                bg.setColor(Ui.ACCENT);
-                bg.setCornerRadius(Ui.dp(this, 10));
-                b.setBackground(bg);
-            }
-            tabsBar.addView(b);
+            final boolean active = tab.equals(d[0]);
+            final TextView t = new TextView(this);
+            t.setText(d[1]);
+            t.setTextSize(13);
+            t.setTypeface(active ? Design.sansBold() : Design.sans());
+            t.setTextColor(active ? Design.ACCENT() : Design.DIM());
+            t.setPadding(Ui.dp(this, 16), Ui.dp(this, 10), Ui.dp(this, 16), Ui.dp(this, 10));
+            t.setBackground(active
+                    ? Design.roundBg(this, Design.ACCENT_SOFT(), 12)
+                    : Design.roundBg(this, Color.TRANSPARENT, 12));
+            final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.rightMargin = Ui.dp(this, 6);
+            t.setLayoutParams(lp);
+            Design.pressable(t);
+            t.setOnClickListener(v -> { tab = d[0]; buildTabs(); render(); });
+            tabsBar.addView(t);
         }
     }
 
@@ -228,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
     /* ================= Guardian tab ================= */
 
     private void renderGuardian() {
+        content.addView(heroCard());
         content.addView(auditCard());
         content.addView(daemonCard());
         content.addView(safeCard());
@@ -235,6 +276,71 @@ public class MainActivity extends AppCompatActivity {
         recoverCard();
         hardenCard();
         content.addView(keyTableCard());
+    }
+
+    /**
+     * One line answering the only question that matters on opening the app: is my money being
+     * watched, and if not, why not.
+     *
+     * <p>Everything below this card is detail. The states are ranked by what needs the user MOST, not
+     * by what is most alarming — "not enabled in Minima Core" outranks key reuse, because until the
+     * IPC is granted nothing can happen at all.
+     */
+    private View heroCard() {
+        final boolean on = cfg.is(Cfg.GUARDIAN_ON, false);
+        final boolean ready = cfg.rescueReady();
+        final String[] badDest = new Audit(cfg, node).safeReused();
+        final int atRisk = lastStatus != null ? lastStatus.atRiskKnown : 0;
+
+        final String headline;
+        final String detail;
+        final int colour;
+        if (!paired) {
+            headline = "Not connected";
+            detail = "Enable Future Cash Next in Minima Core → Apps. Nothing can be collected or "
+                   + "rescued until you do.";
+            colour = Design.RED();
+        } else if (badDest != null) {
+            headline = "Your safe address is reused";
+            detail = "Rescued money would land on another exposed key. Set a fresh destination.";
+            colour = Design.RED();
+        } else if (!on) {
+            headline = ready ? "Guardian is off" : "Guardian needs a destination";
+            detail = ready
+                    ? "Your stakes are only watched while this app is open."
+                    : "Pick where rescued funds should go, then it can run.";
+            colour = Design.WARN();
+        } else if (atRisk > 0) {
+            headline = "Watching — " + atRisk + " at-risk address" + (atRisk == 1 ? "" : "es");
+            detail = "Anything maturing onto a reused key is collected and swept to safety.";
+            colour = Design.WARN();
+        } else {
+            headline = "Protected";
+            detail = "The guardian is watching your stakes, even with the app closed.";
+            colour = Design.SAFE();
+        }
+
+        final LinearLayout c = Ui.card(this, colour);
+        final LinearLayout top = Ui.row(this);
+        final View dot = new View(this);
+        dot.setBackground(Design.roundBg(this, colour, 5));
+        dot.setLayoutParams(new LinearLayout.LayoutParams(Ui.dp(this, 10), Ui.dp(this, 10)));
+        top.addView(dot);
+        final TextView h = Ui.text(this, "  " + headline, colour, 19, true);
+        top.addView(h);
+        c.addView(top);
+        c.addView(Ui.body(this, detail));
+
+        // The chain tip doubles as a liveness indicator: a number that stops moving means the node
+        // stopped talking to us, which no amount of reassuring copy would reveal.
+        if (tip > 0) {
+            final LinearLayout foot = Ui.row(this);
+            foot.addView(Ui.text(this, "chain ", Design.DIM2(), 11, false));
+            foot.addView(Ui.mono(this, String.valueOf(tip), Design.DIM(), 11, false));
+            c.addView(Ui.divider(this));
+            c.addView(foot);
+        }
+        return c;
     }
 
     private View auditCard() {
@@ -247,18 +353,18 @@ public class MainActivity extends AppCompatActivity {
         String msg;
         int colour;
         if (auditRunning) {
-            msg = "Auditing your keys…"; colour = Ui.DIM;
+            msg = "Auditing your keys…"; colour = Design.DIM();
         } else if (bad != null) {
             // Loudest state in the app: the place we sweep RESCUED money to is itself reused. Ranked
             // above key-reuse risk because it breaks the escape route, not just the front door.
             msg = "⚠ Your safe destination " + Ui.shortAddr(bad[0]) + " is a REUSED address (signed ×"
                     + bad[1] + "). Rescuing there would move your money onto another exposed key — "
                     + "set a fresh destination below.";
-            colour = Ui.DANGER;
+            colour = Design.RED();
         } else if (lastAudit != null && lastAudit.worstReuse > 0) {
             msg = "⚠ Key-reuse risk detected (reused ×" + lastAudit.worstReuse + "). At-risk stakes "
                     + "are collected and swept to your safe address.";
-            colour = lastAudit.worstReuse > 3 ? Ui.DANGER : Ui.WARN;
+            colour = lastAudit.worstReuse > 3 ? Design.RED() : Design.WARN();
         } else if (!err.isEmpty()) {
             // Report the failure we actually had. Wrapping every error in "couldn't reach the audit
             // service" told the user to check their network when the real problem was a local one
@@ -267,19 +373,19 @@ public class MainActivity extends AppCompatActivity {
                     + (v != null && v.ok ? "Using your last good audit (" + Ui.timeAgo(v.at) + ") — collecting continues."
                             : "Auto-collect of safe stakes is paused until an audit succeeds; your funds "
                               + "are untouched and stay locked in the contract.");
-            colour = (v != null && v.ok) ? Ui.WARN : Ui.DANGER;
+            colour = (v != null && v.ok) ? Design.WARN() : Design.RED();
         } else if (at == 0) {
-            msg = "No audit yet. Tap Re-audit to check your keys."; colour = Ui.DIM;
+            msg = "No audit yet. Tap Re-audit to check your keys."; colour = Design.DIM();
         } else {
             msg = "✓ No key-reuse risk. Your matured stakes can be collected safely.";
-            colour = Ui.OK;
+            colour = Design.SAFE();
         }
 
-        c.addView(Ui.text(this, "Key audit", Ui.TEXT, 16, true));
+        c.addView(Ui.text(this, "Key audit", Design.TEXT(), 16, true));
         c.addView(Ui.text(this, msg, colour, 13, false));
         if (at > 0) {
             c.addView(Ui.text(this, "audited " + Ui.timeAgo(at) + (v == null ? "" : " · " + v.mode.name().toLowerCase())
-                    + (tip > 0 ? " · block " + tip : ""), Ui.DIM, 11, false));
+                    + (tip > 0 ? " · block " + tip : ""), Design.DIM(), 11, false));
         }
         final LinearLayout row = Ui.row(this);
         row.addView(Ui.ghost(this, "Re-audit", v2 -> maybeAudit(true)));
@@ -291,8 +397,8 @@ public class MainActivity extends AppCompatActivity {
         final boolean on = cfg.is(Cfg.GUARDIAN_ON, false);
         final boolean ready = cfg.rescueReady();
         final String safe = cfg.get(Cfg.SAFE_ADDRESS, null);
-        final LinearLayout c = Ui.card(this, on ? Ui.OK : Ui.WARN);
-        c.addView(Ui.text(this, "Guardian daemon", Ui.TEXT, 16, true));
+        final LinearLayout c = Ui.card(this, on ? Design.SAFE() : Design.WARN());
+        c.addView(Ui.text(this, "Guardian daemon", Design.TEXT(), 16, true));
 
         // The old copy said only that stakes "are checked while this app is open", which never
         // explained WHY an unwatched stake is exposed — and the exposure is the whole point. The
@@ -315,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                  + "it sits there exposed until you next open this app. With the guardian on, it is "
                  + "moved to safety within about a minute of landing.";
         }
-        c.addView(Ui.text(this, body, on ? Ui.OK : Ui.WARN, 13, false));
+        c.addView(Ui.text(this, body, on ? Design.SAFE() : Design.WARN(), 13, false));
 
         final LinearLayout row = Ui.row(this);
         if (on) {
@@ -325,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
                 render();
             }));
         } else {
-            row.addView(Ui.button(this, "Start guardian", Ui.OK, v -> {
+            row.addView(Ui.cta(this, "Start guardian", v -> {
                 // HARD GATE. Never let the daemon run when it cannot rescue — that is the state that
                 // tells the user they are protected while nothing would happen. Not an error dialog:
                 // send them straight to the chooser so the fix is one tap away.
@@ -347,24 +453,24 @@ public class MainActivity extends AppCompatActivity {
     private View safeCard() {
         final Guardian.Status st = lastStatus != null ? lastStatus : new Guardian.Status();
         final LinearLayout c = Ui.card(this, 0);
-        c.addView(Ui.text(this, "Ready to collect — SAFE", Ui.TEXT, 16, true));
+        c.addView(Ui.text(this, "Ready to collect — SAFE", Design.TEXT(), 16, true));
 
         final String detail = st.readySafeN > 0
                 ? Ui.amount(String.valueOf(st.readySafeA)) + " MINIMA in " + (int) st.readySafeN
                   + " matured stake" + (st.readySafeN == 1 ? "" : "s") + " on clean addresses."
                 : "No safe matured stakes right now.";
-        c.addView(Ui.text(this, detail, Ui.DIM, 13, false));
+        c.addView(Ui.text(this, detail, Design.DIM(), 13, false));
 
         final boolean auto = cfg.is(Cfg.AUTO_COLLECT_SAFE, false);
         final LinearLayout row = Ui.row(this);
         if (auto) {
             c.addView(Ui.text(this, "Auto-collect is ON — matured stakes are collected to your own "
-                    + "address. There's no rush: until then they stay safely locked away.", Ui.OK, 12, false));
+                    + "address. There's no rush: until then they stay safely locked away.", Design.SAFE(), 12, false));
             row.addView(Ui.ghost(this, "Turn off", v -> {
                 cfg.setBool(Cfg.AUTO_COLLECT_SAFE, false); render();
             }));
         } else {
-            row.addView(Ui.button(this, "Turn on auto-collect", Ui.OK, v -> {
+            row.addView(Ui.tinted(this, "Turn on auto-collect", Design.SAFE(), v -> {
                 cfg.setBool(Cfg.AUTO_COLLECT_SAFE, true); render();
             }));
         }
@@ -376,8 +482,8 @@ public class MainActivity extends AppCompatActivity {
     private View riskCard() {
         final Guardian.Status st = lastStatus != null ? lastStatus : new Guardian.Status();
         final boolean anyRisk = st.atRiskKnown > 0 || st.readyRiskN > 0 || st.pendRiskN > 0;
-        final LinearLayout c = Ui.card(this, st.readyRiskN > 0 ? Ui.WARN : 0);
-        c.addView(Ui.text(this, "At-risk stakes", Ui.TEXT, 16, true));
+        final LinearLayout c = Ui.card(this, st.readyRiskN > 0 ? Design.WARN() : 0);
+        c.addView(Ui.text(this, "At-risk stakes", Design.TEXT(), 16, true));
 
         String detail;
         if (st.readyRiskN > 0) {
@@ -392,21 +498,21 @@ public class MainActivity extends AppCompatActivity {
             detail = anyRisk ? "No at-risk stakes right now — the guardian is watching and acts the "
                     + "moment one matures." : "No at-risk stakes detected.";
         }
-        c.addView(Ui.text(this, detail, Ui.DIM, 13, false));
+        c.addView(Ui.text(this, detail, Design.DIM(), 13, false));
 
         final String safe = cfg.get(Cfg.SAFE_ADDRESS, null);
         final boolean rescueOn = cfg.is(Cfg.ENABLED, false);
         if (safe != null) {
             c.addView(Ui.text(this, (rescueOn ? "rescue ON → " : "destination: ") + Ui.shortAddr(safe)
                     + (guardian.wallet().sameNodeMode() ? " · this node" : " · external"),
-                    rescueOn ? Ui.OK : Ui.DIM, 12, false));
+                    rescueOn ? Design.SAFE() : Design.DIM(), 12, false));
         }
         if (st.vaultLocked) {
-            c.addView(Ui.text(this, "🔒 vault locked — unlock your node to sweep", Ui.WARN, 12, false));
+            c.addView(Ui.text(this, "🔒 vault locked — unlock your node to sweep", Design.WARN(), 12, false));
         }
 
         final LinearLayout row = Ui.row(this);
-        row.addView(Ui.button(this, safe == null ? "Set up rescue…" : "Change destination", Ui.ACCENT,
+        row.addView(Ui.tinted(this, safe == null ? "Set up rescue…" : "Change destination", Design.ACCENT(),
                 v -> rescueDialog()));
         if (rescueOn) row.addView(Ui.ghost(this, "Stop rescue", v -> {
             cfg.setBool(Cfg.ENABLED, false);
@@ -421,13 +527,13 @@ public class MainActivity extends AppCompatActivity {
     private void rescueDialog() {
         final LinearLayout box = Ui.column(this);
         box.setPadding(Ui.dp(this, 20), Ui.dp(this, 8), Ui.dp(this, 20), Ui.dp(this, 8));
-        box.addView(Ui.text(this, "Where should rescued funds land?", Ui.TEXT, 15, true));
+        box.addView(Ui.text(this, "Where should rescued funds land?", Design.TEXT(), 15, true));
         box.addView(Ui.text(this, "Best if you only have one device: funds stay on this node at a "
-                + "brand-new unused address.", Ui.DIM, 12, false));
+                + "brand-new unused address.", Design.DIM(), 12, false));
         final EditText ext = Ui.field(this, "…or an Mx address from a DIFFERENT wallet", false);
         box.addView(ext);
 
-        final AlertDialog dlg = new AlertDialog.Builder(this)
+        final AlertDialog dlg = new AlertDialog.Builder(this, Design.dialogTheme())
                 .setTitle("Rescue at-risk stakes")
                 .setView(box)
                 // Backing out means they did NOT agree to set a destination, so drop the pending
@@ -437,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
                 .create();
 
         final LinearLayout actions = Ui.row(this);
-        actions.addView(Ui.button(this, "Fresh address on THIS node", Ui.OK, v -> {
+        actions.addView(Ui.tinted(this, "Fresh address on THIS node", Design.SAFE(), v -> {
             dlg.dismiss();
             submit(() -> {
                 final Wallet.Res r = guardian.wallet().setSafeSameNode();
@@ -474,12 +580,12 @@ public class MainActivity extends AppCompatActivity {
             for (String[] s : stuck) total += Integer.parseInt(s[1]);
             final int n = total;
             runOnUiThread(() -> {
-                final LinearLayout c = Ui.card(this, Ui.WARN);
-                c.addView(Ui.text(this, "⚠ " + n + " coin(s) stuck on retired addresses", Ui.WARN, 15, true));
+                final LinearLayout c = Ui.card(this, Design.WARN());
+                c.addView(Ui.text(this, "⚠ " + n + " coin(s) stuck on retired addresses", Design.WARN(), 15, true));
                 c.addView(Ui.text(this, "Retiring nulled those addresses' keys, so ordinary sends can't "
                         + "spend them. Recover moves them to your clean address using each address's "
-                        + "real key.", Ui.DIM, 12, false));
-                c.addView(Ui.button(this, "Recover " + n + " coin(s)", Ui.WARN, v -> submit(() -> {
+                        + "real key.", Design.DIM(), 12, false));
+                c.addView(Ui.tinted(this, "Recover " + n + " coin(s)", Design.WARN(), v -> submit(() -> {
                     final Wallet.SweepReport r = guardian.wallet().recoverRetiredCoins();
                     toast(r.swept > 0 ? "Recovered " + r.swept + " coin(s) to " + Ui.shortAddr(r.dest)
                             : (r.error != null ? r.error : "Nothing to recover."));
@@ -498,21 +604,21 @@ public class MainActivity extends AppCompatActivity {
             final List<Wallet.ReusedAddr> list = guardian.wallet().reusedDefaults(flagged);
             if (list.isEmpty()) return;
             runOnUiThread(() -> {
-                final LinearLayout c = Ui.card(this, Ui.WARN);
-                c.addView(Ui.text(this, "Harden — retire reused addresses", Ui.TEXT, 16, true));
+                final LinearLayout c = Ui.card(this, Design.WARN());
+                c.addView(Ui.text(this, "Harden — retire reused addresses", Design.TEXT(), 16, true));
                 c.addView(Ui.text(this, "Your node routes change to a random pick of its default "
                         + "addresses, so a reused one keeps receiving fresh money. Retiring drops it "
-                        + "from that rotation for good — kept watch-only, moves no funds.", Ui.DIM, 12, false));
+                        + "from that rotation for good — kept watch-only, moves no funds.", Design.DIM(), 12, false));
                 int active = 0;
                 for (Wallet.ReusedAddr ra : list) {
                     if (!ra.isDefault) continue;
                     active++;
                     final LinearLayout r = Ui.row(this);
                     final LinearLayout info = Ui.column(this);
-                    info.addView(Ui.text(this, Ui.shortAddr(ra.mx.isEmpty() ? ra.hex : ra.mx), Ui.TEXT, 12, false));
+                    info.addView(Ui.text(this, Ui.shortAddr(ra.mx.isEmpty() ? ra.hex : ra.mx), Design.TEXT(), 12, false));
                     info.addView(Ui.text(this, ra.coins == 0 ? "empty · ready to retire"
                             : "holds " + ra.coins + " coin(s) — sweep them off first",
-                            ra.coins == 0 ? Ui.DIM : Ui.WARN, 11, false));
+                            ra.coins == 0 ? Design.DIM() : Design.WARN(), 11, false));
                     info.setLayoutParams(new LinearLayout.LayoutParams(0,
                             LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
                     r.addView(info);
@@ -523,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
                             refresh();
                         })));
                     } else {
-                        r.addView(Ui.button(this, "Sweep", Ui.OK, v -> submit(() -> {
+                        r.addView(Ui.tinted(this, "Sweep", Design.SAFE(), v -> submit(() -> {
                             final Wallet.SweepReport res = guardian.wallet().sweepAddressToClean(ra.hex);
                             toast(res.swept > 0 ? "Swept " + res.swept + " coin(s) → " + Ui.shortAddr(res.dest)
                                     : (res.error != null ? res.error : "Nothing swept."));
@@ -534,11 +640,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (active == 0) {
                     c.addView(Ui.text(this, "✓ All your reused addresses are already out of the change "
-                            + "rotation.", Ui.OK, 12, false));
+                            + "rotation.", Design.SAFE(), 12, false));
                 }
                 c.addView(Ui.text(this, "Retiring survives restarts but NOT a reinstall-from-seed — "
                         + "re-run it after any reseed. Restart your node afterwards to top the change "
-                        + "pool back up.", Ui.DIM, 11, false));
+                        + "pool back up.", Design.DIM(), 11, false));
                 content.addView(c);
             });
         });
@@ -546,22 +652,22 @@ public class MainActivity extends AppCompatActivity {
 
     private View keyTableCard() {
         final LinearLayout c = Ui.card(this, 0);
-        c.addView(Ui.text(this, "Key detail", Ui.TEXT, 16, true));
+        c.addView(Ui.text(this, "Key detail", Design.TEXT(), 16, true));
         if (lastAudit == null) {
-            c.addView(Ui.text(this, "Run an audit to see every key's on-chain usage.", Ui.DIM, 12, false));
+            c.addView(Ui.text(this, "Run an audit to see every key's on-chain usage.", Design.DIM(), 12, false));
             return c;
         }
         for (KeyAudit.Row r : lastAudit.rows) {
             if (!r.risk && !r.reused) continue;   // only the interesting ones; the rest are noise
             final LinearLayout row = Ui.row(this);
-            row.addView(Ui.text(this, "#" + r.index + "  " + Ui.shortAddr(r.address), Ui.TEXT, 12, false));
+            row.addView(Ui.text(this, "#" + r.index + "  " + Ui.shortAddr(r.address), Design.TEXT(), 12, false));
             final TextView chip = Ui.text(this, r.reused ? "  RE-USED ×" + r.reuseCount : "  AT RISK",
-                    r.reused ? Ui.DANGER : Ui.WARN, 12, true);
+                    r.reused ? Design.RED() : Design.WARN(), 12, true);
             row.addView(chip);
             c.addView(row);
         }
         c.addView(Ui.text(this, "Only your PUBLIC keys are ever sent to the audit service — they can't "
-                + "be used to take your money.", Ui.DIM, 11, false));
+                + "be used to take your money.", Design.DIM(), 11, false));
         return c;
     }
 
@@ -591,31 +697,58 @@ public class MainActivity extends AppCompatActivity {
 
     private void renderStakes() {
         final LinearLayout listCard = Ui.card(this, 0);
-        listCard.addView(Ui.text(this, "Your stakes", Ui.TEXT, 16, true));
+        final LinearLayout head = Ui.row(this);
+        head.addView(Ui.label(this, "Your stakes"));
+        head.addView(Ui.spacer(this));
+        if (!stakes.isEmpty()) {
+            int ready = 0;
+            for (Guardian.Stake s : stakes) if (s.ready) ready++;
+            head.addView(Ui.pill(this, ready > 0 ? ready + " ready" : stakes.size() + " pending",
+                    ready > 0 ? Design.SAFE() : Design.DIM()));
+        }
+        listCard.addView(head);
+
         if (stakes.isEmpty()) {
-            listCard.addView(Ui.text(this, "No stakes yet. Lock one below and it appears here.",
-                    Ui.DIM, 12, false));
+            listCard.addView(Ui.body(this, "No stakes yet. Lock one below and it appears here, "
+                    + "soonest to unlock first."));
         }
         for (Guardian.Stake s : stakes) {
-            final LinearLayout row = Ui.row(this);
+            final LinearLayout rowV = Ui.inset(this);
             final LinearLayout info = Ui.column(this);
-            info.addView(Ui.text(this, Ui.amount(s.amount) + ("0x00".equals(s.tokenid) ? " MINIMA" : " token")
-                    + (s.atRisk ? "  ⚠ reused payout" : ""), s.atRisk ? Ui.WARN : Ui.TEXT, 14, true));
-            info.addView(Ui.text(this, s.ready ? "ready to collect" : "matures " + Ui.maturesIn(s.matureBlock, tip),
-                    s.ready ? Ui.OK : Ui.DIM, 11, false));
-            info.addView(Ui.text(this, "→ " + Ui.shortAddr(s.payout), Ui.DIM, 11, false));
+
+            // The amount is the thing being scanned for — mono, large, and the only bright ink here.
+            final LinearLayout amtRow = Ui.row(this);
+            amtRow.addView(Ui.mono(this, Ui.amount(s.amount), Design.TEXT(), 17, true));
+            final TextView unit = Ui.text(this, "0x00".equals(s.tokenid) ? " MINIMA" : " token",
+                    Design.DIM2(), 11, false);
+            unit.setPadding(Ui.dp(this, 4), Ui.dp(this, 4), 0, 0);
+            amtRow.addView(unit);
+            if (s.atRisk) {
+                final View sp = new View(this);
+                sp.setLayoutParams(new LinearLayout.LayoutParams(Ui.dp(this, 8), 1));
+                amtRow.addView(sp);
+                amtRow.addView(Ui.pill(this, "reused payout", Design.WARN()));
+            }
+            info.addView(amtRow);
+
+            info.addView(Ui.text(this, s.ready ? "ready to collect"
+                            : "unlocks " + Ui.maturesIn(s.matureBlock, tip),
+                    s.ready ? Design.SAFE() : Design.DIM(), 12, false));
+            info.addView(Ui.mono(this, "block " + s.matureBlock + " → " + Ui.shortAddr(s.payout),
+                    Design.DIM2(), 10, false));
             info.setLayoutParams(new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(info);
+            rowV.addView(info);
+
             // No bare-collect button for an at-risk payout: those belong to the rescue path.
             if (s.ready && !s.atRisk) {
-                row.addView(Ui.ghost(this, "Collect", v -> submit(() -> {
+                rowV.addView(Ui.ghost(this, "Collect", v -> submit(() -> {
                     final Wallet.Res r = guardian.collectNow(s.coinid);
                     toast(r.ok ? "Collect posted — confirms in about a block." : r.error);
                     refresh();
                 })));
             }
-            listCard.addView(row);
+            listCard.addView(rowV);
         }
         content.addView(listCard);
         content.addView(lockCard());
@@ -623,12 +756,12 @@ public class MainActivity extends AppCompatActivity {
 
     private View lockCard() {
         final LinearLayout c = Ui.card(this, 0);
-        c.addView(Ui.text(this, "Lock a new payment", Ui.TEXT, 16, true));
+        c.addView(Ui.text(this, "Lock a new payment", Design.TEXT(), 16, true));
         final EditText amount = Ui.field(this, "Amount (MINIMA)", true);
         c.addView(amount);
 
         final long[] blocks = {1728};   // ~1 day
-        final TextView preview = Ui.text(this, "Unlocks in ~1 day", Ui.DIM, 12, false);
+        final TextView preview = Ui.text(this, "Unlocks in ~1 day", Design.DIM(), 12, false);
         final LinearLayout presets = Ui.row(this);
         final int[][] opts = {{60, 72}, {1440, 1728}, {10080, 12096}, {43200, 51840}};
         final String[] labels = {"+1 hour", "+1 day", "+1 week", "+1 month"};
@@ -645,7 +778,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText recipient = Ui.field(this, "Recipient Mx… (leave blank to pay yourself)", false);
         c.addView(recipient);
 
-        c.addView(Ui.button(this, "Lock it", Ui.ACCENT, v -> {
+        c.addView(Ui.cta(this, "Lock it", v -> {
             final String amt = amount.getText().toString().trim();
             final String rcp = recipient.getText().toString().trim();
             submit(() -> {
@@ -671,7 +804,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }));
         c.addView(Ui.text(this, "Once locked, nobody — not even you — can unlock it early. Collected "
-                + "coins can ONLY go to the payout address; that is enforced on-chain.", Ui.DIM, 11, false));
+                + "coins can ONLY go to the payout address; that is enforced on-chain.", Design.DIM(), 11, false));
         return c;
     }
 
@@ -699,24 +832,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void renderActivity() {
         final LinearLayout c = Ui.card(this, 0);
-        c.addView(Ui.text(this, "Activity", Ui.TEXT, 16, true));
+        c.addView(Ui.text(this, "Activity", Design.TEXT(), 16, true));
         final JSONArray log = cfg.logLines();
         if (log.length() == 0) {
             c.addView(Ui.text(this, "Nothing yet. Every collect, sweep and recovery shows here with "
-                    + "full coin ids and addresses.", Ui.DIM, 12, false));
+                    + "full coin ids and addresses.", Design.DIM(), 12, false));
         }
         for (int i = 0; i < log.length(); i++) {
             final JSONObject e = log.optJSONObject(i);
             if (e == null) continue;
             final String lvl = e.optString("level", "info");
-            final int col = "error".equals(lvl) ? Ui.DANGER : "warn".equals(lvl) ? Ui.WARN : Ui.TEXT;
+            final int col = "error".equals(lvl) ? Design.RED() : "warn".equals(lvl) ? Design.WARN() : Design.TEXT();
             final String msg = e.optString("msg", "");
             final String[] parts = msg.split(" \\| ", 2);
             c.addView(Ui.text(this, parts[0], col, 12, false));
-            if (parts.length > 1) c.addView(Ui.text(this, parts[1], Ui.DIM, 10, false));
+            if (parts.length > 1) c.addView(Ui.text(this, parts[1], Design.DIM(), 10, false));
         }
         c.addView(Ui.ghost(this, "Reset history", v -> {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this, Design.dialogTheme())
                     .setTitle("Reset history?")
                     .setMessage("Clears the log and completed records. Keeps in-flight rescues and your "
                             + "safe address. Moves no funds — your coins and locks live on the chain.")
@@ -775,8 +908,8 @@ public class MainActivity extends AppCompatActivity {
 
     private View helpCard(String title, String body) {
         final LinearLayout c = Ui.card(this, 0);
-        c.addView(Ui.text(this, title, Ui.TEXT, 15, true));
-        c.addView(Ui.text(this, body, Ui.DIM, 12, false));
+        c.addView(Ui.text(this, title, Design.TEXT(), 15, true));
+        c.addView(Ui.text(this, body, Design.DIM(), 12, false));
         return c;
     }
 }

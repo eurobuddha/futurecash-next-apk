@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.text.InputType;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -13,38 +12,62 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Small view builders, so the screens read as content rather than as XML plumbing.
+ * View builders on top of {@link Design}, so screens read as content rather than as layout plumbing.
  *
- * <p>The colour constants are the app's risk vocabulary — green means the money is fine, orange
- * means the guardian is acting, red means something needs the user. They are used consistently and
- * nowhere decoratively.
+ * <p>Two rules this file exists to enforce:
+ *
+ * <ul>
+ *   <li><b>Numbers and addresses are mono.</b> JetBrains Mono's digits are tabular, so amounts and
+ *       block heights line up column-wise and don't jitter as they tick. On a screen people scan to
+ *       check money, a figure that shifts sideways as it updates is a figure they re-read.</li>
+ *   <li><b>Colour means risk, never decoration.</b> Green/amber/red come from Design's risk
+ *       vocabulary and are spent only on state. Everything else is ink, dim ink, or the accent.</li>
+ * </ul>
  */
 public final class Ui {
 
-    public static final int BG       = Color.parseColor("#0A0A0F");
-    public static final int CARD     = Color.parseColor("#14141C");
-    public static final int ACCENT   = Color.parseColor("#F7931A");
-    public static final int TEXT     = Color.parseColor("#E8E8F0");
-    public static final int DIM      = Color.parseColor("#8A8A9A");
-    public static final int OK       = Color.parseColor("#3DD68C");
-    public static final int WARN     = Color.parseColor("#FFB020");
-    public static final int DANGER   = Color.parseColor("#FF5C5C");
-
     private Ui() {}
 
-    public static int dp(Context c, int v) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v,
-                c.getResources().getDisplayMetrics());
-    }
+    public static int dp(Context c, int v) { return Design.dp(c, v); }
+
+    /* ---------- text ---------- */
 
     public static TextView text(Context c, String s, int color, int sizeSp, boolean bold) {
         final TextView t = new TextView(c);
         t.setText(s);
         t.setTextColor(color);
         t.setTextSize(sizeSp);
-        if (bold) t.setTypeface(t.getTypeface(), android.graphics.Typeface.BOLD);
+        t.setTypeface(bold ? Design.sansBold() : Design.sans());
+        t.setLineSpacing(dp(c, 3), 1f);   // body copy here is explanatory; tight leading makes it a wall
         return t;
     }
+
+    /** Numbers, amounts, block heights, addresses — anything that should line up or be compared. */
+    public static TextView mono(Context c, String s, int color, int sizeSp, boolean bold) {
+        final TextView t = new TextView(c);
+        t.setText(s);
+        t.setTextColor(color);
+        t.setTextSize(sizeSp);
+        t.setTypeface(bold ? Design.monoBold() : Design.mono());
+        return t;
+    }
+
+    /** A small caps-ish section label — the quiet top line of a card. */
+    public static TextView label(Context c, String s) {
+        final TextView t = text(c, s.toUpperCase(), Design.DIM2(), 11, true);
+        t.setLetterSpacing(0.08f);
+        return t;
+    }
+
+    public static TextView title(Context c, String s) {
+        return text(c, s, Design.TEXT(), 17, true);
+    }
+
+    public static TextView body(Context c, String s) {
+        return text(c, s, Design.DIM(), 13, false);
+    }
+
+    /* ---------- containers ---------- */
 
     public static LinearLayout column(Context c) {
         final LinearLayout l = new LinearLayout(c);
@@ -59,72 +82,143 @@ public final class Ui {
         return l;
     }
 
-    /** A card. `accent` tints the left edge so the risk state is readable at a glance. */
+    /**
+     * A raised card. {@code accent} tints the hairline so the card's risk state is readable before a
+     * single word is — pass 0 for a neutral card.
+     */
     public static LinearLayout card(Context c, int accent) {
         final LinearLayout l = column(c);
-        final GradientDrawable bg = new GradientDrawable();
-        bg.setColor(CARD);
-        bg.setCornerRadius(dp(c, 12));
-        if (accent != 0) bg.setStroke(dp(c, 1), accent);
+        final GradientDrawable bg = Design.raised(c, 18);
+        if (accent != 0) bg.setStroke(Math.max(1, dp(c, 1)), accent);
         l.setBackground(bg);
-        l.setPadding(dp(c, 14), dp(c, 12), dp(c, 14), dp(c, 12));
+        Design.elevate(l, 6);
+        l.setPadding(dp(c, 18), dp(c, 16), dp(c, 18), dp(c, 16));
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.bottomMargin = dp(c, 10);
+        lp.bottomMargin = dp(c, 14);
         l.setLayoutParams(lp);
         return l;
     }
 
-    public static Button button(Context c, String label, int color, View.OnClickListener onClick) {
-        final Button b = new Button(c);
-        b.setText(label);
-        b.setAllCaps(false);
-        b.setTextColor(Color.BLACK);
-        final GradientDrawable bg = new GradientDrawable();
-        bg.setColor(color);
-        bg.setCornerRadius(dp(c, 10));
-        b.setBackground(bg);
-        b.setOnClickListener(onClick);
+    /** An inset row inside a card — a level down, for list items. */
+    public static LinearLayout inset(Context c) {
+        final LinearLayout l = row(c);
+        l.setBackground(Design.roundBg(c, Design.SURFACE2(), 12));
+        l.setPadding(dp(c, 12), dp(c, 10), dp(c, 12), dp(c, 10));
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.topMargin = dp(c, 8);
-        lp.rightMargin = dp(c, 8);
-        b.setLayoutParams(lp);
+        l.setLayoutParams(lp);
+        return l;
+    }
+
+    /** A status chip: tinted ground, saturated ink, so it reads at a glance without shouting. */
+    public static TextView pill(Context c, String s, int colour) {
+        return Design.pill(c, s, tint(colour, 0x24), colour);
+    }
+
+    private static int tint(int colour, int alpha) {
+        return (alpha << 24) | (colour & 0x00FFFFFF);
+    }
+
+    /* ---------- controls ---------- */
+
+    /** The primary action: gradient ground, ripple, press-scale. One per screen, ideally. */
+    public static Button cta(Context c, String labelText, View.OnClickListener onClick) {
+        final Button b = baseButton(c, labelText, Design.ON_ACCENT());
+        b.setBackground(Design.ripple(Design.gradientCta(c)));
+        Design.pressable(b);
+        b.setOnClickListener(onClick);
         return b;
     }
 
-    public static Button ghost(Context c, String label, View.OnClickListener onClick) {
-        final Button b = button(c, label, Color.TRANSPARENT, onClick);
-        b.setTextColor(TEXT);
+    /** A secondary action: outlined, quieter, still tappable-looking. */
+    public static Button ghost(Context c, String labelText, View.OnClickListener onClick) {
+        final Button b = baseButton(c, labelText, Design.TEXT());
         final GradientDrawable bg = new GradientDrawable();
         bg.setColor(Color.TRANSPARENT);
-        bg.setCornerRadius(dp(c, 10));
-        bg.setStroke(dp(c, 1), DIM);
-        b.setBackground(bg);
+        bg.setCornerRadius(dp(c, 14));
+        bg.setStroke(Math.max(1, dp(c, 1)), Design.BORDER());
+        b.setBackground(Design.ripple(bg));
+        Design.pressable(b);
+        b.setOnClickListener(onClick);
+        return b;
+    }
+
+    /** A destructive or state-changing action, tinted by meaning. */
+    public static Button tinted(Context c, String labelText, int colour, View.OnClickListener onClick) {
+        final Button b = baseButton(c, labelText, colour);
+        final GradientDrawable bg = new GradientDrawable();
+        bg.setColor(tint(colour, 0x1F));
+        bg.setCornerRadius(dp(c, 14));
+        bg.setStroke(Math.max(1, dp(c, 1)), tint(colour, 0x66));
+        b.setBackground(Design.ripple(bg));
+        Design.pressable(b);
+        b.setOnClickListener(onClick);
+        return b;
+    }
+
+    private static Button baseButton(Context c, String labelText, int ink) {
+        final Button b = new Button(c);
+        b.setText(labelText);
+        b.setAllCaps(false);
+        b.setTextColor(ink);
+        b.setTextSize(14);
+        b.setTypeface(Design.sansBold());
+        b.setStateListAnimator(null);   // kill the stock elevation bounce; Design.pressable owns motion
+        b.setPadding(dp(c, 18), dp(c, 12), dp(c, 18), dp(c, 12));
+        b.setMinWidth(0);
+        b.setMinimumWidth(0);
+        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = dp(c, 12);
+        lp.rightMargin = dp(c, 8);
+        b.setLayoutParams(lp);
         return b;
     }
 
     public static EditText field(Context c, String hint, boolean numeric) {
         final EditText e = new EditText(c);
         e.setHint(hint);
-        e.setHintTextColor(DIM);
-        e.setTextColor(TEXT);
-        e.setTextSize(14);
+        e.setHintTextColor(Design.DIM2());
+        e.setTextColor(Design.TEXT());
+        e.setTextSize(15);
         e.setSingleLine(true);
+        // Amounts and addresses are mono for the same reason they are everywhere else: they get
+        // compared, and a proportional font makes that harder than it needs to be.
+        e.setTypeface(numeric ? Design.mono() : Design.sans());
         if (numeric) e.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        final GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Color.parseColor("#1C1C26"));
-        bg.setCornerRadius(dp(c, 10));
-        e.setBackground(bg);
-        e.setPadding(dp(c, 12), dp(c, 10), dp(c, 12), dp(c, 10));
+        e.setBackground(Design.stroked(c, Design.SURFACE2(), 14));
+        e.setPadding(dp(c, 14), dp(c, 13), dp(c, 14), dp(c, 13));
         final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.topMargin = dp(c, 8);
+        lp.topMargin = dp(c, 10);
         e.setLayoutParams(lp);
         return e;
     }
 
-    /** Shorten an address for display, keeping both ends so it stays recognisable. */
+    /** A hairline divider, for separating rows inside one card. */
+    public static View divider(Context c) {
+        final View v = new View(c);
+        final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, Math.max(1, dp(c, 1)));
+        lp.topMargin = dp(c, 12);
+        lp.bottomMargin = dp(c, 4);
+        v.setLayoutParams(lp);
+        v.setBackgroundColor(Design.BORDER());
+        return v;
+    }
+
+    /** Push the next view to the right-hand edge of a row. */
+    public static View spacer(Context c) {
+        final View v = new View(c);
+        v.setLayoutParams(new LinearLayout.LayoutParams(0, 1, 1f));
+        return v;
+    }
+
+    /* ---------- formatting ---------- */
+
+    /** Shorten an address, keeping both ends so it stays recognisable. */
     public static String shortAddr(String s) {
         final String v = s == null ? "" : s;
         return v.length() > 18 ? v.substring(0, 10) + "…" + v.substring(v.length() - 6) : v;
@@ -146,7 +240,7 @@ public final class Ui {
         final String when = mins < 90 ? mins + " min"
                 : mins < 1440 ? Math.round(mins / 60.0) + " h"
                 : Math.round(mins / 1440.0) + " days";
-        return "in ~" + when + " (block " + block + ")";
+        return "in ~" + when;
     }
 
     public static String timeAgo(long ms) {

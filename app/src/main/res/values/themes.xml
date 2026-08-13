@@ -1,12 +1,46 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Always-dark, matching the family's palette. Fixed rather than following the system setting
-         so the risk colours (green safe / orange at-risk / red taken) keep the contrast they were
-         chosen for — those colours carry meaning here, they are not decoration. -->
+    <!-- The Activity theme only supplies the window ground. Everything visible is styled at runtime
+         from Design.java, so the in-app light/dark toggle restyles the whole app by re-rendering
+         rather than recreating the Activity — and so the risk colours (green safe / amber at-risk /
+         red needs-you) are chosen by one place that knows which mode is live. Those colours carry
+         meaning here; they are not decoration. -->
     <style name="Base.Theme.FutureCash" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">#F7931A</item>
         <item name="colorAccent">#F7931A</item>
-        <item name="android:colorBackground">#0A0A0F</item>
+        <item name="android:colorBackground">#0B0D12</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.FutureCash" parent="Base.Theme.FutureCash" />
+
+    <!-- AlertDialog chrome follows the IN-APP toggle, not the system setting, so a dialog can never
+         open in the opposite theme to the screen behind it. -->
+    <style name="FcDialogDark" parent="android:Theme.Material.Dialog.Alert">
+        <item name="android:colorBackground">#12151C</item>
+        <item name="android:textColorPrimary">#EEF0F4</item>
+        <item name="android:textColorSecondary">#8B909C</item>
+        <item name="android:colorAccent">#F7931A</item>
+        <item name="android:windowBackground">@drawable/dialog_bg_dark</item>
+        <item name="android:buttonBarButtonStyle">@style/FcDialogBtnDark</item>
+    </style>
+
+    <!-- Pin the button ink explicitly: without this, appcompat-built dialogs inherit the Activity's
+         text colour and the buttons can come out invisible against the dialog ground. -->
+    <style name="FcDialogBtnDark" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:textColor">#F7931A</item>
+    </style>
+
+    <style name="FcDialogLight" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorBackground">#FFFFFF</item>
+        <item name="android:textColorPrimary">#181B22</item>
+        <item name="android:textColorSecondary">#8B909C</item>
+        <item name="android:colorAccent">#F7931A</item>
+        <item name="android:windowBackground">@drawable/dialog_bg_light</item>
+        <item name="android:buttonBarButtonStyle">@style/FcDialogBtnLight</item>
+    </style>
+
+    <style name="FcDialogBtnLight" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:textColor">#B25E00</item>
+    </style>
 </resources>

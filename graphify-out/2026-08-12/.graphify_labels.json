@@ -4,20 +4,14 @@
   "2": "MainActivity",
   "3": "Cfg",
   "4": "Store",
-  "5": "GuardianService",
+  "5": "android.content.Context",
   "6": "JSONArray",
   "7": "Util",
   "8": "Copy",
   "9": "FutureCashContract",
   "10": "Node",
-  "11": "Result",
+  "11": "Node",
   "12": "gradlew",
   "13": "app/build.gradle",
-  "14": "settings.gradle",
-  "15": "NodeApi",
-  "16": "Mode",
-  "17": "CoinState",
-  "18": "JSONArray",
-  "19": "Cfg",
-  "20": "Store"
+  "14": "settings.gradle"
 }
