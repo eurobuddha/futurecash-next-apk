@@ -53,6 +53,11 @@ public class GuardianService extends Service {
 
     @Override public void onCreate() {
         super.onCreate();
+        // Design holds process-wide static state (theme mode, typefaces) and until now was only
+        // initialised by MainActivity. This service can be the FIRST thing in the process — started
+        // by BootReceiver or GuardianWorker with no Activity — and anything reading Design then would
+        // silently get the ONYX default and null typefaces regardless of the user's choice.
+        Design.load(this);
         Notifier.ensureChannels(this);
         cfg = new Cfg(this);
 

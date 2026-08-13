@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,13 +52,22 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver receiver;
 
     private String tab = "guardian";
-    private boolean paired = true;
+    /**
+     * TRI-STATE, deliberately: null = we haven't heard from Minima Core yet.
+     *
+     * <p>Defaulting to true hid the "not connected" banner until the node denied us, which reassures
+     * before there is anything to be reassured by. Defaulting to false would flash a false alarm at
+     * every launch instead. Neither is honest — "don't know yet" is a real state and gets rendered
+     * as itself.
+     */
+    private Boolean paired = null;
     private KeyAudit.Result lastAudit;
     private long tip = 0;
     private List<Guardian.Stake> stakes = new ArrayList<>();
     private boolean auditRunning = false;
-    /** Set when the rescue chooser was opened BY "Start guardian", so we finish that job afterwards. */
-    private boolean startGuardianAfterSetup = false;
+    /** Set when the rescue chooser was opened BY "Start guardian", so we finish that job afterwards.
+     *  volatile: written on the main thread, read and cleared on the worker. */
+    private volatile boolean startGuardianAfterSetup = false;
 
     // Snapshots computed on the worker and rendered from cache. NOTHING in render() may touch the
     // node or the database.
@@ -214,7 +222,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void renderPairBanner() {
-        if (paired) { pairBanner.setVisibility(View.GONE); return; }
+        // Only when the node has actually told us we're not enabled — never on the unknown state,
+        // which would be a false alarm at every launch.
+        if (!Boolean.FALSE.equals(paired)) { pairBanner.setVisibility(View.GONE); return; }
         pairBanner.setVisibility(View.VISIBLE);
         pairBanner.setText("⚠ Not enabled in Minima Core. The guardian must act unattended, so open "
                 + "Minima Core → Apps and enable Future Cash Next. Until then nothing can be collected "
@@ -222,6 +232,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toast(String s) { runOnUiThread(() -> Toast.makeText(this, s, Toast.LENGTH_LONG).show()); }
+
+    /**
+     * Persist a guardian flag off the main thread, then redraw.
+     *
+     * <p>{@link Cfg#set} is a synchronous {@code commit()} on purpose — these flags decide whether
+     * protection runs, and an unflushed one means the guardian doesn't come back after a reboot, so
+     * trading durability for smoothness would be the wrong way round. The fix is to keep the durable
+     * write and stop doing it on the UI thread.
+     *
+     * @param andThen extra work to run on the main thread once the flag is stored (starting or
+     *                stopping the service, toasting) — may be null
+     */
+    private void setFlag(String key, boolean on, Runnable andThen) {
+        submit(() -> {
+            cfg.setBool(key, on);
+            runOnUiThread(() -> {
+                if (andThen != null) andThen.run();
+                render();
+            });
+        });
+    }
 
     /**
      * Finish the job the user actually asked for. They pressed "Start guardian" and were diverted
@@ -295,7 +326,16 @@ public class MainActivity extends AppCompatActivity {
         final String headline;
         final String detail;
         final int colour;
-        if (!paired) {
+        // ORDER MATTERS, and the rule is: never resolve "I don't know yet" to good news.
+        //
+        // The states below fall into two groups. Everything down to "guardian is off" is derived
+        // from stored config, is known the instant the app opens, and is never reassuring — so it is
+        // safe to draw immediately. Only the last two need a completed snapshot from the worker, and
+        // that snapshot takes seconds: a chain-tip round trip, a `coins relevant:true` that has
+        // measured 248KB, possibly a key re-confirm, then SQLite. Rendering "Protected" during that
+        // window told the user their money was watched before anything had been read — and someone
+        // who glances and locks the phone may see nothing else.
+        if (Boolean.FALSE.equals(paired)) {
             headline = "Not connected";
             detail = "Enable Future Cash Next in Minima Core → Apps. Nothing can be collected or "
                    + "rescued until you do.";
@@ -310,6 +350,11 @@ public class MainActivity extends AppCompatActivity {
                     ? "Your stakes are only watched while this app is open."
                     : "Pick where rescued funds should go, then it can run.";
             colour = Design.WARN();
+        } else if (lastStatus == null || paired == null) {
+            // Guardian is on and configured, but nothing has been read back yet. Say so.
+            headline = "Checking…";
+            detail = "Reading your stakes and keys from Minima Core.";
+            colour = Design.DIM();
         } else if (atRisk > 0) {
             headline = "Watching — " + atRisk + " at-risk address" + (atRisk == 1 ? "" : "es");
             detail = "Anything maturing onto a reused key is collected and swept to safety.";
@@ -324,10 +369,12 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayout top = Ui.row(this);
         final View dot = new View(this);
         dot.setBackground(Design.roundBg(this, colour, 5));
-        dot.setLayoutParams(new LinearLayout.LayoutParams(Ui.dp(this, 10), Ui.dp(this, 10)));
+        final LinearLayout.LayoutParams dotLp =
+                new LinearLayout.LayoutParams(Ui.dp(this, 10), Ui.dp(this, 10));
+        dotLp.rightMargin = Ui.dp(this, 10);   // a margin, not two spaces — survives font and locale
+        dot.setLayoutParams(dotLp);
         top.addView(dot);
-        final TextView h = Ui.text(this, "  " + headline, colour, 19, true);
-        top.addView(h);
+        top.addView(Ui.text(this, headline, colour, 19, true));
         c.addView(top);
         c.addView(Ui.body(this, detail));
 
@@ -384,8 +431,14 @@ public class MainActivity extends AppCompatActivity {
         c.addView(Ui.text(this, "Key audit", Design.TEXT(), 16, true));
         c.addView(Ui.text(this, msg, colour, 13, false));
         if (at > 0) {
-            c.addView(Ui.text(this, "audited " + Ui.timeAgo(at) + (v == null ? "" : " · " + v.mode.name().toLowerCase())
-                    + (tip > 0 ? " · block " + tip : ""), Design.DIM(), 11, false));
+            // "stale" / "reconfirmed" / "partial" are this code's vocabulary, not the user's. Say
+            // what the state MEANS for their money, and say nothing at all when it means nothing.
+            final String meta;
+            if (v == null) meta = "";
+            else if (v.mode == Audit.Mode.RECONFIRMED) meta = " · re-checked against your node";
+            else if (!v.ok) meta = " · needs a fresh audit before safe stakes auto-collect";
+            else meta = "";
+            c.addView(Ui.text(this, "audited " + Ui.timeAgo(at) + meta, Design.DIM(), 11, false));
         }
         final LinearLayout row = Ui.row(this);
         row.addView(Ui.ghost(this, "Re-audit", v2 -> maybeAudit(true)));
@@ -437,11 +490,8 @@ public class MainActivity extends AppCompatActivity {
 
         final LinearLayout row = Ui.row(this);
         if (on) {
-            row.addView(Ui.ghost(this, "Stop guardian", v -> {
-                cfg.setBool(Cfg.GUARDIAN_ON, false);
-                GuardianService.stop(this);
-                render();
-            }));
+            row.addView(Ui.ghost(this, "Stop guardian", v ->
+                    setFlag(Cfg.GUARDIAN_ON, false, () -> GuardianService.stop(this))));
         } else {
             row.addView(Ui.cta(this, "Start guardian", v -> {
                 // HARD GATE. Never let the daemon run when it cannot rescue — that is the state that
@@ -453,9 +503,7 @@ public class MainActivity extends AppCompatActivity {
                     rescueDialog();
                     return;
                 }
-                cfg.setBool(Cfg.GUARDIAN_ON, true);
-                GuardianService.start(this);
-                render();
+                setFlag(Cfg.GUARDIAN_ON, true, () -> GuardianService.start(this));
             }));
         }
         c.addView(row);
@@ -478,13 +526,11 @@ public class MainActivity extends AppCompatActivity {
         if (auto) {
             c.addView(Ui.text(this, "Auto-collect is ON — matured stakes are collected to your own "
                     + "address. There's no rush: until then they stay safely locked away.", Design.SAFE(), 12, false));
-            row.addView(Ui.ghost(this, "Turn off", v -> {
-                cfg.setBool(Cfg.AUTO_COLLECT_SAFE, false); render();
-            }));
+            row.addView(Ui.ghost(this, "Turn off", v ->
+                    setFlag(Cfg.AUTO_COLLECT_SAFE, false, null)));
         } else {
-            row.addView(Ui.tinted(this, "Turn on auto-collect", Design.SAFE(), v -> {
-                cfg.setBool(Cfg.AUTO_COLLECT_SAFE, true); render();
-            }));
+            row.addView(Ui.tinted(this, "Turn on auto-collect", Design.SAFE(), v ->
+                    setFlag(Cfg.AUTO_COLLECT_SAFE, true, null)));
         }
         if (st.readySafeN > 0) row.addView(Ui.ghost(this, "Collect all now", v -> collectAllSafe()));
         c.addView(row);
@@ -526,11 +572,11 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayout row = Ui.row(this);
         row.addView(Ui.tinted(this, safe == null ? "Set up rescue…" : "Change destination", Design.ACCENT(),
                 v -> rescueDialog()));
-        if (rescueOn) row.addView(Ui.ghost(this, "Stop rescue", v -> {
+        if (rescueOn) row.addView(Ui.ghost(this, "Stop rescue", v -> submit(() -> {
             cfg.setBool(Cfg.ENABLED, false);
             cfg.log(Cfg.LVL_INFO, "At-risk rescue DISABLED");
-            render();
-        }));
+            runOnUiThread(this::render);
+        })));
         c.addView(row);
         return c;
     }
