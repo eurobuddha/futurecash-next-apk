@@ -397,8 +397,13 @@ public class MainActivity extends AppCompatActivity {
         final boolean on = cfg.is(Cfg.GUARDIAN_ON, false);
         final boolean ready = cfg.rescueReady();
         final String safe = cfg.get(Cfg.SAFE_ADDRESS, null);
-        final LinearLayout c = Ui.card(this, on ? Design.SAFE() : Design.WARN());
-        c.addView(Ui.text(this, "Guardian daemon", Design.TEXT(), 16, true));
+        final LinearLayout c = Ui.card(this, 0);
+        final LinearLayout head = Ui.row(this);
+        head.addView(Ui.label(this, "Guardian daemon"));
+        head.addView(Ui.spacer(this));
+        head.addView(Ui.pill(this, on ? "running" : (ready ? "off" : "needs setup"),
+                on ? Design.SAFE() : Design.WARN()));
+        c.addView(head);
 
         // The old copy said only that stakes "are checked while this app is open", which never
         // explained WHY an unwatched stake is exposed — and the exposure is the whole point. The
@@ -406,22 +411,29 @@ public class MainActivity extends AppCompatActivity {
         // to start.
         final String body;
         if (on) {
-            body = "Running. Your stakes are watched even with the app closed. A matured stake is "
-                 + "collected, and if its payout address has a reused key the money is swept onward "
-                 + "to safety within about a minute of landing — to "
-                 + Ui.shortAddr(safe) + (guardian.wallet().sameNodeMode() ? " on this node." : " (external).");
+            body = "Watching your stakes even with the app closed. Anything maturing onto a reused "
+                 + "key is collected and swept to safety within about a minute.";
         } else if (!ready) {
-            body = "Off, and it needs somewhere to move rescued funds before it can run. Press "
-                 + "Start guardian and pick a destination — a fresh address on this node takes one "
-                 + "tap. On a node with no key reuse it will never be used; it is there so the "
-                 + "guardian is never watching money it cannot rescue.";
+            body = "It needs somewhere to move rescued funds before it can run. Start guardian will "
+                 + "ask — a fresh address on this node takes one tap.";
         } else {
             body = "Off. After a stake matures, anyone can collect it — that needs no signature — "
                  + "which lands the money on its payout address. If that address's key was reused, "
                  + "it sits there exposed until you next open this app. With the guardian on, it is "
                  + "moved to safety within about a minute of landing.";
         }
-        c.addView(Ui.text(this, body, on ? Design.SAFE() : Design.WARN(), 13, false));
+        c.addView(Ui.body(this, body));
+        // Name the destination when running. "Swept to safety" is a promise; showing WHERE lets the
+        // user check it rather than take it on faith.
+        if (on && safe != null) {
+            final LinearLayout dest = Ui.row(this);
+            dest.addView(Ui.text(this, "sweeps to ", Design.DIM2(), 11, false));
+            dest.addView(Ui.mono(this, Ui.shortAddr(safe), Design.DIM(), 11, false));
+            dest.addView(Ui.text(this, guardian.wallet().sameNodeMode() ? "  · this node" : "  · external",
+                    Design.DIM2(), 11, false));
+            c.addView(Ui.divider(this));
+            c.addView(dest);
+        }
 
         final LinearLayout row = Ui.row(this);
         if (on) {
@@ -684,11 +696,14 @@ public class MainActivity extends AppCompatActivity {
                 auditRunning = false;
                 lastAudit = result;
                 guardian.reloadAtRisk();
-                runOnUiThread(() -> render());
+                // refresh(), not render(): the cached verdict was computed BEFORE this audit ran, so
+                // rendering it now showed "audited just now · stale" — two lines of the same card
+                // disagreeing about the same fact.
+                refresh();
             }
             @Override public void onError(String message) {
                 auditRunning = false;
-                runOnUiThread(() -> render());
+                refresh();
             }
         }));
     }

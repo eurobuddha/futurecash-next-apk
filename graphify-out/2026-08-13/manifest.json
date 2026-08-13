@@ -1,7 +1,7 @@
 {
   "app/build.gradle": {
-    "mtime": 1786630183.9488883,
-    "ast_hash": "1b6425834d9b4d62b7f59fd0e8128b29",
+    "mtime": 1786550806.5437098,
+    "ast_hash": "6a316a3d6e1169433b68679a0bc977ad",
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Audit.java": {
@@ -60,8 +60,8 @@
     "semantic_hash": "02edd490e71d810c0bf856aaca606cb2"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/MainActivity.java": {
-    "mtime": 1786630169.694557,
-    "ast_hash": "bbd1aab694e73208450e8a0151d8184f",
+    "mtime": 1786551021.0440025,
+    "ast_hash": "0be65fb9b26af2c4a783d0ec45e57779",
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/MinimaAddress.java": {
@@ -100,9 +100,9 @@
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Ui.java": {
-    "mtime": 1786629958.3321128,
-    "ast_hash": "7f3693f75f39abe1cfc84c29da7dc2b4",
-    "semantic_hash": ""
+    "mtime": 1786484913.4904132,
+    "ast_hash": "9689b619f89bf25cb771533f4c80e944",
+    "semantic_hash": "9689b619f89bf25cb771533f4c80e944"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Util.java": {
     "mtime": 1786484225.5685313,
@@ -177,11 +177,6 @@
   "app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png": {
     "mtime": 1786484160.7551248,
     "ast_hash": "b23f24603a3ad3f9ead99823cbdab751",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/eurobuddha/futurecashnext/Design.java": {
-    "mtime": 1786629860.6150432,
-    "ast_hash": "8489c32d9f38d61b4d1e03d5cc5a60be",
     "semantic_hash": ""
   }
 }
