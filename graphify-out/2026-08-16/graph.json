@@ -4,119 +4,15 @@
   "graph": {},
   "nodes": [
     {
-      "label": "install.sh",
-      "file_type": "code",
-      "source_file": ".githooks/install.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "id": "githooks_install",
-      "community": 20,
-      "community_name": "install.sh",
-      "norm_label": "install.sh"
-    },
-    {
-      "label": "install.sh script",
-      "file_type": "code",
-      "source_file": ".githooks/install.sh",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "id": "githooks_install_sh__entry",
-      "community": 20,
-      "community_name": "install.sh",
-      "norm_label": "install.sh script"
-    },
-    {
-      "label": "pre-commit",
-      "file_type": "code",
-      "source_file": ".githooks/pre-commit",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "file"
-      },
-      "_origin": "ast",
-      "id": "githooks_pre_commit",
-      "community": 22,
-      "community_name": "pre-commit",
-      "norm_label": "pre-commit"
-    },
-    {
-      "label": "pre-commit script",
-      "file_type": "code",
-      "source_file": ".githooks/pre-commit",
-      "source_location": "L1",
-      "metadata": {
-        "language": "bash",
-        "kind": "bash_entrypoint"
-      },
-      "_origin": "ast",
-      "id": "githooks_pre_commit__entry",
-      "community": 22,
-      "community_name": "pre-commit",
-      "norm_label": "pre-commit script"
-    },
-    {
-      "label": "CLAUDE.md",
-      "file_type": "document",
-      "source_file": "CLAUDE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "claude",
-      "community": 11,
-      "community_name": "User instructions \u2014 AUTHORITATIVE. These override default behavior and must be followed exactly.",
-      "norm_label": "claude.md"
-    },
-    {
-      "label": "User instructions \u2014 AUTHORITATIVE. These override default behavior and must be followed exactly.",
-      "file_type": "document",
-      "source_file": "CLAUDE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "claude_user_instructions_authoritative_these_override_default_behavior_and_must_be_followed_exactly",
-      "community": 11,
-      "community_name": "User instructions \u2014 AUTHORITATIVE. These override default behavior and must be followed exactly.",
-      "norm_label": "user instructions \u2014 authoritative. these override default behavior and must be followed exactly."
-    },
-    {
-      "label": "RULE 0 (highest priority) \u2014 Follow the user's explicit instructions. They are BLOCKING, not suggestions.",
-      "file_type": "document",
-      "source_file": "CLAUDE.md",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "claude_rule_0_highest_priority_follow_the_user_s_explicit_instructions_they_are_blocking_not_suggestions",
-      "community": 11,
-      "community_name": "User instructions \u2014 AUTHORITATIVE. These override default behavior and must be followed exactly.",
-      "norm_label": "rule 0 (highest priority) \u2014 follow the user's explicit instructions. they are blocking, not suggestions."
-    },
-    {
-      "label": "Versioning guardrail \u2014 every code change ships with a version bump",
-      "file_type": "document",
-      "source_file": "CLAUDE.md",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "claude_versioning_guardrail_every_code_change_ships_with_a_version_bump",
-      "community": 11,
-      "community_name": "User instructions \u2014 AUTHORITATIVE. These override default behavior and must be followed exactly.",
-      "norm_label": "versioning guardrail \u2014 every code change ships with a version bump"
-    },
-    {
       "label": "app/build.gradle",
       "file_type": "code",
       "source_file": "app/build.gradle",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "app_build",
       "community": 13,
       "community_name": "app/build.gradle",
-      "norm_label": "app/build.gradle",
-      "id": "app_build"
+      "norm_label": "app/build.gradle"
     },
     {
       "label": "GuardianService.java",
@@ -124,10 +20,10 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/GuardianService.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "guardianservice.java",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "guardianservice.java"
     },
     {
       "label": "GuardianService",
@@ -137,10 +33,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "guardianservice",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice"
+      "norm_label": "guardianservice"
     },
     {
       "label": "NodeApi",
@@ -148,10 +44,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_nodeapi",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "nodeapi",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_nodeapi"
+      "norm_label": "nodeapi"
     },
     {
       "label": "Node",
@@ -159,10 +55,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_node",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "node",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_node"
+      "norm_label": "node"
     },
     {
       "label": "Cfg",
@@ -170,10 +66,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_cfg",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "cfg",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_cfg"
+      "norm_label": "cfg"
     },
     {
       "label": "Store",
@@ -181,10 +77,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_store",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "store",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_store"
+      "norm_label": "store"
     },
     {
       "label": "Guardian",
@@ -192,10 +88,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_guardian",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "guardian",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_guardian"
+      "norm_label": "guardian"
     },
     {
       "label": "BroadcastReceiver",
@@ -203,10 +99,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_broadcastreceiver",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "broadcastreceiver",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_broadcastreceiver"
+      "norm_label": "broadcastreceiver"
     },
     {
       "label": ".onBind()",
@@ -215,10 +111,10 @@
       "source_location": "L52",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": ".onbind()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": ".onbind()"
     },
     {
       "label": "Intent",
@@ -226,10 +122,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "intent",
-      "id": "intent"
+      "id": "intent",
+      "community": 11,
+      "community_name": "android.content.Context",
+      "norm_label": "intent"
     },
     {
       "label": "Override",
@@ -237,10 +133,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": "override",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "norm_label": "override"
     },
     {
       "label": ".onCreate()",
@@ -249,10 +145,10 @@
       "source_location": "L54",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".oncreate()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate"
+      "norm_label": ".oncreate()"
     },
     {
       "label": ".onStartCommand()",
@@ -261,10 +157,10 @@
       "source_location": "L118",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onstartcommand",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".onstartcommand()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onstartcommand"
+      "norm_label": ".onstartcommand()"
     },
     {
       "label": ".tick()",
@@ -273,10 +169,10 @@
       "source_location": "L120",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_tick",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".tick()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_tick"
+      "norm_label": ".tick()"
     },
     {
       "label": ".runPass()",
@@ -285,10 +181,10 @@
       "source_location": "L126",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
-      "community_name": "Wallet",
-      "norm_label": ".runpass()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_runpass"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_runpass",
+      "community": 5,
+      "community_name": "GuardianService",
+      "norm_label": ".runpass()"
     },
     {
       "label": ".submit()",
@@ -297,10 +193,10 @@
       "source_location": "L136",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".submit()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit"
+      "norm_label": ".submit()"
     },
     {
       "label": ".onTaskRemoved()",
@@ -309,10 +205,10 @@
       "source_location": "L143",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": ".ontaskremoved()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved",
+      "community": 11,
+      "community_name": "android.content.Context",
+      "norm_label": ".ontaskremoved()"
     },
     {
       "label": ".onDestroy()",
@@ -321,10 +217,10 @@
       "source_location": "L156",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ondestroy",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".ondestroy()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ondestroy"
+      "norm_label": ".ondestroy()"
     },
     {
       "label": ".startForegroundCompat()",
@@ -333,10 +229,10 @@
       "source_location": "L168",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_startforegroundcompat",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".startforegroundcompat()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_startforegroundcompat"
+      "norm_label": ".startforegroundcompat()"
     },
     {
       "label": ".onTimeout()",
@@ -345,10 +241,10 @@
       "source_location": "L190",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontimeout",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".ontimeout()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontimeout"
+      "norm_label": ".ontimeout()"
     },
     {
       "label": ".stopGracefully()",
@@ -357,10 +253,10 @@
       "source_location": "L193",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stopgracefully",
       "community": 5,
       "community_name": "GuardianService",
-      "norm_label": ".stopgracefully()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stopgracefully"
+      "norm_label": ".stopgracefully()"
     },
     {
       "label": ".start()",
@@ -369,10 +265,10 @@
       "source_location": "L200",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": ".start()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_start"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_start",
+      "community": 11,
+      "community_name": "android.content.Context",
+      "norm_label": ".start()"
     },
     {
       "label": ".stop()",
@@ -381,10 +277,10 @@
       "source_location": "L207",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": ".stop()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stop"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stop",
+      "community": 11,
+      "community_name": "android.content.Context",
+      "norm_label": ".stop()"
     },
     {
       "label": "MainActivity.java",
@@ -392,10 +288,10 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/MainActivity.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "mainactivity.java",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "mainactivity.java"
     },
     {
       "label": "MainActivity",
@@ -405,10 +301,10 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "mainactivity",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity"
+      "norm_label": "mainactivity"
     },
     {
       "label": "TextView",
@@ -416,10 +312,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
-      "norm_label": "textview",
-      "id": "textview"
+      "id": "textview",
+      "community": 17,
+      "community_name": "MainActivity",
+      "norm_label": "textview"
     },
     {
       "label": "NodeApi",
@@ -427,10 +323,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_nodeapi",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "nodeapi",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_nodeapi"
+      "norm_label": "nodeapi"
     },
     {
       "label": "Node",
@@ -438,10 +334,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_node",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "node",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_node"
+      "norm_label": "node"
     },
     {
       "label": "Cfg",
@@ -449,10 +345,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_cfg",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "cfg",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_cfg"
+      "norm_label": "cfg"
     },
     {
       "label": "Store",
@@ -460,10 +356,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_store",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "store",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_store"
+      "norm_label": "store"
     },
     {
       "label": "Guardian",
@@ -471,10 +367,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_guardian",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "guardian",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_guardian"
+      "norm_label": "guardian"
     },
     {
       "label": "AuditRunner",
@@ -482,10 +378,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "auditrunner",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "auditrunner",
-      "id": "auditrunner"
+      "norm_label": "auditrunner"
     },
     {
       "label": "BroadcastReceiver",
@@ -493,10 +389,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_broadcastreceiver",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "broadcastreceiver",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_broadcastreceiver"
+      "norm_label": "broadcastreceiver"
     },
     {
       "label": "Result",
@@ -504,10 +400,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "result",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "result",
-      "id": "result"
+      "norm_label": "result"
     },
     {
       "label": "Stake",
@@ -515,10 +411,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "stake",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "stake",
-      "id": "stake"
+      "norm_label": "stake"
     },
     {
       "label": "Verdict",
@@ -526,10 +422,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "verdict",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "verdict",
-      "id": "verdict"
+      "norm_label": "verdict"
     },
     {
       "label": "Status",
@@ -537,10 +433,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "status",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "status",
-      "id": "status"
+      "norm_label": "status"
     },
     {
       "label": ".onCreate()",
@@ -549,10 +445,10 @@
       "source_location": "L84",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".oncreate()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate"
+      "norm_label": ".oncreate()"
     },
     {
       "label": "Override",
@@ -560,10 +456,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "override",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override"
+      "norm_label": "override"
     },
     {
       "label": ".onResume()",
@@ -572,10 +468,10 @@
       "source_location": "L131",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onresume",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".onresume()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onresume"
+      "norm_label": ".onresume()"
     },
     {
       "label": ".onPause()",
@@ -584,10 +480,10 @@
       "source_location": "L138",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onpause",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".onpause()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onpause"
+      "norm_label": ".onpause()"
     },
     {
       "label": ".onDestroy()",
@@ -596,10 +492,10 @@
       "source_location": "L144",
       "_callable": true,
       "_origin": "ast",
-      "community": 16,
-      "community_name": "Cfg",
-      "norm_label": ".ondestroy()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_ondestroy"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_ondestroy",
+      "community": 17,
+      "community_name": "MainActivity",
+      "norm_label": ".ondestroy()"
     },
     {
       "label": ".submit()",
@@ -608,10 +504,10 @@
       "source_location": "L153",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".submit()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "norm_label": ".submit()"
     },
     {
       "label": ".askNotificationPermission()",
@@ -620,10 +516,10 @@
       "source_location": "L158",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_asknotificationpermission",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".asknotificationpermission()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_asknotificationpermission"
+      "norm_label": ".asknotificationpermission()"
     },
     {
       "label": ".styleChrome()",
@@ -632,10 +528,10 @@
       "source_location": "L169",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
-      "norm_label": ".stylechrome()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome",
+      "community": 17,
+      "community_name": "MainActivity",
+      "norm_label": ".stylechrome()"
     },
     {
       "label": ".buildTabs()",
@@ -644,10 +540,10 @@
       "source_location": "L199",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
-      "norm_label": ".buildtabs()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs"
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs",
+      "community": 17,
+      "community_name": "MainActivity",
+      "norm_label": ".buildtabs()"
     },
     {
       "label": ".renderPairBanner()",
@@ -656,10 +552,10 @@
       "source_location": "L224",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderpairbanner",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".renderpairbanner()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderpairbanner"
+      "norm_label": ".renderpairbanner()"
     },
     {
       "label": ".toast()",
@@ -668,10 +564,10 @@
       "source_location": "L234",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".toast()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "norm_label": ".toast()"
     },
     {
       "label": ".setFlag()",
@@ -680,10 +576,10 @@
       "source_location": "L247",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".setflag()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag"
+      "norm_label": ".setflag()"
     },
     {
       "label": ".finishPendingGuardianStart()",
@@ -692,10 +588,10 @@
       "source_location": "L262",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".finishpendingguardianstart()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart"
+      "norm_label": ".finishpendingguardianstart()"
     },
     {
       "label": ".refresh()",
@@ -704,10 +600,10 @@
       "source_location": "L275",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".refresh()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "norm_label": ".refresh()"
     },
     {
       "label": ".render()",
@@ -716,10 +612,10 @@
       "source_location": "L288",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".render()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "norm_label": ".render()"
     },
     {
       "label": ".renderGuardian()",
@@ -728,10 +624,10 @@
       "source_location": "L301",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".renderguardian()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian"
+      "norm_label": ".renderguardian()"
     },
     {
       "label": ".heroCard()",
@@ -740,10 +636,10 @@
       "source_location": "L320",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".herocard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard"
+      "norm_label": ".herocard()"
     },
     {
       "label": ".auditCard()",
@@ -752,10 +648,10 @@
       "source_location": "L393",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".auditcard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard"
+      "norm_label": ".auditcard()"
     },
     {
       "label": ".daemonCard()",
@@ -764,10 +660,10 @@
       "source_location": "L449",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".daemoncard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard"
+      "norm_label": ".daemoncard()"
     },
     {
       "label": ".safeCard()",
@@ -776,10 +672,10 @@
       "source_location": "L513",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".safecard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard"
+      "norm_label": ".safecard()"
     },
     {
       "label": ".riskCard()",
@@ -788,10 +684,10 @@
       "source_location": "L540",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".riskcard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard"
+      "norm_label": ".riskcard()"
     },
     {
       "label": ".rescueDialog()",
@@ -800,10 +696,10 @@
       "source_location": "L585",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".rescuedialog()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog"
+      "norm_label": ".rescuedialog()"
     },
     {
       "label": ".recoverCard()",
@@ -812,10 +708,10 @@
       "source_location": "L633",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".recovercard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard"
+      "norm_label": ".recovercard()"
     },
     {
       "label": ".hardenCard()",
@@ -824,10 +720,10 @@
       "source_location": "L658",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".hardencard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard"
+      "norm_label": ".hardencard()"
     },
     {
       "label": ".keyTableCard()",
@@ -836,10 +732,10 @@
       "source_location": "L711",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".keytablecard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard"
+      "norm_label": ".keytablecard()"
     },
     {
       "label": ".maybeAudit()",
@@ -848,10 +744,10 @@
       "source_location": "L732",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".maybeaudit()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit"
+      "norm_label": ".maybeaudit()"
     },
     {
       "label": ".renderStakes()",
@@ -860,10 +756,10 @@
       "source_location": "L759",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".renderstakes()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes"
+      "norm_label": ".renderstakes()"
     },
     {
       "label": ".lockCard()",
@@ -872,10 +768,10 @@
       "source_location": "L818",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".lockcard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard"
+      "norm_label": ".lockcard()"
     },
     {
       "label": ".collectAllSafe()",
@@ -884,10 +780,10 @@
       "source_location": "L872",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".collectallsafe()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe"
+      "norm_label": ".collectallsafe()"
     },
     {
       "label": ".renderActivity()",
@@ -896,10 +792,10 @@
       "source_location": "L894",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".renderactivity()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity"
+      "norm_label": ".renderactivity()"
     },
     {
       "label": ".renderHelp()",
@@ -908,10 +804,10 @@
       "source_location": "L930",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".renderhelp()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp"
+      "norm_label": ".renderhelp()"
     },
     {
       "label": ".helpCard()",
@@ -920,10 +816,10 @@
       "source_location": "L970",
       "_callable": true,
       "_origin": "ast",
+      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": ".helpcard()",
-      "id": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard"
+      "norm_label": ".helpcard()"
     },
     {
       "label": "android.app.Service",
@@ -931,10 +827,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "android.app.service",
-      "id": "android_app_service"
+      "id": "android_app_service",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "android.app.service"
     },
     {
       "label": "android.content.BroadcastReceiver",
@@ -942,10 +838,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "android.content.broadcastreceiver",
-      "id": "android_content_broadcastreceiver"
+      "id": "android_content_broadcastreceiver",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "android.content.broadcastreceiver"
     },
     {
       "label": "android.content.Context",
@@ -953,10 +849,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
+      "id": "android_content_context",
+      "community": 11,
       "community_name": "android.content.Context",
-      "norm_label": "android.content.context",
-      "id": "android_content_context"
+      "norm_label": "android.content.context"
     },
     {
       "label": "android.content.Intent",
@@ -964,10 +860,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "android.content.intent",
-      "id": "android_content_intent"
+      "id": "android_content_intent",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "android.content.intent"
     },
     {
       "label": "android.os.IBinder",
@@ -975,10 +871,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "android.os.ibinder",
-      "id": "android_os_ibinder"
+      "id": "android_os_ibinder",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "android.os.ibinder"
     },
     {
       "label": "android.os.Bundle",
@@ -986,10 +882,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "android.os.bundle",
-      "id": "android_os_bundle"
+      "id": "android_os_bundle",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "android.os.bundle"
     },
     {
       "label": "android.view.View",
@@ -997,10 +893,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "android_view_view",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "android.view.view",
-      "id": "android_view_view"
+      "norm_label": "android.view.view"
     },
     {
       "label": "android.widget.LinearLayout",
@@ -1008,10 +904,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
+      "id": "android_widget_linearlayout",
       "community": 17,
       "community_name": "MainActivity",
-      "norm_label": "android.widget.linearlayout",
-      "id": "android_widget_linearlayout"
+      "norm_label": "android.widget.linearlayout"
     },
     {
       "label": "android.widget.TextView",
@@ -1019,10 +915,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
-      "norm_label": "android.widget.textview",
-      "id": "android_widget_textview"
+      "id": "android_widget_textview",
+      "community": 24,
+      "community_name": "android.widget.TextView",
+      "norm_label": "android.widget.textview"
     },
     {
       "label": "androidx.appcompat.app.AppCompatActivity",
@@ -1030,10 +926,10 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
-      "norm_label": "androidx.appcompat.app.appcompatactivity",
-      "id": "androidx_appcompat_app_appcompatactivity"
+      "id": "androidx_appcompat_app_appcompatactivity",
+      "community": 20,
+      "community_name": "MainActivity.java",
+      "norm_label": "androidx.appcompat.app.appcompatactivity"
     },
     {
       "label": "NodeApi",
@@ -1118,8 +1014,8 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/Design.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 24,
+      "community_name": "android.widget.TextView",
       "norm_label": "design.java",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design"
     },
@@ -1132,7 +1028,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": "design",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design"
     },
@@ -1144,8 +1040,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 26,
+      "community_name": "Mode",
       "norm_label": "mode",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_mode"
     },
@@ -1155,8 +1051,8 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/Design.java",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 26,
+      "community_name": "Mode",
       "norm_label": "onyx",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_mode_onyx"
     },
@@ -1166,8 +1062,8 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/Design.java",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 26,
+      "community_name": "Mode",
       "norm_label": "daylight",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_mode_daylight"
     },
@@ -1179,7 +1075,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".design()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_design"
     },
@@ -1190,8 +1086,8 @@
       "source_location": "L54",
       "_callable": true,
       "_origin": "ast",
-      "community": 17,
-      "community_name": "MainActivity",
+      "community": 11,
+      "community_name": "android.content.Context",
       "norm_label": ".load()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_load"
     },
@@ -1202,8 +1098,8 @@
       "source_location": "L61",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 26,
+      "community_name": "Mode",
       "norm_label": ".set()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_set"
     },
@@ -1214,7 +1110,7 @@
       "source_location": "L67",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
+      "community": 11,
       "community_name": "android.content.Context",
       "norm_label": ".toggle()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_toggle"
@@ -1226,8 +1122,8 @@
       "source_location": "L69",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 26,
+      "community_name": "Mode",
       "norm_label": ".mode()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_mode"
     },
@@ -1239,7 +1135,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".isdark()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_isdark"
     },
@@ -1251,7 +1147,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".label()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_label"
     },
@@ -1262,8 +1158,8 @@
       "source_location": "L73",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".pick()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_pick"
     },
@@ -1274,8 +1170,8 @@
       "source_location": "L76",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".bg()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_bg"
     },
@@ -1287,7 +1183,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".surface()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_surface"
     },
@@ -1298,8 +1194,8 @@
       "source_location": "L78",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".surface2()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_surface2"
     },
@@ -1311,7 +1207,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".border()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_border"
     },
@@ -1346,8 +1242,8 @@
       "source_location": "L82",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".dim2()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_dim2"
     },
@@ -1359,7 +1255,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".accent()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_accent"
     },
@@ -1370,8 +1266,8 @@
       "source_location": "L84",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".accent_soft()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_accent_soft"
     },
@@ -1383,7 +1279,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".grad_start()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_grad_start"
     },
@@ -1394,8 +1290,8 @@
       "source_location": "L86",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".on_accent()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_on_accent"
     },
@@ -1419,7 +1315,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".positive()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_positive"
     },
@@ -1454,8 +1350,8 @@
       "source_location": "L95",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".sans()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_sans"
     },
@@ -1466,8 +1362,8 @@
       "source_location": "L96",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".sansbold()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_sansbold"
     },
@@ -1478,8 +1374,8 @@
       "source_location": "L97",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".mono()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_mono"
     },
@@ -1490,8 +1386,8 @@
       "source_location": "L98",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".monobold()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_monobold"
     },
@@ -1503,7 +1399,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".dialogtheme()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_dialogtheme"
     },
@@ -1515,7 +1411,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".dp()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_dp"
     },
@@ -1527,7 +1423,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".pill()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_pill"
     },
@@ -1538,7 +1434,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": "textview",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_java_textview"
     },
@@ -1550,7 +1446,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".roundbg()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_roundbg"
     },
@@ -1561,7 +1457,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": "gradientdrawable",
       "id": "gradientdrawable"
     },
@@ -1573,7 +1469,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".card()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_card"
     },
@@ -1585,7 +1481,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".stroked()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_stroked"
     },
@@ -1597,7 +1493,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".gradientcta()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_gradientcta"
     },
@@ -1609,7 +1505,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".raised()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_raised"
     },
@@ -1621,7 +1517,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".elevate()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_elevate"
     },
@@ -1632,8 +1528,8 @@
       "source_location": "L196",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".pressable()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_pressable"
     },
@@ -1644,8 +1540,8 @@
       "source_location": "L210",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 24,
+      "community_name": "android.widget.TextView",
       "norm_label": ".ripple()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_ripple"
     },
@@ -1655,8 +1551,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 24,
+      "community_name": "android.widget.TextView",
       "norm_label": "rippledrawable",
       "id": "rippledrawable"
     },
@@ -1668,7 +1564,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": ".pulse()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_design_design_pulse"
     },
@@ -1689,8 +1585,8 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/Ui.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": "ui.java",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui"
     },
@@ -1702,8 +1598,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": "ui",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui"
     },
@@ -1714,8 +1610,8 @@
       "source_location": "L29",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".ui()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_ui"
     },
@@ -1726,8 +1622,8 @@
       "source_location": "L31",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".dp()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_dp"
     },
@@ -1749,8 +1645,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": "textview",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_java_textview"
     },
@@ -1761,8 +1657,8 @@
       "source_location": "L46",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".mono()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_mono"
     },
@@ -1773,8 +1669,8 @@
       "source_location": "L56",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".label()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_label"
     },
@@ -1785,8 +1681,8 @@
       "source_location": "L62",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 24,
+      "community_name": "android.widget.TextView",
       "norm_label": ".title()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_title"
     },
@@ -1856,8 +1752,8 @@
       "source_location": "L104",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".inset()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_inset"
     },
@@ -1868,8 +1764,8 @@
       "source_location": "L116",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".pill()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_pill"
     },
@@ -1880,8 +1776,8 @@
       "source_location": "L120",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".tint()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_tint"
     },
@@ -1892,8 +1788,8 @@
       "source_location": "L127",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".cta()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_cta"
     },
@@ -1903,8 +1799,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": "onclicklistener",
       "id": "onclicklistener"
     },
@@ -1914,8 +1810,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": "button",
       "id": "button"
     },
@@ -1926,8 +1822,8 @@
       "source_location": "L136",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".ghost()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_ghost"
     },
@@ -1938,8 +1834,8 @@
       "source_location": "L149",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".tinted()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_tinted"
     },
@@ -1950,8 +1846,8 @@
       "source_location": "L161",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".basebutton()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_basebutton"
     },
@@ -1962,8 +1858,8 @@
       "source_location": "L180",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": ".field()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_field"
     },
@@ -1973,8 +1869,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": "edittext",
       "id": "edittext"
     },
@@ -1985,8 +1881,8 @@
       "source_location": "L201",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".divider()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_divider"
     },
@@ -2045,8 +1941,8 @@
       "source_location": "L246",
       "_callable": true,
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".timeago()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_ui_ui_timeago"
     },
@@ -2056,8 +1952,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 22,
+      "community_name": ".field",
       "norm_label": "android.graphics.typeface",
       "id": "android_graphics_typeface"
     },
@@ -2068,7 +1964,7 @@
       "source_location": "",
       "_origin": "ast",
       "community": 2,
-      "community_name": "android.content.Context",
+      "community_name": "Design",
       "norm_label": "android.graphics.drawable.gradientdrawable",
       "id": "android_graphics_drawable_gradientdrawable"
     },
@@ -2078,8 +1974,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 24,
+      "community_name": "android.widget.TextView",
       "norm_label": "android.graphics.drawable.rippledrawable",
       "id": "android_graphics_drawable_rippledrawable"
     },
@@ -2089,8 +1985,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": "android.widget.button",
       "id": "android_widget_button"
     },
@@ -2100,8 +1996,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 2,
-      "community_name": "android.content.Context",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": "android.widget.edittext",
       "id": "android_widget_edittext"
     },
@@ -2111,8 +2007,8 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/BootReceiver.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 20,
+      "community_name": "MainActivity.java",
       "norm_label": "bootreceiver.java",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_bootreceiver"
     },
@@ -2124,8 +2020,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 20,
+      "community_name": "MainActivity.java",
       "norm_label": "bootreceiver",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_bootreceiver_bootreceiver"
     },
@@ -2136,8 +2032,8 @@
       "source_location": "L16",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 20,
+      "community_name": "MainActivity.java",
       "norm_label": ".onreceive()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_bootreceiver_bootreceiver_onreceive"
     },
@@ -2147,8 +2043,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 20,
+      "community_name": "MainActivity.java",
       "norm_label": "override",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_bootreceiver_java_override"
     },
@@ -2195,8 +2091,8 @@
       "source_location": "L71",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".rescueready()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_cfg_cfg_rescueready"
     },
@@ -2231,8 +2127,8 @@
       "source_location": "L87",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 17,
+      "community_name": "MainActivity",
       "norm_label": ".is()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_cfg_cfg_is"
     },
@@ -2255,8 +2151,8 @@
       "source_location": "L95",
       "_callable": true,
       "_origin": "ast",
-      "community": 17,
-      "community_name": "MainActivity",
+      "community": 16,
+      "community_name": "Cfg",
       "norm_label": ".getlong()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_cfg_cfg_getlong"
     },
@@ -2563,8 +2459,8 @@
       "source_location": "L249",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
-      "community_name": "Wallet",
+      "community": 4,
+      "community_name": "Store",
       "norm_label": ".detectstrandedforsweep()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardian_guardian_detectstrandedforsweep"
     },
@@ -2778,8 +2674,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "intent",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_intent"
     },
@@ -2789,8 +2685,8 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/GuardianWorker.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "guardianworker.java",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker"
     },
@@ -2802,8 +2698,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "guardianworker",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_guardianworker"
     },
@@ -2814,8 +2710,8 @@
       "source_location": "L24",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": ".guardianworker()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_guardianworker_guardianworker"
     },
@@ -2826,8 +2722,8 @@
       "source_location": "L26",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": ".dowork()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_guardianworker_dowork"
     },
@@ -2837,8 +2733,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "result",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_java_result"
     },
@@ -2848,8 +2744,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "override",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_java_override"
     },
@@ -2860,8 +2756,8 @@
       "source_location": "L43",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 11,
+      "community_name": "android.content.Context",
       "norm_label": ".schedule()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_guardianworker_schedule"
     },
@@ -2872,8 +2768,8 @@
       "source_location": "L50",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 11,
+      "community_name": "android.content.Context",
       "norm_label": ".cancel()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_guardianworker_guardianworker_cancel"
     },
@@ -2927,8 +2823,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "androidx.annotation.nonnull",
       "id": "androidx_annotation_nonnull"
     },
@@ -2938,8 +2834,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "androidx.work.worker",
       "id": "androidx_work_worker"
     },
@@ -2949,8 +2845,8 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 5,
-      "community_name": "GuardianService",
+      "community": 23,
+      "community_name": ".doWork",
       "norm_label": "androidx.work.workerparameters",
       "id": "androidx_work_workerparameters"
     },
@@ -2997,8 +2893,8 @@
       "source_location": "L37",
       "_callable": true,
       "_origin": "ast",
-      "community": 3,
-      "community_name": "Result",
+      "community": 0,
+      "community_name": "Wallet",
       "norm_label": ".validhexaddr()",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_node_node_validhexaddr"
     },
@@ -4059,9 +3955,9 @@
       "source_location": "L49",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 16,
       "norm_label": ".usesfingerprint()",
-      "community_name": "Wallet",
+      "community_name": "Cfg",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_audit_audit_usesfingerprint"
     },
     {
@@ -4082,9 +3978,9 @@
       "source_location": "L77",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 16,
       "norm_label": ".usable()",
-      "community_name": "Wallet",
+      "community_name": "Cfg",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_audit_audit_usable"
     },
     {
@@ -4118,9 +4014,9 @@
       "source_location": "L162",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 16,
       "norm_label": ".safereused()",
-      "community_name": "Wallet",
+      "community_name": "Cfg",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_audit_audit_safereused"
     },
     {
@@ -4130,9 +4026,9 @@
       "source_location": "L172",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 16,
       "norm_label": ".safeisreused()",
-      "community_name": "Wallet",
+      "community_name": "Cfg",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_audit_audit_safeisreused"
     },
     {
@@ -4286,9 +4182,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 0,
+      "community": 16,
       "norm_label": "jsonobject",
-      "community_name": "Wallet",
+      "community_name": "Cfg",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_auditapi_java_jsonobject"
     },
     {
@@ -5293,9 +5189,9 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/Notifier.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 20,
       "norm_label": "notifier.java",
-      "community_name": "GuardianService",
+      "community_name": "MainActivity.java",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_notifier"
     },
     {
@@ -5306,9 +5202,9 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": "notifier",
-      "community_name": "GuardianService",
+      "community_name": "android.content.Context",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_notifier_notifier"
     },
     {
@@ -5318,9 +5214,9 @@
       "source_location": "L19",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": ".notifier()",
-      "community_name": "GuardianService",
+      "community_name": "android.content.Context",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_notifier_notifier_notifier"
     },
     {
@@ -5330,9 +5226,9 @@
       "source_location": "L21",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": ".ensurechannels()",
-      "community_name": "GuardianService",
+      "community_name": "android.content.Context",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_notifier_notifier_ensurechannels"
     },
     {
@@ -5342,9 +5238,9 @@
       "source_location": "L38",
       "_callable": true,
       "_origin": "ast",
-      "community": 5,
+      "community": 11,
       "norm_label": ".alert()",
-      "community_name": "GuardianService",
+      "community_name": "android.content.Context",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_notifier_notifier_alert"
     },
     {
@@ -5353,9 +5249,9 @@
       "source_file": "app/src/main/java/com/eurobuddha/futurecashnext/Sha3.java",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 25,
       "norm_label": "sha3.java",
-      "community_name": "org.junit.Test",
+      "community_name": "Sha3",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_sha3"
     },
     {
@@ -5366,9 +5262,9 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 1,
+      "community": 25,
       "norm_label": "sha3",
-      "community_name": "org.junit.Test",
+      "community_name": "Sha3",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_sha3_sha3"
     },
     {
@@ -5378,9 +5274,9 @@
       "source_location": "L44",
       "_callable": true,
       "_origin": "ast",
-      "community": 1,
+      "community": 25,
       "norm_label": ".sha3()",
-      "community_name": "org.junit.Test",
+      "community_name": "Sha3",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_sha3_sha3_sha3"
     },
     {
@@ -5390,9 +5286,9 @@
       "source_location": "L47",
       "_callable": true,
       "_origin": "ast",
-      "community": 1,
+      "community": 25,
       "norm_label": ".hash()",
-      "community_name": "org.junit.Test",
+      "community_name": "Sha3",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_sha3_sha3_hash"
     },
     {
@@ -5402,9 +5298,9 @@
       "source_location": "L74",
       "_callable": true,
       "_origin": "ast",
-      "community": 1,
+      "community": 25,
       "norm_label": ".absorb()",
-      "community_name": "org.junit.Test",
+      "community_name": "Sha3",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_sha3_sha3_absorb"
     },
     {
@@ -5414,9 +5310,9 @@
       "source_location": "L86",
       "_callable": true,
       "_origin": "ast",
-      "community": 1,
+      "community": 25,
       "norm_label": ".keccakf()",
-      "community_name": "org.junit.Test",
+      "community_name": "Sha3",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_sha3_sha3_keccakf"
     },
     {
@@ -5619,9 +5515,9 @@
       "source_location": "L156",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": ".collectswithstatus()",
-      "community_name": "Wallet",
+      "community_name": "Store",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_store_store_collectswithstatus"
     },
     {
@@ -5655,9 +5551,9 @@
       "source_location": "L185",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": ".deletecollect()",
-      "community_name": "Store",
+      "community_name": "Wallet",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_store_store_deletecollect"
     },
     {
@@ -5691,9 +5587,9 @@
       "source_location": "L207",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": ".insertsweep()",
-      "community_name": "Wallet",
+      "community_name": "Store",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_store_store_insertsweep"
     },
     {
@@ -5739,9 +5635,9 @@
       "source_location": "L250",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
+      "community": 0,
       "norm_label": ".deletesweep()",
-      "community_name": "Store",
+      "community_name": "Wallet",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_store_store_deletesweep"
     },
     {
@@ -5763,9 +5659,9 @@
       "source_location": "L264",
       "_callable": true,
       "_origin": "ast",
-      "community": 0,
+      "community": 4,
       "norm_label": ".allsweepcoinids()",
-      "community_name": "Wallet",
+      "community_name": "Store",
       "id": "app_src_main_java_com_eurobuddha_futurecashnext_store_store_allsweepcoinids"
     },
     {
@@ -6434,9 +6330,9 @@
       "source_file": "build.gradle",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 20,
       "norm_label": "build.gradle",
-      "community_name": "GuardianService",
+      "community_name": "MainActivity.java",
       "id": "build"
     },
     {
@@ -6616,61 +6512,6 @@
   ],
   "links": [
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".githooks/install.sh",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "githooks_install",
-      "target": "githooks_install_sh__entry",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".githooks/pre-commit",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "githooks_pre_commit",
-      "target": "githooks_pre_commit__entry",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CLAUDE.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "claude",
-      "target": "claude_user_instructions_authoritative_these_override_default_behavior_and_must_be_followed_exactly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CLAUDE.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "claude_user_instructions_authoritative_these_override_default_behavior_and_must_be_followed_exactly",
-      "target": "claude_rule_0_highest_priority_follow_the_user_s_explicit_instructions_they_are_blocking_not_suggestions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "CLAUDE.md",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "claude_user_instructions_authoritative_these_override_default_behavior_and_must_be_followed_exactly",
-      "target": "claude_versioning_guardrail_every_code_change_ships_with_a_version_bump",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -6678,9 +6519,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "android_app_service"
+      "target": "android_app_service",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6690,9 +6531,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "android_content_broadcastreceiver"
+      "target": "android_content_broadcastreceiver",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6702,9 +6543,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "android_content_context"
+      "target": "android_content_context",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6714,9 +6555,9 @@
       "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "android_content_intent"
+      "target": "android_content_intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6726,9 +6567,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "android_os_ibinder"
+      "target": "android_os_ibinder",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -6737,9 +6578,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6749,9 +6590,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "build"
+      "target": "build",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -6761,9 +6602,9 @@
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice",
-      "target": "minimaapi"
+      "target": "minimaapi",
+      "confidence_score": 1.0
     },
     {
       "relation": "inherits",
@@ -6772,9 +6613,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "android_app_service"
+      "target": "android_app_service",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -6784,9 +6625,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "android_content_broadcastreceiver"
+      "target": "android_content_broadcastreceiver",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6795,9 +6636,9 @@
       "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6806,9 +6647,9 @@
       "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6817,9 +6658,9 @@
       "source_location": "L156",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ondestroy"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ondestroy",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6828,9 +6669,9 @@
       "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onstartcommand"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onstartcommand",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6839,9 +6680,9 @@
       "source_location": "L143",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6850,9 +6691,9 @@
       "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontimeout"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontimeout",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6861,9 +6702,9 @@
       "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_runpass"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_runpass",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6872,9 +6713,9 @@
       "source_location": "L200",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_start"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_start",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6883,9 +6724,9 @@
       "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_startforegroundcompat"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_startforegroundcompat",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6894,9 +6735,9 @@
       "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stop"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stop",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6905,9 +6746,9 @@
       "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stopgracefully"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stopgracefully",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6916,9 +6757,9 @@
       "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -6927,9 +6768,9 @@
       "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_tick"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_tick",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -6939,9 +6780,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_cfg"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_cfg",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -6951,9 +6792,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_guardian"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_guardian",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -6963,9 +6804,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_node"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_node",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -6975,9 +6816,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_nodeapi"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_nodeapi",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -6987,9 +6828,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_store"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_store",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -6999,9 +6840,9 @@
       "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_nodeapi"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_nodeapi",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7011,9 +6852,9 @@
       "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_node"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_node",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7023,9 +6864,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_cfg"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_cfg",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7035,9 +6876,9 @@
       "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_store"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_store",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7047,9 +6888,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_guardian"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_guardian",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7059,9 +6900,9 @@
       "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_broadcastreceiver"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_broadcastreceiver",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7071,9 +6912,9 @@
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind",
-      "target": "android_content_intent"
+      "target": "android_content_intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7083,9 +6924,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind",
-      "target": "android_os_ibinder"
+      "target": "android_os_ibinder",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7095,9 +6936,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onbind",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7107,9 +6948,9 @@
       "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved",
-      "target": "intent"
+      "target": "intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7119,9 +6960,9 @@
       "source_location": "L202",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_start",
-      "target": "intent"
+      "target": "intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7131,9 +6972,9 @@
       "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stop",
-      "target": "intent"
+      "target": "intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7143,9 +6984,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7155,9 +6996,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ondestroy",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7167,9 +7008,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onstartcommand",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7179,9 +7020,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7191,9 +7032,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontimeout",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7275,9 +7116,9 @@
       "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_runpass"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_runpass",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7287,9 +7128,9 @@
       "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_startforegroundcompat"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_startforegroundcompat",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7299,9 +7140,9 @@
       "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7347,9 +7188,9 @@
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_onstartcommand",
-      "target": "android_content_intent"
+      "target": "android_content_intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7359,9 +7200,9 @@
       "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_tick",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7407,9 +7248,9 @@
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontaskremoved",
-      "target": "android_content_intent"
+      "target": "android_content_intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7443,9 +7284,9 @@
       "source_location": "L190",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_ontimeout",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stopgracefully"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stopgracefully",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7467,9 +7308,9 @@
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_start",
-      "target": "android_content_context"
+      "target": "android_content_context",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7515,9 +7356,9 @@
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_guardianservice_guardianservice_stop",
-      "target": "android_content_context"
+      "target": "android_content_context",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -7551,9 +7392,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_content_broadcastreceiver"
+      "target": "android_content_broadcastreceiver",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7563,9 +7404,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_content_context"
+      "target": "android_content_context",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7575,9 +7416,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_content_intent"
+      "target": "android_content_intent",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7587,9 +7428,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_os_bundle"
+      "target": "android_os_bundle",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7599,9 +7440,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7611,9 +7452,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_widget_linearlayout"
+      "target": "android_widget_linearlayout",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7623,9 +7464,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "android_widget_textview"
+      "target": "android_widget_textview",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7635,9 +7476,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "androidx_appcompat_app_appcompatactivity"
+      "target": "androidx_appcompat_app_appcompatactivity",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7646,9 +7487,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7658,9 +7499,9 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "build"
+      "target": "build",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7670,9 +7511,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "edittext"
+      "target": "edittext",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7682,9 +7523,9 @@
       "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "jsonarray"
+      "target": "jsonarray",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -7694,9 +7535,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity",
-      "target": "minimaapi"
+      "target": "minimaapi",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7706,9 +7547,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "android_content_broadcastreceiver"
+      "target": "android_content_broadcastreceiver",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7718,9 +7559,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "android_widget_linearlayout"
+      "target": "android_widget_linearlayout",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7730,9 +7571,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "android_widget_textview"
+      "target": "android_widget_textview",
+      "confidence_score": 1.0
     },
     {
       "relation": "inherits",
@@ -7741,9 +7582,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "androidx_appcompat_app_appcompatactivity"
+      "target": "androidx_appcompat_app_appcompatactivity",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7753,9 +7594,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_cfg"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_cfg",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7765,9 +7606,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_guardian"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_guardian",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7777,9 +7618,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_node"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_node",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7789,9 +7630,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_nodeapi"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_nodeapi",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7801,9 +7642,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_store"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_store",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7812,9 +7653,9 @@
       "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_asknotificationpermission"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_asknotificationpermission",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7823,9 +7664,9 @@
       "source_location": "L393",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7834,9 +7675,9 @@
       "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7845,9 +7686,9 @@
       "source_location": "L872",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7856,9 +7697,9 @@
       "source_location": "L449",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7867,9 +7708,9 @@
       "source_location": "L262",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7878,9 +7719,9 @@
       "source_location": "L658",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7889,9 +7730,9 @@
       "source_location": "L970",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7900,9 +7741,9 @@
       "source_location": "L320",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7911,9 +7752,9 @@
       "source_location": "L711",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7922,9 +7763,9 @@
       "source_location": "L818",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7933,9 +7774,9 @@
       "source_location": "L732",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7944,9 +7785,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7955,9 +7796,9 @@
       "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_ondestroy"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_ondestroy",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7966,9 +7807,9 @@
       "source_location": "L138",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onpause"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onpause",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7977,9 +7818,9 @@
       "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onresume"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onresume",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7988,9 +7829,9 @@
       "source_location": "L633",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -7999,9 +7840,9 @@
       "source_location": "L275",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8010,9 +7851,9 @@
       "source_location": "L288",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8021,9 +7862,9 @@
       "source_location": "L894",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8032,9 +7873,9 @@
       "source_location": "L301",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8043,9 +7884,9 @@
       "source_location": "L930",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8054,9 +7895,9 @@
       "source_location": "L224",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderpairbanner"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderpairbanner",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8065,9 +7906,9 @@
       "source_location": "L759",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8076,9 +7917,9 @@
       "source_location": "L585",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8087,9 +7928,9 @@
       "source_location": "L540",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8098,9 +7939,9 @@
       "source_location": "L513",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8109,9 +7950,9 @@
       "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8120,9 +7961,9 @@
       "source_location": "L169",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8131,9 +7972,9 @@
       "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -8142,9 +7983,9 @@
       "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8154,9 +7995,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "auditrunner"
+      "target": "auditrunner",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8166,9 +8007,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "result"
+      "target": "result",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8178,9 +8019,9 @@
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "stake"
+      "target": "stake",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8190,9 +8031,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "status"
+      "target": "status",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8202,9 +8043,9 @@
       "weight": 1.0,
       "context": "field",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity",
-      "target": "verdict"
+      "target": "verdict",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8214,9 +8055,9 @@
       "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs",
-      "target": "textview"
+      "target": "textview",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8226,9 +8067,9 @@
       "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_nodeapi"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_nodeapi",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8238,9 +8079,9 @@
       "source_location": "L96",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_node"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_node",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8250,9 +8091,9 @@
       "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_cfg"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_cfg",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8262,9 +8103,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_store"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_store",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8274,9 +8115,9 @@
       "source_location": "L97",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_guardian"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_guardian",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8286,9 +8127,9 @@
       "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "auditrunner"
+      "target": "auditrunner",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8298,9 +8139,9 @@
       "source_location": "L107",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_broadcastreceiver"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_broadcastreceiver",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8310,9 +8151,9 @@
       "source_location": "L541",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
-      "target": "status"
+      "target": "status",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8322,9 +8163,9 @@
       "source_location": "L514",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
-      "target": "status"
+      "target": "status",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8334,9 +8175,9 @@
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "android_os_bundle"
+      "target": "android_os_bundle",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8394,9 +8235,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8406,9 +8247,9 @@
       "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_asknotificationpermission"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_asknotificationpermission",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8418,9 +8259,9 @@
       "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8430,9 +8271,9 @@
       "source_location": "L127",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8442,9 +8283,9 @@
       "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8454,9 +8295,9 @@
       "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8466,9 +8307,9 @@
       "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8478,9 +8319,9 @@
       "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_oncreate",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8514,9 +8355,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_ondestroy",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8526,9 +8367,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onpause",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -8538,9 +8379,9 @@
       "weight": 1.0,
       "context": "attribute",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onresume",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_java_override",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8550,9 +8391,9 @@
       "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_onresume",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8586,9 +8427,9 @@
       "source_location": "L873",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8598,9 +8439,9 @@
       "source_location": "L659",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8610,9 +8451,9 @@
       "source_location": "L845",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8622,9 +8463,9 @@
       "source_location": "L740",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8634,9 +8475,9 @@
       "source_location": "L634",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8646,9 +8487,9 @@
       "source_location": "L276",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8658,9 +8499,9 @@
       "source_location": "L917",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8670,9 +8511,9 @@
       "source_location": "L806",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8682,9 +8523,9 @@
       "source_location": "L606",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8694,9 +8535,9 @@
       "source_location": "L575",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8706,9 +8547,9 @@
       "source_location": "L248",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_submit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8850,9 +8691,9 @@
       "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8862,9 +8703,9 @@
       "source_location": "L190",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_stylechrome",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8958,9 +8799,9 @@
       "source_location": "L219",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_buildtabs",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8982,9 +8823,9 @@
       "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderpairbanner"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderpairbanner",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -8994,9 +8835,9 @@
       "source_location": "L886",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9006,9 +8847,9 @@
       "source_location": "L501",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9018,9 +8859,9 @@
       "source_location": "L269",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9030,9 +8871,9 @@
       "source_location": "L686",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9042,9 +8883,9 @@
       "source_location": "L850",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9054,9 +8895,9 @@
       "source_location": "L648",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9066,9 +8907,9 @@
       "source_location": "L808",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9078,9 +8919,9 @@
       "source_location": "L609",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_toast",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9090,9 +8931,9 @@
       "source_location": "L494",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9102,9 +8943,9 @@
       "source_location": "L530",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9126,9 +8967,9 @@
       "source_location": "L252",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_setflag",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9162,9 +9003,9 @@
       "source_location": "L270",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9174,9 +9015,9 @@
       "source_location": "L608",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_finishpendingguardianstart",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9186,9 +9027,9 @@
       "source_location": "L888",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9198,9 +9039,9 @@
       "source_location": "L687",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9210,9 +9051,9 @@
       "source_location": "L864",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9222,9 +9063,9 @@
       "source_location": "L650",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9270,9 +9111,9 @@
       "source_location": "L283",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9282,9 +9123,9 @@
       "source_location": "L920",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9294,9 +9135,9 @@
       "source_location": "L809",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_refresh",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9306,9 +9147,9 @@
       "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderactivity",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9318,9 +9159,9 @@
       "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9330,9 +9171,9 @@
       "source_location": "L294",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9342,9 +9183,9 @@
       "source_location": "L292",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_render",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9354,9 +9195,9 @@
       "source_location": "L303",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9366,9 +9207,9 @@
       "source_location": "L304",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9378,9 +9219,9 @@
       "source_location": "L308",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_hardencard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9390,9 +9231,9 @@
       "source_location": "L302",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9402,9 +9243,9 @@
       "source_location": "L309",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9414,9 +9255,9 @@
       "source_location": "L307",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_recovercard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9426,9 +9267,9 @@
       "source_location": "L306",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9438,9 +9279,9 @@
       "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderguardian",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -9450,9 +9291,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_herocard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9642,9 +9483,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9738,9 +9579,9 @@
       "source_location": "L444",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_auditcard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_maybeaudit",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9822,9 +9663,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9930,9 +9771,9 @@
       "source_location": "L503",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_daemoncard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10086,9 +9927,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10146,9 +9987,9 @@
       "source_location": "L535",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_safecard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_collectallsafe",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10230,9 +10071,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10362,9 +10203,9 @@
       "source_location": "L574",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_riskcard",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_rescuedialog",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10902,9 +10743,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_keytablecard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11106,9 +10947,9 @@
       "source_location": "L815",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderstakes",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11298,9 +11139,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_lockcard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11622,9 +11463,9 @@
       "source_location": "L931",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_renderhelp",
-      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard"
+      "target": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -11634,9 +11475,9 @@
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "app_src_main_java_com_eurobuddha_futurecashnext_mainactivity_mainactivity_helpcard",
-      "target": "android_view_view"
+      "target": "android_view_view",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -25735,5 +25576,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e1838d536e614287905706553eb1c14a4ae199e4"
+  "built_at_commit": "64e3b6edfe7f36b069779642ac81097757f7f865"
 }
