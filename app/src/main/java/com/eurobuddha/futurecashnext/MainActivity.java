@@ -415,9 +415,11 @@ public class MainActivity extends AppCompatActivity {
         } else if (bad != null) {
             // Loudest state in the app: the place we sweep RESCUED money to is itself reused. Ranked
             // above key-reuse risk because it breaks the escape route, not just the front door.
-            msg = "⚠ Your safe destination " + Ui.shortAddr(bad[0]) + " is a REUSED address (signed ×"
+            // Full address on its own line — the user needs to recognise WHICH address is burnt,
+            // and an abbreviated one cannot be compared against a wallet or an explorer.
+            msg = "⚠ Your safe destination is a REUSED address (signed ×"
                     + bad[1] + "). Rescuing there would move your money onto another exposed key — "
-                    + "set a fresh destination below.";
+                    + "set a fresh destination below.\n\n" + bad[0];
             colour = Design.RED();
         } else if (lastAudit != null && lastAudit.worstReuse > 0) {
             msg = "⚠ Key-reuse risk detected (reused ×" + lastAudit.worstReuse + "). At-risk stakes "
@@ -490,13 +492,16 @@ public class MainActivity extends AppCompatActivity {
         // Name the destination when running. "Swept to safety" is a promise; showing WHERE lets the
         // user check it rather than take it on faith.
         if (on && safe != null) {
-            final LinearLayout dest = Ui.row(this);
-            dest.addView(Ui.text(this, "sweeps to ", Design.DIM2(), 11, false));
-            dest.addView(Ui.mono(this, Ui.shortAddr(safe), Design.DIM(), 11, false));
-            dest.addView(Ui.text(this, guardian.wallet().sameNodeMode() ? "  · this node" : "  · external",
-                    Design.DIM2(), 11, false));
             c.addView(Ui.divider(this));
+            final LinearLayout dest = Ui.row(this);
+            dest.addView(Ui.text(this, "sweeps to", Design.DIM2(), 11, false));
+            dest.addView(Ui.text(this, guardian.wallet().sameNodeMode()
+                    ? "  · this node · tap to copy" : "  · external · tap to copy",
+                    Design.DIM2(), 11, false));
             c.addView(dest);
+            // The FULL address, never abbreviated — "swept to safety" is a promise, and only the
+            // whole value lets the user check it against their wallet rather than take it on faith.
+            c.addView(Ui.copyable(this, safe, Design.DIM(), 11));
         }
 
         final LinearLayout row = Ui.row(this);
@@ -574,9 +579,10 @@ public class MainActivity extends AppCompatActivity {
         final String safe = cfg.get(Cfg.SAFE_ADDRESS, null);
         final boolean rescueOn = cfg.is(Cfg.ENABLED, false);
         if (safe != null) {
-            c.addView(Ui.text(this, (rescueOn ? "rescue ON → " : "destination: ") + Ui.shortAddr(safe)
-                    + (guardian.wallet().sameNodeMode() ? " · this node" : " · external"),
+            c.addView(Ui.text(this, (rescueOn ? "rescue ON → " : "destination: ")
+                    + (guardian.wallet().sameNodeMode() ? "this node" : "external") + " · tap to copy",
                     rescueOn ? Design.SAFE() : Design.DIM(), 12, false));
+            c.addView(Ui.copyable(this, safe, rescueOn ? Design.SAFE() : Design.DIM(), 11));
         }
         if (st.vaultLocked) {
             c.addView(Ui.text(this, "🔒 vault locked — unlock your node to sweep", Design.WARN(), 12, false));
@@ -619,7 +625,7 @@ public class MainActivity extends AppCompatActivity {
             submit(() -> {
                 final Wallet.Res r = guardian.wallet().setSafeSameNode();
                 if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); finishPendingGuardianStart(); }
-                toast(r.ok ? "Rescue ON → " + Ui.shortAddr(r.value) : r.error);
+                toast(r.ok ? "Rescue ON → " + r.value : r.error);
                 runOnUiThread(this::render);
             });
         }));
@@ -632,7 +638,7 @@ public class MainActivity extends AppCompatActivity {
                 final Wallet.Res r = guardian.wallet().setSafeExternal(addr, count);
                 if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); finishPendingGuardianStart(); }
                 toast(r.ok
-                        ? "Rescue ON → external " + Ui.shortAddr(addr)
+                        ? "Rescue ON → external " + addr
                           + (count == 0 ? " (verified clean)" : " (reuse check unverified — will re-check)")
                         : r.error);
                 runOnUiThread(this::render);
@@ -658,7 +664,7 @@ public class MainActivity extends AppCompatActivity {
                         + "real key.", Design.DIM(), 12, false));
                 c.addView(Ui.tinted(this, "Recover " + n + " coin(s)", Design.WARN(), v -> submit(() -> {
                     final Wallet.SweepReport r = guardian.wallet().recoverRetiredCoins();
-                    toast(r.swept > 0 ? "Recovered " + r.swept + " coin(s) to " + Ui.shortAddr(r.dest)
+                    toast(r.swept > 0 ? "Recovered " + r.swept + " coin(s) to " + r.dest
                             : (r.error != null ? r.error : "Nothing to recover."));
                     refresh();
                 })));
@@ -686,7 +692,7 @@ public class MainActivity extends AppCompatActivity {
                     active++;
                     final LinearLayout r = Ui.row(this);
                     final LinearLayout info = Ui.column(this);
-                    info.addView(Ui.text(this, Ui.shortAddr(ra.mx.isEmpty() ? ra.hex : ra.mx), Design.TEXT(), 12, false));
+                    info.addView(Ui.copyable(this, ra.mx.isEmpty() ? ra.hex : ra.mx, Design.TEXT(), 11));
                     info.addView(Ui.text(this, ra.coins == 0 ? "empty · ready to retire"
                             : "holds " + ra.coins + " coin(s) — sweep them off first",
                             ra.coins == 0 ? Design.DIM() : Design.WARN(), 11, false));
@@ -702,7 +708,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         r.addView(Ui.tinted(this, "Sweep", Design.SAFE(), v -> submit(() -> {
                             final Wallet.SweepReport res = guardian.wallet().sweepAddressToClean(ra.hex);
-                            toast(res.swept > 0 ? "Swept " + res.swept + " coin(s) → " + Ui.shortAddr(res.dest)
+                            toast(res.swept > 0 ? "Swept " + res.swept + " coin(s) → " + res.dest
                                     : (res.error != null ? res.error : "Nothing swept."));
                             refresh();
                         })));
@@ -731,11 +737,13 @@ public class MainActivity extends AppCompatActivity {
         for (KeyAudit.Row r : lastAudit.rows) {
             if (!r.risk && !r.reused) continue;   // only the interesting ones; the rest are noise
             final LinearLayout row = Ui.row(this);
-            row.addView(Ui.text(this, "#" + r.index + "  " + Ui.shortAddr(r.address), Design.TEXT(), 12, false));
-            final TextView chip = Ui.text(this, r.reused ? "  RE-USED ×" + r.reuseCount : "  AT RISK",
-                    r.reused ? Design.RED() : Design.WARN(), 12, true);
-            row.addView(chip);
+            row.addView(Ui.text(this, "#" + r.index, Design.TEXT(), 12, true));
+            row.addView(Ui.text(this, r.reused ? "  RE-USED ×" + r.reuseCount : "  AT RISK",
+                    r.reused ? Design.RED() : Design.WARN(), 12, true));
             c.addView(row);
+            // The full address under its verdict — this is the value the user takes to an explorer
+            // or a support ticket, and a shortened one cannot be pasted anywhere.
+            c.addView(Ui.copyable(this, r.address, Design.DIM(), 10));
         }
         c.addView(Ui.text(this, "Only your PUBLIC keys are ever sent to the audit service — they can't "
                 + "be used to take your money.", Design.DIM(), 11, false));
@@ -808,7 +816,7 @@ public class MainActivity extends AppCompatActivity {
             info.addView(Ui.text(this, s.ready ? "ready to collect"
                             : "unlocks " + Ui.maturesIn(s.matureBlock, tip),
                     s.ready ? Design.SAFE() : Design.DIM(), 12, false));
-            info.addView(Ui.mono(this, "block " + s.matureBlock + " → " + Ui.shortAddr(s.payout),
+            info.addView(Ui.mono(this, "block " + s.matureBlock + " → " + s.payout,
                     Design.DIM2(), 10, false));
             info.setLayoutParams(new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1f));

@@ -216,13 +216,26 @@ public final class Ui {
         return v;
     }
 
-    /* ---------- formatting ---------- */
-
-    /** Shorten an address, keeping both ends so it stays recognisable. */
-    public static String shortAddr(String s) {
-        final String v = s == null ? "" : s;
-        return v.length() > 18 ? v.substring(0, 10) + "…" + v.substring(v.length() - 6) : v;
+    /**
+     * A full identifier — mono, wrapping onto further lines rather than losing characters, tap to
+     * copy the complete value. An abbreviated address cannot be pasted into a wallet, an explorer
+     * or a support ticket, which is the only thing it exists for — so nothing in this app may
+     * shorten one. This builder is the replacement for the deleted {@code shortAddr()}.
+     */
+    public static TextView copyable(Context c, String value, int color, int sizeSp) {
+        final TextView t = mono(c, value, color, sizeSp, false);
+        t.setOnClickListener(v -> {
+            final android.content.ClipboardManager cm = (android.content.ClipboardManager)
+                    c.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (cm != null) {
+                cm.setPrimaryClip(android.content.ClipData.newPlainText("value", value));
+                android.widget.Toast.makeText(c, "Copied", android.widget.Toast.LENGTH_SHORT).show();
+            }
+        });
+        return t;
     }
+
+    /* ---------- formatting ---------- */
 
     public static String amount(String a) {
         try {
