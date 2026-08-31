@@ -166,12 +166,7 @@ public class GuardianService extends Service {
      * chain-watcher does not fit dataSync, which is capped at ~6h/day and then crashes the service.
      */
     private boolean startForegroundCompat() {
-        final Notification n = new NotificationCompat.Builder(this, Notifier.CH_FG)
-                .setContentTitle("Future Cash guardian")
-                .setContentText("Watching your stakes — collecting safely, rescuing at-risk ones")
-                .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
-                .setOngoing(true)
-                .build();
+        final Notification n = buildNotification(this);
         try {
             if (Build.VERSION.SDK_INT >= 34) {
                 startForeground(FG_ID, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
@@ -184,6 +179,35 @@ public class GuardianService extends Service {
         } catch (Exception e) {
             return false;   // ForegroundServiceStartNotAllowedException etc. — don't crash
         }
+    }
+
+    /**
+     * The ongoing notification must not promise more than the config allows: "collecting safely"
+     * while auto-collect is off described a guardian that would leave matured clean stakes
+     * untouched forever. The text follows the switch, and BigTextStyle keeps the honest (longer)
+     * variant readable instead of ellipsized.
+     */
+    private static Notification buildNotification(Context ctx) {
+        final boolean auto = new Cfg(ctx).is(Cfg.AUTO_COLLECT_SAFE, false);
+        final String text = auto
+                ? "Watching your stakes — collecting matured ones, rescuing at-risk ones"
+                : "Rescuing at-risk stakes only. Auto-collect is OFF — matured clean stakes are "
+                  + "NOT collected until you turn it on in the app.";
+        return new NotificationCompat.Builder(ctx, Notifier.CH_FG)
+                .setContentTitle("Future Cash guardian")
+                .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
+                .setOngoing(true)
+                .build();
+    }
+
+    /** Re-post the foreground notification so its text tracks the auto-collect switch. */
+    public static void refreshNotification(Context ctx) {
+        if (!new Cfg(ctx).is(Cfg.GUARDIAN_ON, false)) return;   // no service → nothing to update
+        final NotificationManager nm =
+                (NotificationManager) ctx.getSystemService(NOTIFICATION_SERVICE);
+        if (nm != null) try { nm.notify(FG_ID, buildNotification(ctx)); } catch (Exception ignored) {}
     }
 
     /** Android 14+ can ask a time-limited FGS to stop. Stop gracefully rather than crashing. */

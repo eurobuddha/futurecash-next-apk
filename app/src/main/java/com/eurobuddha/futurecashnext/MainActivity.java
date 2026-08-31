@@ -359,9 +359,20 @@ public class MainActivity extends AppCompatActivity {
             headline = "Watching — " + atRisk + " at-risk address" + (atRisk == 1 ? "" : "es");
             detail = "Anything maturing onto a reused key is collected and swept to safety.";
             colour = Design.WARN();
+        } else if (!cfg.is(Cfg.AUTO_COLLECT_SAFE, false) && lastStatus.readySafeN > 0) {
+            // "Protected" while collectible money sits untouched is the lie this card must not
+            // tell: with auto-collect off, the guardian will NEVER take these — only rescue.
+            final int n = (int) lastStatus.readySafeN;
+            headline = "Auto-collect is OFF — " + n + " stake" + (n == 1 ? "" : "s") + " waiting";
+            detail = "Matured stakes on clean addresses are NOT collected while auto-collect is "
+                   + "off. Turn it on below, or tap Collect all now. At-risk rescue still runs.";
+            colour = Design.WARN();
         } else {
             headline = "Protected";
-            detail = "The guardian is watching your stakes, even with the app closed.";
+            detail = "The guardian is watching your stakes, even with the app closed."
+                   + (cfg.is(Cfg.AUTO_COLLECT_SAFE, false) ? ""
+                      : " Auto-collect is off, so clean matured stakes will wait for you; "
+                        + "at-risk ones are still rescued.");
             colour = Design.SAFE();
         }
 
@@ -527,10 +538,12 @@ public class MainActivity extends AppCompatActivity {
             c.addView(Ui.text(this, "Auto-collect is ON — matured stakes are collected to your own "
                     + "address. There's no rush: until then they stay safely locked away.", Design.SAFE(), 12, false));
             row.addView(Ui.ghost(this, "Turn off", v ->
-                    setFlag(Cfg.AUTO_COLLECT_SAFE, false, null)));
+                    setFlag(Cfg.AUTO_COLLECT_SAFE, false, () -> GuardianService.refreshNotification(this))));
         } else {
+            c.addView(Ui.text(this, "Auto-collect is OFF — the guardian will not collect these. "
+                    + "They stay safely locked in the contract until you act.", Design.WARN(), 12, false));
             row.addView(Ui.tinted(this, "Turn on auto-collect", Design.SAFE(), v ->
-                    setFlag(Cfg.AUTO_COLLECT_SAFE, true, null)));
+                    setFlag(Cfg.AUTO_COLLECT_SAFE, true, () -> GuardianService.refreshNotification(this))));
         }
         if (st.readySafeN > 0) row.addView(Ui.ghost(this, "Collect all now", v -> collectAllSafe()));
         c.addView(row);
