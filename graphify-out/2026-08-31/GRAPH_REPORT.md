@@ -1,21 +1,21 @@
 # Graph Report - futurecash-next  (2026-08-31)
 
 ## Corpus Check
-- 34 files · ~39,405 words
+- 34 files · ~39,267 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 558 nodes · 1637 edges · 39 communities (17 shown, 22 thin omitted)
-- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 175 edges (avg confidence: 0.8)
+- 559 nodes · 1641 edges · 31 communities (13 shown, 18 thin omitted)
+- Extraction: 89% EXTRACTED · 11% INFERRED · 0% AMBIGUOUS · INFERRED: 177 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e47312ee`
+- Built from commit: `96c99902`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- org.json.JSONObject
+- Wallet
 - org.junit.Test
 - android.content.Context
 - Result
@@ -28,29 +28,22 @@
 - Node
 - User instructions — AUTHORITATIVE. These override default behavior and must be followed exactly.
 - gradlew
-- .log
-- AuditApi
+- NodeApi
+- Cfg
 - MainActivity
 - JSONArray
 - Cfg
 - install.sh
-- Wallet
+- TextView
 - pre-commit
-- Guardian
-- Node
-- .cleanAddress
 - CoinState
-- Mode
-- Sha3
-- Result
 - BroadcastReceiver
 - Cfg
+- Result
 - Guardian
 - Node
-- NodeApi
 - Override
 - Store
-- TextView
 
 ## God Nodes (most connected - your core abstractions)
 1. `MainActivity` - 46 edges
@@ -65,29 +58,33 @@
 10. `AuditApi` - 19 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AuditRunner` --references--> `Cfg`  [EXTRACTED]
-  app/src/main/java/com/eurobuddha/futurecashnext/AuditRunner.java → app/src/main/java/com/eurobuddha/futurecashnext/Cfg.java
 - `Guardian` --references--> `Cfg`  [EXTRACTED]
   app/src/main/java/com/eurobuddha/futurecashnext/Guardian.java → app/src/main/java/com/eurobuddha/futurecashnext/Cfg.java
 - `Audit` --references--> `Node`  [EXTRACTED]
   app/src/main/java/com/eurobuddha/futurecashnext/Audit.java → app/src/main/java/com/eurobuddha/futurecashnext/Node.java
 - `AuditRunner` --references--> `Node`  [EXTRACTED]
   app/src/main/java/com/eurobuddha/futurecashnext/AuditRunner.java → app/src/main/java/com/eurobuddha/futurecashnext/Node.java
-- `AuditRunner` --references--> `Audit`  [EXTRACTED]
-  app/src/main/java/com/eurobuddha/futurecashnext/AuditRunner.java → app/src/main/java/com/eurobuddha/futurecashnext/Audit.java
+- `Audit` --references--> `Cfg`  [EXTRACTED]
+  app/src/main/java/com/eurobuddha/futurecashnext/Audit.java → app/src/main/java/com/eurobuddha/futurecashnext/Cfg.java
+- `AuditRunner` --references--> `Cfg`  [EXTRACTED]
+  app/src/main/java/com/eurobuddha/futurecashnext/AuditRunner.java → app/src/main/java/com/eurobuddha/futurecashnext/Cfg.java
 
 ## Import Cycles
 - None detected.
 
-## Communities (39 total, 22 thin omitted)
+## Communities (31 total, 18 thin omitted)
+
+### Community 0 - "Wallet"
+Cohesion: 0.06
+Nodes (23): Guardian, Node, Store, Notifier, Stake, Node, Tx, AddressSets (+15 more)
 
 ### Community 1 - "org.junit.Test"
-Cohesion: 0.07
-Nodes (22): KeyAudit, LocalKey, Result, Reuse, Row, Status, AT_RISK, OK (+14 more)
+Cohesion: 0.06
+Nodes (23): KeyAudit, LocalKey, Result, Reuse, Row, Status, AT_RISK, OK (+15 more)
 
 ### Community 2 - "android.content.Context"
 Cohesion: 0.08
-Nodes (24): android.content.Context, android.graphics.drawable.GradientDrawable, android.graphics.drawable.RippleDrawable, android.graphics.Typeface, android.view.View, android.widget.Button, android.widget.EditText, android.widget.LinearLayout (+16 more)
+Nodes (23): android.content.Context, android.graphics.drawable.GradientDrawable, android.graphics.drawable.RippleDrawable, android.graphics.Typeface, android.view.View, android.widget.Button, android.widget.EditText, android.widget.LinearLayout (+15 more)
 
 ### Community 4 - "Store"
 Cohesion: 0.09
@@ -105,57 +102,41 @@ Nodes (3): RULE 0 (highest priority) — Follow the user's explicit instructions
 Cohesion: 0.60
 Nodes (3): gradlew script, die(), warn()
 
-### Community 15 - ".log"
-Cohesion: 0.11
-Nodes (8): android.content.SharedPreferences, Audit, JSONArray, JSONObject, Cfg, java.util.regex.Pattern, JSONArray, org.json.JSONArray
+### Community 15 - "NodeApi"
+Cohesion: 0.19
+Nodes (6): android.os.Handler, Cb, NodeApi, PairingListener, MinimaAPI, org.minimarex.minimaapi.MinimaAPI
 
-### Community 16 - "AuditApi"
-Cohesion: 0.08
-Nodes (12): android.app.Activity, android.os.Handler, AuditApi, Cb, AuditRunner, Cb, Cb, NodeApi (+4 more)
+### Community 16 - "Cfg"
+Cohesion: 0.06
+Nodes (18): android.app.Activity, android.content.SharedPreferences, Audit, JSONArray, Mode, FRESH, NONE, PARTIAL (+10 more)
 
 ### Community 17 - "MainActivity"
 Cohesion: 0.12
-Nodes (14): android.os.Bundle, androidx.appcompat.app.AppCompatActivity, MainActivity, AuditRunner, BroadcastReceiver, Cfg, Guardian, Node (+6 more)
-
-### Community 21 - "Wallet"
-Cohesion: 0.22
-Nodes (5): Cfg, Node, ReusedAddr, SweepReport, Wallet
-
-### Community 23 - "Guardian"
-Cohesion: 0.20
-Nodes (8): Guardian, Node, Store, Notifier, Stake, Audit, SweepRow, Wallet
-
-### Community 24 - "Node"
-Cohesion: 0.23
-Nodes (3): Node, Tx, Res
+Nodes (15): android.os.Bundle, androidx.appcompat.app.AppCompatActivity, BroadcastReceiver, Cfg, Guardian, Node, NodeApi, Override (+7 more)
 
 ### Community 27 - "CoinState"
 Cohesion: 0.40
 Nodes (5): CoinState, GONE, SPENT, UNKNOWN, UNSPENT
 
-### Community 28 - "Mode"
-Cohesion: 0.29
-Nodes (7): Mode, FRESH, NONE, PARTIAL, RECONFIRMED, STALE, Verdict
-
 ## Knowledge Gaps
 - **21 isolated node(s):** `install.sh script`, `RULE 0 (highest priority) — Follow the user's explicit instructions. They are BLOCKING, not suggestions.`, `Versioning guardrail — every code change ships with a version bump`, `ONYX`, `DAYLIGHT` (+16 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `MainActivity` connect `MainActivity` to `android.content.Context`, `GuardianService`?**
-  _High betweenness centrality (0.074) - this node is a cross-community bridge._
-- **Why does `Guardian` connect `Guardian` to `org.json.JSONObject`, `android.content.Context`, `Store`, `.log`, `Node`, `.reconcile`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
-- **Why does `Cfg` connect `.log` to `GuardianService`, `AuditApi`, `MainActivity`, `Guardian`, `.reconcile`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+  _High betweenness centrality (0.072) - this node is a cross-community bridge._
+- **Why does `Guardian` connect `Wallet` to `Cfg`, `android.content.Context`, `Store`?**
+  _High betweenness centrality (0.057) - this node is a cross-community bridge._
+- **Why does `Cfg` connect `Cfg` to `Wallet`, `MainActivity`, `GuardianService`?**
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
 - **What connects `install.sh script`, `RULE 0 (highest priority) — Follow the user's explicit instructions. They are BLOCKING, not suggestions.`, `Versioning guardrail — every code change ships with a version bump` to the rest of the system?**
   _21 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Wallet` be split into smaller, more focused modules?**
+  _Cohesion score 0.06054960409874243 - nodes in this community are weakly interconnected._
 - **Should `org.junit.Test` be split into smaller, more focused modules?**
-  _Cohesion score 0.06582278481012659 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.059370725034199726 - nodes in this community are weakly interconnected._
 - **Should `android.content.Context` be split into smaller, more focused modules?**
-  _Cohesion score 0.07780772686433064 - nodes in this community are weakly interconnected._
-- **Should `Store` be split into smaller, more focused modules?**
-  _Cohesion score 0.09206349206349207 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07985347985347985 - nodes in this community are weakly interconnected._

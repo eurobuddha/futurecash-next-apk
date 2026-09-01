@@ -1,7 +1,7 @@
 {
   "app/build.gradle": {
-    "mtime": 1788209841.2844102,
-    "ast_hash": "eba0ee0e5e9ab6450bf94be03df8fd98",
+    "mtime": 1788209724.7726915,
+    "ast_hash": "86e60e13afa363c3f7bf8ac8f6b1c63b",
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Audit.java": {
@@ -35,9 +35,9 @@
     "semantic_hash": "9cc6ae66ac2dc86de0ef12c0afb3de8a"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/FutureCashContract.java": {
-    "mtime": 1788209834.1843727,
-    "ast_hash": "55ed97187034f753711b7765516c4334",
-    "semantic_hash": ""
+    "mtime": 1786484225.564973,
+    "ast_hash": "a39e86818c669ab8d87ba094ff315a5d",
+    "semantic_hash": "a39e86818c669ab8d87ba094ff315a5d"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Guardian.java": {
     "mtime": 1786549860.9311757,
@@ -60,8 +60,8 @@
     "semantic_hash": "02edd490e71d810c0bf856aaca606cb2"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/MainActivity.java": {
-    "mtime": 1788209817.7885692,
-    "ast_hash": "b872abc64cbb3842c2cedb1ad786aaa4",
+    "mtime": 1788209698.116155,
+    "ast_hash": "6ff3520d68c2f64287e8b217a1f88012",
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/MinimaAddress.java": {
@@ -100,14 +100,14 @@
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Ui.java": {
-    "mtime": 1788209775.3660874,
-    "ast_hash": "46d349a722bacc59e09f95e119da2d55",
+    "mtime": 1786629958.3321128,
+    "ast_hash": "7f3693f75f39abe1cfc84c29da7dc2b4",
     "semantic_hash": ""
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Util.java": {
-    "mtime": 1788209831.7870526,
-    "ast_hash": "b2c745329ed48bf4ac45b00befd63100",
-    "semantic_hash": ""
+    "mtime": 1786484225.5685313,
+    "ast_hash": "cf5f76da0f78bd876a77e6ae99c6e4aa",
+    "semantic_hash": "cf5f76da0f78bd876a77e6ae99c6e4aa"
   },
   "app/src/main/java/com/eurobuddha/futurecashnext/Wallet.java": {
     "mtime": 1786486161.6068063,
