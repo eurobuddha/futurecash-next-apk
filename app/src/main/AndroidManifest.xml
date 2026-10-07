@@ -21,7 +21,7 @@
 
     <!-- Android 11+ package visibility: needed to deliver our targeted IPC broadcasts to the node -->
     <queries>
-        <package android:name="org.minimarex.minimacore" />
+        <package android:name="com.eurobuddha.minimacore" />
     </queries>
 
     <!-- allowBackup=false is a FUND-SAFETY setting here, not a preference.

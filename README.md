@@ -27,7 +27,7 @@ So this app:
 ## Architecture
 
 Companion APK — it does **not** embed a node. Java + classic Views, talking to Minima Core
-(`org.minimarex.minimacore`) over broadcast-Intent IPC via `app/libs/minimaapi.aar`.
+(`com.eurobuddha.minimacore`) over broadcast-Intent IPC via `app/libs/minimaapi.aar`.
 
 ```
 GuardianService (foreground, specialUse)          MainActivity (4 tabs)
