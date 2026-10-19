@@ -100,8 +100,9 @@ public final class Guardian {
      */
     private void detect(long tip, Set<String> ownDefault) {
         seenStakes.clear();
-        final JSONObject r = node.cmd("coins relevant:true");
-        final JSONArray arr = Node.arr(r);
+        Wallet.AddressSets owners=new Wallet.AddressSets();
+        owners.ownDefault.addAll(ownDefault);
+        final JSONArray arr=StakeScan.read(node,owners,StakeScan.contracts(wallet));
         for (int i = 0; i < arr.length(); i++) {
             final JSONObject c = arr.optJSONObject(i);
             if (c == null) continue;
@@ -516,11 +517,12 @@ public final class Guardian {
     /* ================= UI-facing actions ================= */
 
     /** This node's stakes, for the Stakes tab. Relevant-only, same reasoning as detect(). */
-    public List<Stake> listStakes() {
+    public synchronized List<Stake> listStakes() {
+        reloadAtRisk();
         final List<Stake> out = new ArrayList<>();
         final long tip = tip();
         final Wallet.AddressSets sets = wallet.addressSets();
-        final JSONArray arr = Node.arr(node.cmd("coins relevant:true"));
+        final JSONArray arr = StakeScan.read(node,sets,StakeScan.contracts(wallet));
         final Set<String> seen = new HashSet<>();
         for (int i = 0; i < arr.length(); i++) {
             final JSONObject c = arr.optJSONObject(i);
@@ -537,7 +539,7 @@ public final class Guardian {
             st.amount = Node.outAmount(c);
             st.tokenid = c.optString("tokenid", "0x00");
             st.matureBlock = parseLong(Node.state(c, FutureCashContract.ST_FUTUREBLOCK));
-            st.ready = st.matureBlock <= tip;
+            st.ready = matured(c,tip);
             st.atRisk = atRisk.contains(Wallet.canonAddr(payout));
             out.add(st);
         }
@@ -600,10 +602,13 @@ public final class Guardian {
      * Collect ONE matured stake now. Same safety gates as the engine: refuses an at-risk payout
      * (the rescue path owns those) and refuses without a usable audit.
      */
-    public Wallet.Res collectNow(String coinid) {
+    public synchronized Wallet.Res collectNow(String coinid) {
         if (!Node.validHexAddr(coinid)) return Wallet.Res.err("Not a valid coin id.");
         final long tip = tip();
-        final JSONArray arr = Node.arr(node.cmd("coins coinid:" + coinid));
+        final JSONObject lookup=node.cmd("coins coinid:"+coinid);
+        if (!Node.ok(lookup) || lookup.optJSONArray("response")==null)
+            return Wallet.Res.err("Could not read the complete stake list. Refresh and retry.");
+        final JSONArray arr = Node.arr(lookup);
         JSONObject coin = null;
         for (int i = 0; i < arr.length(); i++) {
             final JSONObject c = arr.optJSONObject(i);
@@ -612,7 +617,7 @@ public final class Guardian {
             }
         }
         if (coin == null) return Wallet.Res.err("Stake not found — it may already be collected.");
-        if (!looksLikeFutureCash(coin)) return Wallet.Res.err("Not a FutureCash stake.");
+        if (!StakeScan.isStake(coin,StakeScan.contracts(wallet))) return Wallet.Res.err("Not a FutureCash stake.");
         if (!matured(coin, tip)) {
             return Wallet.Res.err("Not matured yet — unlocks at block "
                     + Node.state(coin, FutureCashContract.ST_FUTUREBLOCK) + " (now " + tip + ").");
@@ -622,6 +627,7 @@ public final class Guardian {
         if (!Wallet.owns(sets.ownDefault, payout)) {
             return Wallet.Res.err("That stake doesn't pay out to this node — it isn't yours to collect.");
         }
+        reloadAtRisk();
         if (atRisk.contains(Wallet.canonAddr(payout))) {
             return Wallet.Res.err("This stake pays out to an at-risk address — the Guardian rescues it "
                     + "with collect + sweep instead. Set up rescue on the Guardian tab.");
@@ -639,6 +645,7 @@ public final class Guardian {
     /** Refresh the in-memory at-risk set (after an audit completes on another thread). */
     public synchronized void reloadAtRisk() {
         atRisk.clear();
+        for (String retired : wallet.retiredAddresses()) atRisk.add(Wallet.canonAddr(retired));
         final JSONArray flagged = cfg.atRisk();
         for (int i = 0; i < flagged.length(); i++) {
             final String a = flagged.optString(i, "");

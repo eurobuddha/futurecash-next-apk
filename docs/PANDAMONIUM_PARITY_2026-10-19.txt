@@ -20,3 +20,24 @@ eca1383c9d27683a281fbe6355356267877dc2dd14d963d7cc289ca0700e517f
 Candidate: dist/futurecash-next-0.1.9-candidate.apk; checksum beside it.
 No device install, network transaction or publication. Final rollout held for Fold
 validation with the reviewed Pandamonium 2.0.0 candidate.
+
+Stake validation checkpoint: Future Cash Next0.1.10/code110
+Reused Pandamonium's exact StakeScan class for known covenant, owned payout and
+strict reply validation. Standalone's walletOwned set stays empty: the user
+explicitly restricted the minimaWallet connection to Pandamonium. No new external
+wallet/signing API or standalone minimaWallet change. Existing IPC is retained.
+
+List/manual collection refresh risk including retired keys, share the guardian's
+coinage/block maturity, and reject failed/malformed lookups. Vault readiness fails
+closed for missing, malformed, pending or failed status replies. The foreground UI
+runs the enabled/configured guardian, replacing the service it stands down.
+Review: approve these bounded shared repairs; broader evidence/retry review remains.
+
+Validation:54 debug +54 release tests pass,0 failures/errors/skips. Release lint:
+0 errors/50 warnings. Offline signed assembleRelease passed. Package verified as
+com.eurobuddha.futurecashnext, version0.1.10/code110; ZIP integrity and family signing
+certificate verified. Candidate:dist/futurecash-next-0.1.10-candidate.apk
+SHA256 dd005f6bb35837ba8cbaadb81d552fbf12d468b77781f0d963008969eb0b2a54
+Certificate SHA256 eca1383c9d27683a281fbe6355356267877dc2dd14d963d7cc289ca0700e517f
+No device install, real transactions or publication. Fold verification and complete
+Pandamonium2.0.0 review remain pending.

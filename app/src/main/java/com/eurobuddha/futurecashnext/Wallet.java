@@ -56,6 +56,8 @@ public final class Wallet {
 
     public static final class AddressSets {
         public final Set<String> ownDefault = new HashSet<>();   // canonAddr of addresses we can sign for
+        /** Populated only by hosts that provide an authenticated minimaWallet public snapshot. */
+        public final Set<String> walletOwned = new HashSet<>();
         public final Set<String> allTracked = new HashSet<>();   // raw forms of everything the node tracks
     }
 
@@ -294,8 +296,9 @@ public final class Wallet {
     }
 
     public boolean vaultLocked() {
-        final JSONObject resp = Node.obj(node.cmd("status"));
-        return resp != null && resp.optBoolean("locked", false);
+        final JSONObject reply = node.cmd("status");
+        final JSONObject resp = Node.obj(reply);
+        return !Node.ok(reply) || resp == null || !(resp.opt("locked") instanceof Boolean) || resp.optBoolean("locked", true);
     }
 
     /* ================= retired addresses (Harden / Recover) ================= */

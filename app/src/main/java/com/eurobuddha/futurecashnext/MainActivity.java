@@ -274,7 +274,9 @@ public class MainActivity extends AppCompatActivity {
     /** Pull fresh state on the worker, then redraw. Every blocking call belongs in here. */
     private void refresh() {
         submit(() -> {
+            try {
             final long t = guardian.tip();
+            if (t>0 && cfg.is(Cfg.GUARDIAN_ON,false) && cfg.rescueReady()) guardian.reconcile(t);
             final List<Guardian.Stake> s = guardian.listStakes();
             final Audit.Verdict v = new Audit(cfg, node).usable();   // may block on the node — worker only
             final Guardian.Status st = guardian.status(t);           // SQLite — worker only
@@ -282,6 +284,9 @@ public class MainActivity extends AppCompatActivity {
                 tip = t; stakes = s; lastVerdict = v; lastStatus = st;
                 render();
             });
+            } catch (RuntimeException unavailable) {
+                toast(unavailable.getMessage()==null ? "Could not read the complete stake list. Refresh and retry." : unavailable.getMessage());
+            }
         });
     }
 
