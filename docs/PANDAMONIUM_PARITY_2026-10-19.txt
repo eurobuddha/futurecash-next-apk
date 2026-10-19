@@ -41,3 +41,24 @@ SHA256 dd005f6bb35837ba8cbaadb81d552fbf12d468b77781f0d963008969eb0b2a54
 Certificate SHA256 eca1383c9d27683a281fbe6355356267877dc2dd14d963d7cc289ca0700e517f
 No device install, real transactions or publication. Fold verification and complete
 Pandamonium2.0.0 review remain pending.
+
+Audit-completion ANR repair: Future Cash Next0.1.11/code111
+The Fold's Pandamonium1.9.117 trace showed MainActivity.onDone ->
+Guardian.reloadAtRisk -> Wallet.retiredAddresses -> Node.cmd blocking the UI thread.
+The preceding repair added node reads to reloadAtRisk but missed its UI callback
+caller. Both standalone and integrated activity callbacks had the same regression.
+Remove that redundant callback call; existing refresh queues listStakes and its
+risk reload on the worker. Retired-key protection remains intact.
+
+Reuse the current MainActivity.submit/refresh path and existing Mockito executor
+fixtures. New AuditCompletionThreadingTest invokes the actual private audit entry
+and captures its real callback. Success, failure and post-shutdown completion do
+not call the guardian on the callback thread. Two cases failed on1.9.117 source,
+then all three passed after repair. Existing risk tests remain in the full suite.
+Review verdict: approve this bounded fix; complete2.0.0 review remains open.
+Validation:57 debug +57 release tests pass, release lint and signed assembly pass.
+Verified package/version111/0.1.11, ZIP and family certificate. Local candidate:
+dist/futurecash-next-0.1.11-candidate.apk
+SHA256 b1a545081281a601e7fea2a2fb5093a77466ccd0476591587947435b5a69a01a
+Standalone candidate not installed or published. Pandamonium1.9.118 is installed on
+the Fold for device verification; its minimaWallet feature remains host-only.
