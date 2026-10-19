@@ -47,7 +47,7 @@ public final class AuditRunner {
         final JSONObject r = node.cmd("keys action:list");
         final JSONObject resp = Node.obj(r);
         final JSONArray keys = resp == null ? null : resp.optJSONArray("keys");
-        if (keys == null || keys.length() == 0) {
+        if (!Node.ok(r) || keys == null || keys.length() == 0) {
             // A LOCAL failure, and it must not be reported as a network one — the fix is enabling the
             // app in Minima Core, not checking the internet.
             final String m = "Couldn't read your keys from Minima Core — enable Future Cash Next in "
@@ -64,9 +64,15 @@ public final class AuditRunner {
 
         for (int i = 0; i < keys.length(); i++) {
             final JSONObject k = keys.optJSONObject(i);
-            if (k == null) continue;
+            if (k == null) {
+                String message = "The node returned an unreadable key row. Audit remains incomplete.";
+                audit.recordFailure(message);
+                cb.onError(message);
+                return;
+            }
             final String pk = k.optString("publickey", "");
-            local.add(new KeyAudit.LocalKey(pk, k.optInt("uses", 0), k.optInt("maxuses", 0)));
+            local.add(new KeyAudit.LocalKey(pk, exactInt(k, "uses", -1),
+                    exactInt(k, "maxuses", 0), exactInt(k, "size", 0), exactInt(k, "depth", 0)));
             final MinimaAddress.Result d = MinimaAddress.fromPublicKey(pk);
             derived.add(d);
             if (!pk.isEmpty()) pubs.add(pk);
@@ -113,7 +119,14 @@ public final class AuditRunner {
 
                 // A COMPLETE audit means both endpoints answered. A partial one can only
                 // UNDER-report reuse, so it must never license bare-collecting a "safe" coin.
-                final boolean complete = !usage.isEmpty() && !reuse.isEmpty();
+                boolean complete = result.complete;
+                // A partial batch must not license a bare collect or a rescue to an
+                // unchecked destination just because some other key was returned.
+                for (String dest : dests) {
+                    boolean found = false;
+                    for (KeyAudit.Reuse ru : reuse) found |= ru.matches(dest);
+                    complete &= found;
+                }
 
                 audit.store(atRisk, keys, complete, badAddr, badCount);
                 cfg.set(Cfg.AUDIT_LAST_ERR, "");
@@ -129,6 +142,14 @@ public final class AuditRunner {
                 cb.onError(m);
             }
         });
+    }
+
+    // Exact parsing reused from PandaPools KeyUses.extractUses: corrupt or fractional
+    // counters remain unknown rather than silently becoming zero.
+    private static int exactInt(JSONObject row, String name, int absent) {
+        if (!row.has(name)) return absent;
+        try { return new java.math.BigDecimal(row.get(name).toString()).intValueExact(); }
+        catch (Exception invalid) { return -1; }
     }
 
     /** The addresses this app sends money TO: the configured safe and the minted clean address. */
@@ -156,7 +177,7 @@ public final class AuditRunner {
                 for (KeyAudit.Reuse ru : reuse) {
                     if (ru.matches(addr)) { cb.accept(ru.reused ? Math.max(1, ru.reuseCount) : 0); return; }
                 }
-                cb.accept(0);
+                cb.accept(-1); // No row is an unknown result, not a clean destination.
             }
             @Override public void onError(String message) { cb.accept(-1); }
         });

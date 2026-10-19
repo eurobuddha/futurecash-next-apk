@@ -1,0 +1,22 @@
+Standalone parity checkpoint: Future Cash Next 0.1.9 / code 109
+
+Reused the complete scripts/adapt-pandamonium-key-audit.py from the Pandamonium
+feature/bear-languages-2026-10-16 branch (through ca50b54), without changing the
+adapter. Classic counters and blocks-as-key-uses leaf positions remain distinct.
+Missing/malformed rows stay incomplete; partial audits retain known risk; old and
+future-dated cache entries cannot authorize collection. The UI shows both key
+families and does not describe an incomplete audit as clean.
+
+Reused AuditEvidenceTest, AuditCacheVersionTest, DualKeyAuditTest and PartialAuditTest.
+The cache fixture omits only setup for Pandamonium's internal minimaWallet bridge,
+which this standalone app does not provide. Existing IPC SDK retained.
+
+Review: changed source, callers, state persistence and tests inspected. No open
+finding in this port. Other integrated changes remain under parity review.
+Validation: 49 JVM tests passed; release lint 0 errors / 50 warnings. Signed release
+assembled offline. APK package com.eurobuddha.futurecashnext, version 0.1.9/code109.
+Release certificate SHA-256:
+eca1383c9d27683a281fbe6355356267877dc2dd14d963d7cc289ca0700e517f
+Candidate: dist/futurecash-next-0.1.9-candidate.apk; checksum beside it.
+No device install, network transaction or publication. Final rollout held for Fold
+validation with the reviewed Pandamonium 2.0.0 candidate.

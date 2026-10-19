@@ -425,6 +425,10 @@ public class MainActivity extends AppCompatActivity {
             msg = "⚠ Key-reuse risk detected (reused ×" + lastAudit.worstReuse + "). At-risk stakes "
                     + "are collected and swept to your safe address.";
             colour = lastAudit.worstReuse > 3 ? Design.RED() : Design.WARN();
+        } else if ((lastAudit != null && lastAudit.verdict == KeyAudit.Verdict.RISK_HEURISTIC)
+                || cfg.atRisk().length() > 0) {
+            msg = "Key-reuse risk is recorded for this wallet. Review the key details and your rescue destination.";
+            colour = Design.WARN();
         } else if (!err.isEmpty()) {
             // Report the failure we actually had. Wrapping every error in "couldn't reach the audit
             // service" told the user to check their network when the real problem was a local one
@@ -436,8 +440,11 @@ public class MainActivity extends AppCompatActivity {
             colour = (v != null && v.ok) ? Design.WARN() : Design.RED();
         } else if (at == 0) {
             msg = "No audit yet. Tap Re-audit to check your keys."; colour = Design.DIM();
+        } else if (v == null || !v.ok || (lastAudit != null && !lastAudit.complete)) {
+            msg = "The audit is incomplete or out of date. Re-audit before trusting the result.";
+            colour = Design.WARN();
         } else {
-            msg = "✓ No key-reuse risk. Your matured stakes can be collected safely.";
+            msg = "No known key reuse was found in the checked keys.";
             colour = Design.SAFE();
         }
 
@@ -734,12 +741,23 @@ public class MainActivity extends AppCompatActivity {
             c.addView(Ui.text(this, "Run an audit to see every key's on-chain usage.", Design.DIM(), 12, false));
             return c;
         }
+        c.addView(Ui.text(this, "Classic keys: " + lastAudit.classicKeys
+                + " · Block keys: " + lastAudit.blockKeys
+                + (lastAudit.unknownKeys == 0 ? "" : " · Unknown: " + lastAudit.unknownKeys),
+                Design.DIM(), 12, false));
+        c.addView(Ui.text(this, "Both key sets are checked for known signature reuse. "
+                + "The spend-count estimate applies to classic keys only; block keys use leaf positions.",
+                Design.DIM(), 12, false));
         for (KeyAudit.Row r : lastAudit.rows) {
-            if (!r.risk && !r.reused) continue;   // only the interesting ones; the rest are noise
             final LinearLayout row = Ui.row(this);
             row.addView(Ui.text(this, "#" + r.index, Design.TEXT(), 12, true));
-            row.addView(Ui.text(this, r.reused ? "  RE-USED ×" + r.reuseCount : "  AT RISK",
-                    r.reused ? Design.RED() : Design.WARN(), 12, true));
+            String verdict = r.reused ? "  RE-USED ×" + r.reuseCount
+                    : r.risk ? "  AT RISK" : r.checked ? "  No known reuse" : "  Not fully checked";
+            row.addView(Ui.text(this, verdict,
+                    r.reused ? Design.RED() : r.risk || !r.checked ? Design.WARN() : Design.TEXT(), 12, true));
+            c.addView(Ui.text(this, (r.family == KeyAudit.Family.CLASSIC ? "Classic · counter "
+                    : r.family == KeyAudit.Family.BLOCK ? "Block · leaf position " : "Unknown key type · ")
+                    + r.local, Design.DIM(), 11, false));
             c.addView(row);
             // The full address under its verdict — this is the value the user takes to an explorer
             // or a support ticket, and a shortened one cannot be pasted anywhere.
@@ -755,7 +773,9 @@ public class MainActivity extends AppCompatActivity {
         final long at = cfg.getLong(Cfg.AUDIT_AT);
         // Refresh once the verdict is nearing expiry, not on every open: the gate needs a verdict
         // under 30 minutes old, so auditing on every launch was load the service never needed.
-        if (!force && at > 0 && System.currentTimeMillis() - at < 20 * 60_000L) return;
+        final long age = System.currentTimeMillis() - at;
+        if (!force && at > 0 && age >= 0 && cfg.get(Cfg.AUDIT_USES, "").startsWith(Audit.FINGERPRINT_VERSION)
+                && age < 20 * 60_000L) return;
         auditRunning = true;
         runOnUiThread(this::render);
         submit(() -> auditRunner.run(new AuditRunner.Cb() {

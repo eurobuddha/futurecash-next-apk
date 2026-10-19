@@ -10,8 +10,8 @@ android {
         applicationId "com.eurobuddha.futurecashnext"
         minSdk 28
         targetSdk 35
-        versionCode 108
-        versionName "0.1.8"
+        versionCode 109
+        versionName "0.1.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,6 +54,8 @@ dependencies {
     implementation libs.constraintlayout
 
     testImplementation libs.junit
+    testImplementation 'org.json:json:20240303'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
 
     // Periodic fallback that revives the guardian if the OS kills it
     implementation 'androidx.work:work-runtime:2.9.1'

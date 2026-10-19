@@ -27,6 +27,8 @@ public final class Audit {
      */
     public static final long MAX_MS = 24 * 3600_000L;
 
+    static final String FINGERPRINT_VERSION = "dual-key-v1|";
+
     public enum Mode { FRESH, RECONFIRMED, STALE, PARTIAL, NONE }
 
     public static final class Verdict {
@@ -54,11 +56,12 @@ public final class Audit {
                 if (k == null) continue;
                 final String pk = k.optString("publickey", "");
                 if (pk.isEmpty()) continue;
-                parts.add(pk.toUpperCase() + ":" + k.optInt("uses", 0));
+                parts.add(pk.toUpperCase(java.util.Locale.ROOT) + ":" + k.opt("uses")
+                        + ":" + k.opt("size") + ":" + k.opt("depth") + ":" + k.opt("maxuses"));
             }
         }
         Collections.sort(parts);
-        return String.join("|", parts);
+        return FINGERPRINT_VERSION + String.join("|", parts);
     }
 
     /**
@@ -80,6 +83,11 @@ public final class Audit {
         final long age = System.currentTimeMillis() - at;
 
         if (!aok || at == 0) return new Verdict(false, at, at != 0 ? Mode.PARTIAL : Mode.NONE);
+        // Match AppLock: a backwards clock cannot make an old safety decision fresh.
+        if (at < 0 || age < 0) return new Verdict(false, at, Mode.STALE);
+        final String storedFingerprint = cfg.get(Cfg.AUDIT_USES, "");
+        if (storedFingerprint == null || !storedFingerprint.startsWith(FINGERPRINT_VERSION))
+            return new Verdict(false, at, Mode.STALE);
         if (age < FRESH_MS) return new Verdict(true, at, Mode.FRESH);
         if (age >= MAX_MS)  return new Verdict(false, at, Mode.STALE);
 
@@ -115,9 +123,27 @@ public final class Audit {
             // `scripts address:…` lookups. See Node.validAddr.
             if (Node.validAddr(a)) arr.put(a);
         }
+        if (!complete) {
+            // Missing evidence cannot clear an earlier at-risk verdict. A complete
+            // audit can replace it; a partial one may only add newly found risks.
+            try {
+                JSONArray previous = new JSONArray(cfg.get(Cfg.ATRISK_ADDRS, "[]"));
+                java.util.Set<String> known = new java.util.HashSet<>();
+                for (int i = 0; i < arr.length(); i++) known.add(arr.optString(i));
+                for (int i = 0; i < previous.length(); i++) {
+                    String address = previous.optString(i);
+                    if (Node.validAddr(address) && known.add(address)) arr.put(address);
+                }
+            } catch (Exception unreadable) {
+                // Keep the persisted set untouched when it cannot be parsed.
+                cfg.setBool(Cfg.AUDIT_OK, false);
+                return;
+            }
+        }
         cfg.set(Cfg.ATRISK_ADDRS, arr.toString());
         cfg.set(Cfg.AUDIT_USES, usesFingerprint(localKeys));
-        setSafeReused(badDestAddr, badDestCount);
+        if (complete || (badDestAddr != null && !badDestAddr.isEmpty()))
+            setSafeReused(badDestAddr, badDestCount);
         cfg.setBool(Cfg.AUDIT_OK, complete);
         cfg.set(Cfg.AUDIT_AT, String.valueOf(System.currentTimeMillis()));
 
