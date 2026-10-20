@@ -13,8 +13,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection;
  *
  * <p>Everything is bounded: https only, no redirects, hard timeouts, a capped read, and requests
  * chunked so a node with many keys can't produce an over-long URL. Callbacks are delivered on the
- * main thread and suppressed once the Activity is gone.
+ * caller's {@link Executor} (the main thread by default) and suppressed once the Activity is gone.
  */
 public final class AuditApi {
 
@@ -68,18 +70,20 @@ public final class AuditApi {
     // have its callbacks silently dropped — a null act means "no view lifecycle to respect", and
     // `released` alone gates delivery.
     private final Activity act;
-    private final Handler main = new Handler(Looper.getMainLooper());
+    /** Where callbacks land. Consumers treat the callback as "may be any thread"; the Activity
+     *  passes its worker so the completion's disk writes (Audit.store) stay off the main thread. */
+    private final Executor deliver;
     // Two endpoints x a handful of chunks; a small pool keeps them concurrent without a thread each.
     private final ExecutorService exec = Executors.newFixedThreadPool(4);
     private volatile boolean released = false;
 
-    public AuditApi(Activity activity) {
+    /**
+     * @param activity null for a headless (service) audit — no view lifecycle to respect
+     * @param deliver  callback executor; null = the main looper
+     */
+    public AuditApi(Activity activity, Executor deliver) {
         this.act = activity;
-    }
-
-    /** Headless audit, for the background guardian. */
-    public AuditApi() {
-        this.act = null;
+        this.deliver = deliver != null ? deliver : new Handler(Looper.getMainLooper())::post;
     }
 
     public void onDestroy() {
@@ -247,11 +251,16 @@ public final class AuditApi {
     /* ---------- helpers ---------- */
 
     private void post(Runnable r) {
-        main.post(() -> {
-            if (released) return;
-            if (act != null && (act.isFinishing() || act.isDestroyed())) return;
-            r.run();
-        });
+        try {
+            deliver.execute(() -> {
+                if (released) return;
+                if (act != null && (act.isFinishing() || act.isDestroyed())) return;
+                r.run();
+            });
+        } catch (RejectedExecutionException gone) {
+            // The caller's executor is shut down — the consumer is gone, same as `released`. Must
+            // not escape: it would be an uncaught exception on a pool thread and kill the process.
+        }
     }
 
     private static List<String> nonNull(List<String> in) {

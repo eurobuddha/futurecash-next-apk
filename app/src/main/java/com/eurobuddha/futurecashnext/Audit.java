@@ -47,6 +47,14 @@ public final class Audit {
      * A canonical {@code publickey:uses} string for the node's whole key set. Sorted, so it is
      * stable, and any change — a key signing again, a key appearing, the set being rebuilt —
      * changes the string.
+     *
+     * <p>Block (128/4) keys are safe to fingerprint on {@code uses} too. Verified 2026-10-20 against
+     * core: {@code keys action:list} emits {@code KeyRow.toJSON()}, i.e. the stored {@code walletsql}
+     * {@code keys.uses} column, which is written ONLY by {@code Wallet.signData} (after a signature;
+     * {@code block.getCurrentBlockAsKeyUses} picks the leaf from the tip at SIGN time) and by the
+     * restore/resync bulk updates — it is never recomputed from the chain tip per block.
+     * (_worktrees/minima-core-keets-android: database/wallet/Wallet.java signData/updateUses,
+     * system/commands/base/block.java, system/commands/search/keys.java.)
      */
     public static String usesFingerprint(JSONArray keys) {
         final List<String> parts = new ArrayList<>();
@@ -91,16 +99,13 @@ public final class Audit {
         if (age < FRESH_MS) return new Verdict(true, at, Mode.FRESH);
         if (age >= MAX_MS)  return new Verdict(false, at, Mode.STALE);
 
-        final String fp = cfg.get(Cfg.AUDIT_USES, "");
-        if (fp == null || fp.isEmpty()) return new Verdict(false, at, Mode.STALE);
-
         final JSONObject r = node.cmd("keys action:list");
         if (!Node.ok(r)) return new Verdict(false, at, Mode.STALE);
         final JSONObject resp = Node.obj(r);
         final JSONArray keys = resp == null ? null : resp.optJSONArray("keys");
         if (keys == null) return new Verdict(false, at, Mode.STALE);
 
-        return usesFingerprint(keys).equals(fp)
+        return usesFingerprint(keys).equals(storedFingerprint)
                 ? new Verdict(true, at, Mode.RECONFIRMED)
                 : new Verdict(false, at, Mode.STALE);
     }
@@ -135,9 +140,11 @@ public final class Audit {
                     if (Node.validAddr(address) && known.add(address)) arr.put(address);
                 }
             } catch (Exception unreadable) {
-                // Keep the persisted set untouched when it cannot be parsed.
-                cfg.setBool(Cfg.AUDIT_OK, false);
-                return;
+                // An unparseable previous set carries no evidence, so treat it as empty and still
+                // write what THIS audit found plus the fingerprint — returning here threw that
+                // evidence away and left audit_at old, so maybeAudit re-ran at once.
+                cfg.log(Cfg.LVL_WARN, "Stored at-risk address list was unreadable — replaced with this "
+                        + "partial audit's findings");
             }
         }
         cfg.set(Cfg.ATRISK_ADDRS, arr.toString());

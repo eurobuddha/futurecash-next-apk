@@ -22,6 +22,16 @@ public class PartialAuditTest {
         verify(cfg).setBool(Cfg.AUDIT_OK, false);
         verify(cfg, never()).set(eq(Cfg.SAFE_REUSED), anyString());
     }
+    @Test public void unreadablePreviousRiskListStillWritesThisAuditsEvidence() throws Exception {
+        Cfg cfg = mock(Cfg.class);
+        when(cfg.get(Cfg.ATRISK_ADDRS, "[]")).thenReturn("not json");
+        new Audit(cfg, mock(Node.class)).store(Collections.singletonList("0xCCDD"), new JSONArray(), false, null, 0);
+        verify(cfg).set(Cfg.ATRISK_ADDRS, "[\"0xCCDD\"]");
+        verify(cfg).set(eq(Cfg.AUDIT_USES), startsWith(Audit.FINGERPRINT_VERSION));
+        verify(cfg).setBool(Cfg.AUDIT_OK, false);
+        verify(cfg).set(eq(Cfg.AUDIT_AT), anyString());
+        verify(cfg).log(eq(Cfg.LVL_WARN), anyString());
+    }
     @Test public void completeAuditCanReplacePreviouslyKnownRisk() {
         Cfg cfg = mock(Cfg.class);
         new Audit(cfg, mock(Node.class)).store(Collections.emptyList(), new JSONArray(), true, null, 0);

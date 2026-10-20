@@ -40,6 +40,16 @@ public class AuditEvidenceTest {
             assertTrue(parse("parseUsage", row).isEmpty());
         }
     }
+    @Test public void callbackOnAShutDownExecutorIsDroppedNotThrown() {
+        java.util.concurrent.ExecutorService dead = java.util.concurrent.Executors.newSingleThreadExecutor();
+        dead.shutdown();
+        final boolean[] called = {false};
+        new AuditApi(null, dead).audit(new ArrayList<>(), new ArrayList<>(), new AuditApi.Cb() {
+            @Override public void onResult(List<KeyAudit.Usage> u, List<KeyAudit.Reuse> r, long t) { called[0] = true; }
+            @Override public void onError(String m) { called[0] = true; }
+        });
+        assertFalse(called[0]);   // the consumer is gone: dropped, and no RejectedExecutionException escaped
+    }
     @Test public void backendErrorsCannotBeTreatedAsCompletedRows() throws Exception {
         assertTrue(parse("parseReuse", new JSONObject().put("address", "0xABC")
                 .put("reused", false).put("reuse_count", 0).put("error", "unavailable")).isEmpty());

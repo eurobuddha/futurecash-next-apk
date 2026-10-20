@@ -32,12 +32,16 @@ public final class AuditRunner {
     private final Audit audit;
     private final AuditApi api;
 
-    /** @param activity may be null — the guardian runs this headless. */
-    public AuditRunner(Node node, Cfg cfg, Activity activity) {
+    /**
+     * @param activity may be null — the guardian runs this headless
+     * @param deliver  where the callbacks run (null = main thread). The completion persists the
+     *                 verdict with synchronous commits, so the Activity hands over its worker.
+     */
+    public AuditRunner(Node node, Cfg cfg, Activity activity, java.util.concurrent.Executor deliver) {
         this.node = node;
         this.cfg = cfg;
         this.audit = new Audit(cfg, node);
-        this.api = activity != null ? new AuditApi(activity) : new AuditApi();
+        this.api = new AuditApi(activity, deliver);
     }
 
     public void onDestroy() { api.onDestroy(); }
@@ -77,11 +81,6 @@ public final class AuditRunner {
             derived.add(d);
             if (!pk.isEmpty()) pubs.add(pk);
             if (d != null) addrs.add(d.hex);
-        }
-        if (local.isEmpty()) {
-            audit.recordFailure("This node reported no keys.");
-            cb.onError("This node reported no keys.");
-            return;
         }
 
         // The addresses we SEND rescued money to ride along in the same /reuse batch — no extra

@@ -27,25 +27,14 @@ final class StakeScan {
                 && Guardian.looksLikeFutureCash(coin)
                 && Node.validAddr(Node.state(coin, FutureCashContract.ST_RECIPIENT));
     }
+    /** Relevant-only, read-only. The minimaWallet-owned `coins address:` + `cointrack` branch lives in
+     *  Pandamonium's copy (apks/base/integrated/futurecash-next/.../StakeScan.java); this app never
+     *  has walletOwned addresses, so it is not carried here. */
     static JSONArray read(Node node, Wallet.AddressSets owners, Set<String> contracts) {
         LinkedHashMap<String,JSONObject> found = new LinkedHashMap<>();
         add(found, node.cmd("coins relevant:true"), owners, contracts);
-        Set<String> alreadyTracked=new java.util.HashSet<>(found.keySet());
-        // A classic wallet's old stakes may predate script tracking. Search the live chain too.
-        // Do not pass relevant:false: core treats the presence of 'relevant' as enabling it.
-        if (!owners.walletOwned.isEmpty())
-            for (String address : contracts)
-                add(found, node.cmd("coins address:" + address), owners, contracts);
         JSONArray out = new JSONArray();
-        // Preserve newly discovered proofs before those blocks leave the unpruned chain.
-        for (java.util.Map.Entry<String,JSONObject> entry : found.entrySet()) {
-            if (!alreadyTracked.contains(entry.getKey())) {
-                JSONObject tracked=node.cmd("cointrack enable:true coinid:"+entry.getValue().optString("coinid"));
-                if (tracked==null || !Boolean.TRUE.equals(tracked.opt("status")) || Node.pending(tracked))
-                    throw new IllegalStateException("Could not track minimaWallet addresses. Refresh and retry.");
-            }
-            out.put(entry.getValue());
-        }
+        for (JSONObject coin : found.values()) out.put(coin);
         return out;
     }
     private static void add(LinkedHashMap<String,JSONObject> out, JSONObject reply,

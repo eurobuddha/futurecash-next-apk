@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,11 +52,17 @@ public final class Guardian {
 
     /** Canonical at-risk payout addresses, refreshed at the top of every pass. */
     private final Set<String> atRisk = new HashSet<>();
+    /** Our retired addresses as read by {@link #reloadAtRisk} — the ONE node read per pass; nothing
+     *  later in the pass asks the node again, so a flaky reply can't abort a pass mid-sweep. */
+    private List<String> retired = Collections.emptyList();
     /** Stake coins seen in this pass, by coinid — saves re-fetching in collectMatured. */
     private final java.util.HashMap<String, JSONObject> seenStakes = new java.util.HashMap<>();
 
     private boolean vaultLocked = false;
+    /** The node didn't say whether the vault is locked — gated like locked, worded differently. */
+    private boolean vaultUnknown = false;
     private boolean lockNotified = false;
+    private boolean unknownNotified = false;
     private boolean cannotRescueNotified = false;
 
     public interface Notifier {
@@ -97,8 +104,13 @@ public final class Guardian {
      * <p>ownsAddress is still applied, and is still load-bearing: relevance is stamped when a block
      * is PROCESSED and never re-evaluated, so any stake that arrived while a node had the covenant
      * registered trackall:true stays in its relevant set for good.
+     *
+     * <p>StakeScan already enforces unspent, shape, contract address and payout-ownership on every
+     * coin it returns, so nothing is re-filtered here.
+     *
+     * @return the scanned stake coins, so the UI list can share this pass's single scan
      */
-    private void detect(long tip, Set<String> ownDefault) {
+    private JSONArray detect(long tip, Set<String> ownDefault) {
         seenStakes.clear();
         Wallet.AddressSets owners=new Wallet.AddressSets();
         owners.ownDefault.addAll(ownDefault);
@@ -107,11 +119,7 @@ public final class Guardian {
             final JSONObject c = arr.optJSONObject(i);
             if (c == null) continue;
             final String coinid = c.optString("coinid", "");
-            if (coinid.isEmpty() || c.optBoolean("spent", false)) continue;
-            if (!looksLikeFutureCash(c)) continue;
-
             final String payout = Node.state(c, FutureCashContract.ST_RECIPIENT);
-            if (!Wallet.owns(ownDefault, payout)) continue;   // only stakes paying out to US
 
             seenStakes.put(coinid, c);
             final long matureBlock = parseLong(Node.state(c, FutureCashContract.ST_FUTUREBLOCK));
@@ -129,6 +137,7 @@ public final class Guardian {
                         + " | stake:" + coinid + " | to:" + payout);
             }
         }
+        return arr;
     }
 
     /* ================= collect ================= */
@@ -248,8 +257,7 @@ public final class Guardian {
      * explicit key from each address's SIGNEDBY script (auto can't: the row key is nulled).
      */
     private void detectStrandedForSweep() {
-        final List<String> retired = wallet.retiredAddresses();
-        if (retired.isEmpty()) return;
+        if (retired.isEmpty()) return;   // read once by reloadAtRisk at the top of the pass
         final Set<String> claimed = new HashSet<>(store.allSweepCoinIds());
         for (String addr : retired) {
             for (JSONObject c : wallet.coinsAt(addr)) {
@@ -402,44 +410,52 @@ public final class Guardian {
      *
      * <p>Serialised by the single worker thread in GuardianService, and every state transition that
      * leads to a post is an atomic claim in the database, so even a second pass could not double-post.
+     *
+     * @return this node's stakes as seen by this pass's scan (what {@link #listStakes} would return),
+     *         so a UI refresh that ran the pass needn't scan the node a second time
+     * @throws IllegalStateException when the at-risk set or the stake list could not be read
+     *         completely — thrown before anything is posted (see {@link #reloadAtRisk}; the node
+     *         lists are read once, at the top, and nothing after the first post re-reads them)
      */
-    public synchronized void reconcile(long tip) {
+    public synchronized List<Stake> reconcile(long tip) {
         vaultLocked = false;
+        vaultUnknown = false;
         cfg.set(Cfg.LAST_TIP, String.valueOf(tip));
 
-        // The at-risk set: the audited addresses, PLUS our own retired ones. The audit only covers
-        // the node's default addresses, so a retired (non-default) reused address is invisible to it
-        // — and a stake paying out there would be bare-collected onto a reused address the guardian
-        // then couldn't auto-sweep. Flagging them forces the rescue path.
-        atRisk.clear();
-        final JSONArray flagged = cfg.atRisk();
-        for (int i = 0; i < flagged.length(); i++) {
-            final String a = flagged.optString(i, "");
-            if (Node.validAddr(a)) atRisk.add(Wallet.canonAddr(a));
-        }
-        for (String a : wallet.retiredAddresses()) atRisk.add(Wallet.canonAddr(a));
+        // The at-risk set: the audited addresses, PLUS our own retired ones (see reloadAtRisk).
+        reloadAtRisk();
 
         final boolean autoCollectSafe = cfg.is(Cfg.AUTO_COLLECT_SAFE, false);
         final boolean rescueEnabled = cfg.is(Cfg.ENABLED, false);
         final String safe = cfg.get(Cfg.SAFE_ADDRESS, null);
 
         final Wallet.AddressSets sets = wallet.addressSets();
-        detect(tip, sets.ownDefault);
+        final JSONArray scanned = detect(tip, sets.ownDefault);
 
         final Audit.Verdict verdict = audit.usable();
 
         // Rescue needs a usable safe AND an unlocked vault, both checked BEFORE collecting, so an
         // at-risk coin is only pulled onto its exposed address when a sweep can immediately follow.
+        // UNKNOWN gates exactly like LOCKED — but it is a different fact and gets its own words.
         boolean canSweep = false;
         if (rescueEnabled && safe != null && wallet.safeUsable(safe, sets.allTracked, atRisk)) {
-            vaultLocked = wallet.vaultLocked();
+            final Wallet.VaultState vault = wallet.vaultState();
+            vaultLocked = vault == Wallet.VaultState.LOCKED;
+            vaultUnknown = vault == Wallet.VaultState.UNKNOWN;
             if (vaultLocked) {
                 if (!lockNotified) {
                     lockNotified = true;
                     cfg.log(Cfg.LVL_WARN, "Vault locked — rescue paused until you unlock it");
                 }
+            } else if (vaultUnknown) {
+                if (!unknownNotified) {
+                    unknownNotified = true;
+                    cfg.log(Cfg.LVL_WARN, "Couldn't confirm your node's vault is unlocked — rescue "
+                            + "paused until the node answers; retry");
+                }
             } else {
                 lockNotified = false;
+                unknownNotified = false;
                 canSweep = true;
             }
         }
@@ -455,8 +471,9 @@ public final class Guardian {
         // while the protection it advertises is off. The vault-locked case above already works this
         // way; this covers the destination being cleared or flagged reused underneath us.
         // Condition mirrors what collectMatured is actually given below (canSweep && !badSafe), so the
-        // warning can't disagree with the engine. vaultLocked is excluded — it has its own message.
-        if (!(canSweep && !badSafe) && !vaultLocked) {
+        // warning can't disagree with the engine. vaultLocked/vaultUnknown are excluded — each has
+        // its own message.
+        if (!(canSweep && !badSafe) && !vaultLocked && !vaultUnknown) {
             if (!cannotRescueNotified) {
                 cannotRescueNotified = true;
                 final String why = badSafe
@@ -481,6 +498,7 @@ public final class Guardian {
             sweepPending(tip, safe);
         }
         reconcileSweeps(tip, safe);
+        return stakesFrom(scanned, tip);
     }
 
     /* ================= status snapshot for the UI ================= */
@@ -491,6 +509,8 @@ public final class Guardian {
         public double readySafeN, readySafeA, readyRiskN, readyRiskA;
         public double pendRiskN, pendRiskSoonest, pendRiskA;
         public boolean vaultLocked;
+        /** The vault state could not be read — rescue is paused, but "unlock it" is NOT the fix. */
+        public boolean vaultUnknown;
         public int atRiskKnown;
     }
 
@@ -510,6 +530,7 @@ public final class Guardian {
         final double[] pend = store.pendingAtRisk(tip);
         s.pendRiskN = pend[0]; s.pendRiskSoonest = pend[1]; s.pendRiskA = pend[2];
         s.vaultLocked = vaultLocked;
+        s.vaultUnknown = vaultUnknown;
         s.atRiskKnown = atRisk.size();
         return s;
     }
@@ -519,19 +540,20 @@ public final class Guardian {
     /** This node's stakes, for the Stakes tab. Relevant-only, same reasoning as detect(). */
     public synchronized List<Stake> listStakes() {
         reloadAtRisk();
-        final List<Stake> out = new ArrayList<>();
         final long tip = tip();
         final Wallet.AddressSets sets = wallet.addressSets();
-        final JSONArray arr = StakeScan.read(node,sets,StakeScan.contracts(wallet));
-        final Set<String> seen = new HashSet<>();
+        return stakesFrom(StakeScan.read(node,sets,StakeScan.contracts(wallet)), tip);
+    }
+
+    /** The UI rows for a StakeScan result. StakeScan has already enforced unspent, shape, contract
+     *  address, payout-ownership and coinid uniqueness, so nothing is re-filtered here. */
+    private List<Stake> stakesFrom(JSONArray arr, long tip) {
+        final List<Stake> out = new ArrayList<>();
         for (int i = 0; i < arr.length(); i++) {
             final JSONObject c = arr.optJSONObject(i);
-            if (c == null || c.optBoolean("spent", false)) continue;
+            if (c == null) continue;
             final String cid = c.optString("coinid", "");
-            if (cid.isEmpty() || !seen.add(cid)) continue;
-            if (!looksLikeFutureCash(c)) continue;
             final String payout = Node.state(c, FutureCashContract.ST_RECIPIENT);
-            if (!Wallet.owns(sets.ownDefault, payout)) continue;
 
             final Stake st = new Stake();
             st.coinid = cid;
@@ -600,10 +622,20 @@ public final class Guardian {
 
     /**
      * Collect ONE matured stake now. Same safety gates as the engine: refuses an at-risk payout
-     * (the rescue path owns those) and refuses without a usable audit.
+     * (the rescue path owns those) and refuses without a usable audit. A list that could not be read
+     * completely (contract, stake, key, address or at-risk — all throw IllegalStateException) is a
+     * REFUSAL, never a post.
      */
     public synchronized Wallet.Res collectNow(String coinid) {
         if (!Node.validHexAddr(coinid)) return Wallet.Res.err("Not a valid coin id.");
+        try {
+            return collectNowChecked(coinid);
+        } catch (IllegalStateException incomplete) {
+            return Wallet.Res.err(incomplete.getMessage());
+        }
+    }
+
+    private Wallet.Res collectNowChecked(String coinid) {
         final long tip = tip();
         final JSONObject lookup=node.cmd("coins coinid:"+coinid);
         if (!Node.ok(lookup) || lookup.optJSONArray("response")==null)
@@ -642,15 +674,30 @@ public final class Guardian {
         return Wallet.Res.ok(Node.outAmount(coin));
     }
 
-    /** Refresh the in-memory at-risk set (after an audit completes on another thread). */
+    /**
+     * Refresh the in-memory at-risk set: the audited addresses, PLUS our own retired ones. The audit
+     * only covers the node's default addresses, so a retired (non-default) reused address is
+     * invisible to it — and a stake paying out there would be bare-collected onto a reused address
+     * the guardian then couldn't auto-sweep. Flagging them forces the rescue path.
+     *
+     * <p>FAILS CLOSED: both sources throw when they cannot be read completely, and the set is only
+     * replaced once both have been. An incomplete set would let a stake paying to a retired or
+     * reused address pass the at-risk gate — so the caller must refuse, not fall through.
+     *
+     * @throws IllegalStateException when the stored or the node-side list could not be read
+     */
     public synchronized void reloadAtRisk() {
-        atRisk.clear();
-        for (String retired : wallet.retiredAddresses()) atRisk.add(Wallet.canonAddr(retired));
+        final List<String> retiredNow = wallet.retiredAddresses();
+        final Set<String> next = new HashSet<>();
+        for (String a : retiredNow) next.add(Wallet.canonAddr(a));
         final JSONArray flagged = cfg.atRisk();
         for (int i = 0; i < flagged.length(); i++) {
             final String a = flagged.optString(i, "");
-            if (Node.validAddr(a)) atRisk.add(Wallet.canonAddr(a));
+            if (Node.validAddr(a)) next.add(Wallet.canonAddr(a));
         }
+        retired = retiredNow;
+        atRisk.clear();
+        atRisk.addAll(next);
     }
 
     public Set<String> atRiskSet() { return new HashSet<>(atRisk); }

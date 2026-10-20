@@ -61,10 +61,14 @@ public class MainActivity extends AppCompatActivity {
      * as itself.
      */
     private Boolean paired = null;
-    private KeyAudit.Result lastAudit;
+    /** volatile: written by the audit callback on the worker, read by render() on main. */
+    private volatile KeyAudit.Result lastAudit;
     private long tip = 0;
     private List<Guardian.Stake> stakes = new ArrayList<>();
-    private boolean auditRunning = false;
+    /** volatile: flipped by the audit callback on the worker, read by the main thread. */
+    private volatile boolean auditRunning = false;
+    /** The last refresh failure shown, so a failure that persists across blocks is toasted once. */
+    private String lastRefreshError;
     /** Set when the rescue chooser was opened BY "Start guardian", so we finish that job afterwards.
      *  volatile: written on the main thread, read and cleared on the worker. */
     private volatile boolean startGuardianAfterSetup = false;
@@ -96,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
         node = new Node(nodeApi);
         guardian = new Guardian(node, cfg, store,
                 (t, b) -> { if (cfg.is(Cfg.NOTIFY, true)) Notifier.alert(this, t, b); });
-        auditRunner = new AuditRunner(node, cfg, this);
+        // Callbacks land on the worker: the completion persists the verdict with synchronous
+        // commits, which must not run on the main thread.
+        auditRunner = new AuditRunner(node, cfg, this, worker);
 
         Notifier.ensureChannels(this);
         askNotificationPermission();
@@ -122,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
         // table lost it — the failure that only shows at spend time.
         submit(() -> {
             guardian.wallet().registerContract();
-            guardian.reloadAtRisk();
-            refresh();
+            refresh();   // reloads the at-risk set itself, and reports (rather than throws) if it can't
             maybeAudit(false);
         });
     }
@@ -275,17 +280,29 @@ public class MainActivity extends AppCompatActivity {
     private void refresh() {
         submit(() -> {
             try {
-            final long t = guardian.tip();
-            if (t>0 && cfg.is(Cfg.GUARDIAN_ON,false) && cfg.rescueReady()) guardian.reconcile(t);
-            final List<Guardian.Stake> s = guardian.listStakes();
-            final Audit.Verdict v = new Audit(cfg, node).usable();   // may block on the node — worker only
-            final Guardian.Status st = guardian.status(t);           // SQLite — worker only
-            runOnUiThread(() -> {
-                tip = t; stakes = s; lastVerdict = v; lastStatus = st;
-                render();
-            });
+                final long t = guardian.tip();
+                // ONE scan per refresh: a pass hands back the stake list it just scanned, so the
+                // list never re-reads `coins relevant:true` (248 KB on a busy node) behind it.
+                final List<Guardian.Stake> s = (t > 0 && cfg.is(Cfg.GUARDIAN_ON, false) && cfg.rescueReady())
+                        ? guardian.reconcile(t) : guardian.listStakes();
+                final Audit.Verdict v = new Audit(cfg, node).usable();   // may block on the node — worker only
+                final Guardian.Status st = guardian.status(t);           // SQLite — worker only
+                runOnUiThread(() -> {
+                    tip = t; stakes = s; lastVerdict = v; lastStatus = st; lastRefreshError = null;
+                    render();
+                });
             } catch (RuntimeException unavailable) {
-                toast(unavailable.getMessage()==null ? "Could not read the complete stake list. Refresh and retry." : unavailable.getMessage());
+                // The snapshot must reflect the failure: keeping the old one left the hero card on
+                // "Protected" over a scan that just failed. Only our own IllegalStateException
+                // carries user-facing text — anything else (NPE, JSON) gets the generic line.
+                final String msg = unavailable instanceof IllegalStateException && unavailable.getMessage() != null
+                        ? unavailable.getMessage()
+                        : "Could not read the complete stake list. Refresh and retry.";
+                runOnUiThread(() -> {
+                    lastStatus = null;   // hero renders "Checking…" rather than a stale verdict
+                    if (!msg.equals(lastRefreshError)) { lastRefreshError = msg; toast(msg); }
+                    render();
+                });
             }
         });
     }
@@ -412,6 +429,8 @@ public class MainActivity extends AppCompatActivity {
         final String err = cfg.get(Cfg.AUDIT_LAST_ERR, "");
         final Audit.Verdict v = lastVerdict;                        // cached — see the field comment
         final String[] bad = new Audit(cfg, node).safeReused();     // prefs only, never touches the node
+        Boolean riskRecorded;                                        // null = the stored set is unreadable
+        try { riskRecorded = cfg.atRisk().length() > 0; } catch (IllegalStateException e) { riskRecorded = null; }
 
         String msg;
         int colour;
@@ -430,8 +449,12 @@ public class MainActivity extends AppCompatActivity {
             msg = "⚠ Key-reuse risk detected (reused ×" + lastAudit.worstReuse + "). At-risk stakes "
                     + "are collected and swept to your safe address.";
             colour = lastAudit.worstReuse > 3 ? Design.RED() : Design.WARN();
+        } else if (riskRecorded == null) {
+            // Unknown is never good news: until a re-audit rewrites it, nothing is collected.
+            msg = "The stored audit result can't be read. Re-audit before trusting any verdict.";
+            colour = Design.WARN();
         } else if ((lastAudit != null && lastAudit.verdict == KeyAudit.Verdict.RISK_HEURISTIC)
-                || cfg.atRisk().length() > 0) {
+                || riskRecorded) {
             msg = "Key-reuse risk is recorded for this wallet. Review the key details and your rescue destination.";
             colour = Design.WARN();
         } else if (!err.isEmpty()) {
@@ -598,6 +621,8 @@ public class MainActivity extends AppCompatActivity {
         }
         if (st.vaultLocked) {
             c.addView(Ui.text(this, "🔒 vault locked — unlock your node to sweep", Design.WARN(), 12, false));
+        } else if (st.vaultUnknown) {
+            c.addView(Ui.text(this, "Couldn't confirm your node's vault is unlocked — retry.", Design.WARN(), 12, false));
         }
 
         final LinearLayout row = Ui.row(this);
@@ -650,7 +675,7 @@ public class MainActivity extends AppCompatActivity {
                 final Wallet.Res r = guardian.wallet().setSafeExternal(addr, count);
                 if (r.ok) { cfg.setBool(Cfg.ENABLED, true); cfg.log(Cfg.LVL_INFO, "At-risk rescue ENABLED"); finishPendingGuardianStart(); }
                 toast(r.ok
-                        ? "Rescue ON → external " + addr
+                        ? "Rescue ON → external " + r.value   // the stored (normalised) form
                           + (count == 0 ? " (verified clean)" : " (reuse check unverified — will re-check)")
                         : r.error);
                 runOnUiThread(this::render);
@@ -663,7 +688,9 @@ public class MainActivity extends AppCompatActivity {
     /** Coins stranded on retired addresses — shown only when there are any. */
     private void recoverCard() {
         submit(() -> {
-            final List<String[]> stuck = guardian.wallet().retiredWithCoins();
+            final List<String[]> stuck;
+            try { stuck = guardian.wallet().retiredWithCoins(); }
+            catch (IllegalStateException unreadable) { return; }   // lists unreadable — no card, not a wrong one
             if (stuck.isEmpty()) return;
             int total = 0;
             for (String[] s : stuck) total += Integer.parseInt(s[1]);
@@ -688,7 +715,9 @@ public class MainActivity extends AppCompatActivity {
     /** Harden: retire reused addresses so the node stops routing change to them. */
     private void hardenCard() {
         submit(() -> {
-            final JSONArray flagged = cfg.atRisk();
+            final JSONArray flagged;
+            try { flagged = cfg.atRisk(); }
+            catch (IllegalStateException unreadable) { return; }   // the audit card says so; nothing to retire from
             if (flagged.length() == 0) return;
             final List<Wallet.ReusedAddr> list = guardian.wallet().reusedDefaults(flagged);
             if (list.isEmpty()) return;
@@ -920,15 +949,19 @@ public class MainActivity extends AppCompatActivity {
         submit(() -> {
             int done = 0;
             String lastErr = null;
-            for (Guardian.Stake s : guardian.listStakes()) {
-                if (!s.ready || s.atRisk) continue;
-                final Wallet.Res r = guardian.collectNow(s.coinid);
-                if (r.ok) done++;
-                else {
-                    lastErr = r.error;
-                    // A blocking condition fails every remaining stake identically — stop.
-                    if (r.error != null && (r.error.contains("audit") || r.error.contains("Apps"))) break;
+            try {
+                for (Guardian.Stake s : guardian.listStakes()) {
+                    if (!s.ready || s.atRisk) continue;
+                    final Wallet.Res r = guardian.collectNow(s.coinid);
+                    if (r.ok) done++;
+                    else {
+                        lastErr = r.error;
+                        // A blocking condition fails every remaining stake identically — stop.
+                        if (r.error != null && (r.error.contains("audit") || r.error.contains("Apps"))) break;
+                    }
                 }
+            } catch (IllegalStateException incomplete) {
+                lastErr = incomplete.getMessage();   // the list couldn't be read completely — nothing posted
             }
             toast(done > 0 ? "Posted " + done + " collect(s) — they confirm in about a block."
                     : (lastErr != null ? lastErr : "Nothing to collect."));

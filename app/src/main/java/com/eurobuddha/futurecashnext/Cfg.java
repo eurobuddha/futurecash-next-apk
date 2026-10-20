@@ -100,8 +100,17 @@ public final class Cfg {
 
     /* ---------- the at-risk set ---------- */
 
+    /**
+     * FAILS CLOSED: an unparseable stored set THROWS. Returning an empty array would read as "no
+     * known risk" and let an at-risk stake be bare-collected onto its exposed address.
+     *
+     * @throws IllegalStateException when the stored set cannot be parsed
+     */
     public JSONArray atRisk() {
-        try { return new JSONArray(get(ATRISK_ADDRS, "[]")); } catch (Exception e) { return new JSONArray(); }
+        try { return new JSONArray(get(ATRISK_ADDRS, "[]")); }
+        catch (Exception e) {
+            throw new IllegalStateException("Could not read the stored at-risk address list. Re-run the key audit.");
+        }
     }
 
     /* ---------- clean (minted) destination, stored as ONE atomic blob ---------- */

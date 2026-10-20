@@ -111,10 +111,12 @@ public final class KeyAudit {
             this.reuseCount = reuseCount;
         }
 
-        /** Does this verdict describe the given address, in either spelling? */
+        /** Does this verdict describe the given address, in either spelling? Case-insensitive on
+         *  both: hex is hex, and the Mx body is base32 which the server echoes UPPERCASE while a
+         *  user may have typed it lowercase. */
         public boolean matches(String addr) {
             if (addr == null || addr.isEmpty()) return false;
-            return addr.equalsIgnoreCase(address) || addr.equals(miniaddress);
+            return addr.equalsIgnoreCase(address) || addr.equalsIgnoreCase(miniaddress);
         }
     }
 

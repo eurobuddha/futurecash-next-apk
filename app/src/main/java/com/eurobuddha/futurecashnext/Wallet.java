@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,11 +30,15 @@ public final class Wallet {
 
     /* ================= address identity ================= */
 
-    /** Canonical form so hex and Mx spellings of the same address compare equal within their kind. */
+    /**
+     * Canonical form so hex and Mx spellings of the same address compare equal within their kind.
+     * The Mx body is base32 and case-insensitive on decode (the node and the audit service echo it
+     * UPPERCASE), so it is upper-cased here — a user-typed lowercase Mx must equal its echo.
+     */
     public static String canonAddr(String a) {
         String s = a == null ? "" : a.trim();
         if (s.toLowerCase().startsWith("0x")) return "h" + s.substring(2).toLowerCase();
-        if (s.startsWith("Mx") || s.startsWith("MX")) return "m" + s;
+        if (s.startsWith("Mx") || s.startsWith("MX")) return "mMx" + s.substring(2).toUpperCase(Locale.ROOT);
         if (s.matches("^[0-9a-fA-F]{8,}$")) return "h" + s.toLowerCase();
         return "x" + s.toLowerCase();
     }
@@ -56,15 +61,23 @@ public final class Wallet {
 
     public static final class AddressSets {
         public final Set<String> ownDefault = new HashSet<>();   // canonAddr of addresses we can sign for
-        /** Populated only by hosts that provide an authenticated minimaWallet public snapshot. */
-        public final Set<String> walletOwned = new HashSet<>();
         public final Set<String> allTracked = new HashSet<>();   // raw forms of everything the node tracks
     }
 
+    /**
+     * FAILS CLOSED: an empty {@code allTracked}/{@code ownDefault} from a failed reply reads as
+     * "nothing is local" — which would let a THIS-node address through as an external safe and
+     * make {@link #safeUsable} say yes — so a bad reply throws instead.
+     *
+     * @throws IllegalStateException when the script table could not be read completely
+     */
     public AddressSets addressSets() {
         final AddressSets sets = new AddressSets();
         final JSONObject r = node.cmd("scripts");
-        final JSONArray arr = Node.arr(r);
+        if (!Node.ok(r) || r.optJSONArray("response") == null) {
+            throw new IllegalStateException("Could not read the complete address list. Refresh and retry.");
+        }
+        final JSONArray arr = r.optJSONArray("response");
         for (int i = 0; i < arr.length(); i++) {
             final JSONObject s = arr.optJSONObject(i);
             if (s == null) continue;
@@ -90,14 +103,6 @@ public final class Wallet {
         final JSONArray a = Node.arr(r);
         final JSONObject s = a.length() > 0 ? a.optJSONObject(0) : null;
         return (s != null && !s.optString("script", "").isEmpty()) ? s : null;
-    }
-
-    public boolean addressIsLocal(String addr) {
-        if (!Node.validAddr(addr)) return false;
-        final JSONObject r = node.cmd("scripts address:" + addr);
-        final JSONArray a = Node.arr(r);
-        for (int i = 0; i < a.length(); i++) if (hasOwnKey(a.optJSONObject(i))) return true;
-        return false;
     }
 
     /* ================= the contract ================= */
@@ -197,9 +202,13 @@ public final class Wallet {
 
         // Minting CREATES a key pair, which a locked vault cannot do — `newaddress` just fails.
         // Check first so the user gets the real reason and a fix instead of a dead-end.
-        if (vaultLocked()) {
+        final VaultState vault = vaultState();
+        if (vault == VaultState.LOCKED) {
             return Res.err("Your node's keys are locked, so it can't make a new address. "
                     + "Unlock your node (Vault), then try again.");
+        }
+        if (vault == VaultState.UNKNOWN) {
+            return Res.err("Couldn't confirm your node's vault is unlocked — retry.");
         }
         final JSONObject r = node.cmd("newaddress");
         if (Node.pending(r)) {
@@ -233,8 +242,12 @@ public final class Wallet {
      *                   0 = verified clean, >0 = refuse.
      */
     public Res setSafeExternal(String addr, long reuseCount) {
-        final String a = addr == null ? "" : addr.trim();
-        if (!Node.validMx(a)) return Res.err("Not a valid Mx address (must start with Mx).");
+        final String typed = addr == null ? "" : addr.trim();
+        if (!Node.validMx(typed)) return Res.err("Not a valid Mx address (must start with Mx).");
+        // Normalise ONCE at the trust boundary: the node and the audit service echo the Mx body
+        // UPPERCASE, and everything downstream (the reuse verdict on this destination, the
+        // is-it-local check) compares against those echoes.
+        final String a = "Mx" + typed.substring(2).toUpperCase(Locale.ROOT);
         if (reuseCount > 0) {
             return Res.err("That address has already signed " + reuseCount + " time(s) — its key is "
                     + "reused. Sweeping your rescued money there would move it onto another exposed "
@@ -242,9 +255,16 @@ public final class Wallet {
         }
         final String localErr = "That address belongs to THIS node. Use an EXTERNAL wallet "
                 + "(a different node/seed) with fresh keys.";
-        final AddressSets sets = addressSets();
-        if (sets.allTracked.contains(a)) return Res.err(localErr);
-        if (addressIsLocal(a)) return Res.err(localErr);
+        try {
+            // allTracked is the node's whole scripts table in BOTH spellings (ScriptRow emits
+            // address + miniaddress), read fail-closed. A per-address `scripts address:` probe is
+            // NOT usable here: the node answers status:false ("not found") for exactly the
+            // external addresses we want to accept.
+            final AddressSets sets = addressSets();
+            if (sets.allTracked.contains(a)) return Res.err(localErr);
+        } catch (IllegalStateException unreadable) {
+            return Res.err(unreadable.getMessage());   // can't prove it's external — refuse, don't crash
+        }
 
         cfg.set(Cfg.SAFE_MODE, "external");
         cfg.set(Cfg.SAFE_ADDRESS, a);
@@ -295,10 +315,15 @@ public final class Wallet {
         return cleanAddress();
     }
 
-    public boolean vaultLocked() {
+    /** UNKNOWN = the node didn't answer usably (timeout, pending approval, malformed). Callers gate on
+     *  it exactly like LOCKED, but must say so — "unlock your vault" is the wrong fix for it. */
+    public enum VaultState { LOCKED, UNLOCKED, UNKNOWN }
+
+    public VaultState vaultState() {
         final JSONObject reply = node.cmd("status");
         final JSONObject resp = Node.obj(reply);
-        return !Node.ok(reply) || resp == null || !(resp.opt("locked") instanceof Boolean) || resp.optBoolean("locked", true);
+        if (!Node.ok(reply) || resp == null || !(resp.opt("locked") instanceof Boolean)) return VaultState.UNKNOWN;
+        return resp.optBoolean("locked", true) ? VaultState.LOCKED : VaultState.UNLOCKED;
     }
 
     /* ================= retired addresses (Harden / Recover) ================= */
@@ -333,20 +358,32 @@ public final class Wallet {
      * {@code RETURN SIGNEDBY(0x<key>)} of one of THIS node's keys. Excludes foreign/compound
      * contracts and other people's watch scripts. Retiring leaves the key in the keys table, so
      * these are still sweepable with the explicit key.
+     *
+     * <p>FAILS CLOSED: a failed, pending or malformed reply THROWS rather than returning an empty
+     * list. An empty list here is indistinguishable from "nothing retired", and it feeds the at-risk
+     * set — so a bad reply would let a stake paying to a retired (nulled-key) address pass the
+     * at-risk gate and be bare-collected onto it.
+     *
+     * @throws IllegalStateException when either list could not be read completely
      */
     public List<String> retiredAddresses() {
         final List<String> out = new ArrayList<>();
         final JSONObject kr = node.cmd("keys action:list");
         final JSONObject kresp = Node.obj(kr);
         final JSONArray keys = kresp == null ? null : kresp.optJSONArray("keys");
-        final Set<String> ours = new HashSet<>();
-        if (keys != null) {
-            for (int i = 0; i < keys.length(); i++) {
-                final JSONObject k = keys.optJSONObject(i);
-                if (k != null) ours.add(k.optString("publickey", "").toLowerCase());
-            }
+        if (!Node.ok(kr) || keys == null) {
+            throw new IllegalStateException("Could not read the complete key list. Refresh and retry.");
         }
-        final JSONArray arr = Node.arr(node.cmd("scripts"));
+        final Set<String> ours = new HashSet<>();
+        for (int i = 0; i < keys.length(); i++) {
+            final JSONObject k = keys.optJSONObject(i);
+            if (k != null) ours.add(k.optString("publickey", "").toLowerCase());
+        }
+        final JSONObject sr = node.cmd("scripts");
+        if (!Node.ok(sr) || sr.optJSONArray("response") == null) {
+            throw new IllegalStateException("Could not read the complete address list. Refresh and retry.");
+        }
+        final JSONArray arr = sr.optJSONArray("response");
         for (int i = 0; i < arr.length(); i++) {
             final JSONObject s = arr.optJSONObject(i);
             if (s == null) continue;
@@ -609,7 +646,10 @@ public final class Wallet {
     /** Sweep every stuck coin off retired addresses. Undoes the retire damage without a reseed. */
     public SweepReport recoverRetiredCoins() {
         final SweepReport total = new SweepReport();
-        for (String[] a : retiredWithCoins()) {
+        final List<String[]> stuck;
+        try { stuck = retiredWithCoins(); }
+        catch (IllegalStateException unreadable) { total.error = unreadable.getMessage(); return total; }
+        for (String[] a : stuck) {
             final SweepReport r = sweepAddressToClean(a[0]);
             total.swept += r.swept;
             total.failed += r.failed;

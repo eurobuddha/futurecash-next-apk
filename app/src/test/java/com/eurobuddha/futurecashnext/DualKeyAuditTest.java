@@ -3,10 +3,12 @@ package com.eurobuddha.futurecashnext;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
+import org.mockito.MockedConstruction;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /** Disposable public-key fixtures; no node, seed, signatures or network requests. */
 public class DualKeyAuditTest {
@@ -109,6 +111,34 @@ public class DualKeyAuditTest {
         assertTrue(result.derivationMismatch);
         assertFalse(result.complete);
         assertEquals(KeyAudit.Status.UNKNOWN, result.rows.get(0).status());
+    }
+    /** A user-typed lowercase Mx destination against the server's UPPERCASE echo: the audit must still
+     *  be complete (the destination's verdict WAS found) and a reused echo must flag it. */
+    @Test public void lowercaseDestinationMatchesUppercaseEchoSoAuditCompletesAndFlagsReuse() throws Exception {
+        final String destTyped = address(BLOCK).mx.toLowerCase(java.util.Locale.ROOT);
+        Node node = mock(Node.class);
+        Cfg cfg = mock(Cfg.class);
+        when(node.cmd("keys action:list")).thenReturn(new JSONObject().put("status", true).put("response",
+                new JSONObject().put("keys", new JSONArray().put(new JSONObject().put("publickey", CLASSIC)
+                        .put("uses", 10).put("maxuses", 262144).put("size", 64).put("depth", 3)))));
+        when(cfg.get(Cfg.SAFE_ADDRESS, "")).thenReturn(destTyped);
+        List<KeyAudit.Usage> usage = Collections.singletonList(usage(CLASSIC, 10));
+        List<KeyAudit.Reuse> reuse = Arrays.asList(reused(CLASSIC, false),
+                new KeyAudit.Reuse(address(BLOCK).hex, address(BLOCK).mx, true, 2));
+        assertTrue(reuse.get(1).matches(destTyped));
+        final KeyAudit.Result[] got = {null};
+        try (MockedConstruction<AuditApi> api = mockConstruction(AuditApi.class, (mock, ctx) ->
+                doAnswer(inv -> { inv.<AuditApi.Cb>getArgument(2).onResult(usage, reuse, 100); return null; })
+                        .when(mock).audit(any(), any(), any()))) {
+            new AuditRunner(node, cfg, null, null).run(new AuditRunner.Cb() {
+                @Override public void onDone(KeyAudit.Result result, long tip) { got[0] = result; }
+                @Override public void onError(String message) { fail(message); }
+            });
+        }
+        assertNotNull(got[0]);
+        assertTrue(got[0].complete);
+        verify(cfg).setBool(Cfg.AUDIT_OK, true);                     // complete: the destination's row was found
+        verify(cfg).set(eq(Cfg.SAFE_REUSED), contains(destTyped));   // and it says reused, so the safe is flagged
     }
     @Test public void publicHistoryDoesNotRequireOrInventLocalCounters() {
         KeyAudit.Result result=join(Collections.singletonList(classic(-1)),
