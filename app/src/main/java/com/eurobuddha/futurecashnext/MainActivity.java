@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         receiver = new BroadcastReceiver() {
             @Override public void onReceive(Context c, Intent intent) {
                 if (!MinimaAPI.checkMinimaID(MainActivity.this, intent)) return;
-                final String data = intent.getStringExtra(MinimaAPIMessages.MINIMA_API_NOTIFY_DATA);
+                final String data = MinimaAPI.notifyData(intent);
                 if (data == null) return;
                 try {
                     final String ev = new JSONObject(data).optString("event", "");
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         ContextCompat.registerReceiver(this, receiver,
-                new IntentFilter(MinimaAPIMessages.MINIMA_API_NOTIFY), ContextCompat.RECEIVER_EXPORTED);
+                MinimaAPI.notifyFilter(), ContextCompat.RECEIVER_EXPORTED);
 
         // Assert the covenant at every launch, so simply opening the app repairs a node whose script
         // table lost it — the failure that only shows at spend time.
